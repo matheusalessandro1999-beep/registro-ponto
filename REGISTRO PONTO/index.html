@@ -14,27 +14,23 @@
 <script src="permissions.js"></script>
 <script src="shared.js"></script>
 
-<!-- 🔥 Firebase SDKs -->
+<!-- Firebase SDKs (versão compatível com HTML puro) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
-  // Configuração do Firebase
   const firebaseConfig = {
-    apiKey: "AIzaSyCm3iXprnjJq_1s1XDdnFbaSozW2WlA7OM",
-    authDomain: "teste-90a07.firebaseapp.com",
-    databaseURL: "https://teste-90a07-default-rtdb.firebaseio.com",
-    projectId: "teste-90a07",
-    storageBucket: "teste-90a07.firebasestorage.app",
-    messagingSenderId: "406767398016",
-    appId: "1:406767398016:web:c1acbab21746437f06ca65"
+    apiKey: "AIzaSyBQwHGiXEuPeSqoIIi159e0uyMx_JGL4y8",
+    authDomain: "registro-ponto-cd.firebaseapp.com",
+    databaseURL: "https://registro-ponto-cd-default-rtdb.firebaseio.com",
+    projectId: "registro-ponto-cd",
+    storageBucket: "registro-ponto-cd.firebasestorage.app",
+    messagingSenderId: "672250389821",
+    appId: "1:672250389821:web:33a80de64c5ccdd9bc5154"
   };
 
-  // Inicializa o Firebase
   firebase.initializeApp(firebaseConfig);
-
-  // Disponibiliza o banco e autenticação pro resto do sistema
   const db = firebase.database();
   const auth = firebase.auth();
 </script>
