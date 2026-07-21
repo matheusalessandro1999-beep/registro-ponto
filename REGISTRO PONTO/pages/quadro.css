@@ -1,0 +1,292 @@
+/* ════════════════════════════════════════════
+   quadro.css — Quadro Operacional
+   ════════════════════════════════════════════ */
+
+/* ── Botão salvar ── */
+.btn-save {
+  display:inline-flex; align-items:center; gap:8px; padding:9px 20px;
+  border-radius:8px; border:none; background:var(--accent); color:#fff;
+  font-family:var(--font-body); font-size:12px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+}
+.btn-save:hover { background:#3a7ae0; transform:translateY(-1px); box-shadow:0 4px 16px rgba(79,142,247,.4); }
+.btn-save:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* ── Seletor de filiais ── */
+.filial-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+.filial-btn {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:8px 18px; border-radius:9px; border:1.5px solid var(--border);
+  background:var(--surface); color:var(--muted);
+  font-family:var(--font-body); font-size:13px; font-weight:600;
+  cursor:pointer; transition:all .18s; user-select:none;
+}
+.filial-btn:hover  { border-color:var(--accent); color:var(--text); }
+.filial-btn.active { background:rgba(79,142,247,.12); border-color:var(--accent); color:var(--accent); }
+
+html.light-theme .filial-btn { background:#fff; border-color:#CBD5E1; color:#64748b; }
+html.light-theme .filial-btn:hover{ border-color:#2563eb; color:#2563eb; }
+html.light-theme .filial-btn.active{ background:rgba(37,99,235,.1); border-color:#2563eb; color:#2563eb; }
+
+/* ── Summary cards ── */
+.summary-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+.summary-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:14px 18px; transition:transform .2s;
+}
+.summary-card:hover { transform:translateY(-2px); }
+.summary-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:6px; }
+.summary-value { font-family:var(--font-head); font-size:28px; font-weight:800; letter-spacing:-1.5px; line-height:1; }
+.summary-value.blue   { color:#93C5FD; }
+.summary-value.green  { color:#6EE7B7; }
+.summary-value.red    { color:#FCA5A5; }
+.summary-value.yellow { color:#FDE68A; }
+
+html.light-theme .summary-card { background:#fff; border-color:#E2E8F0; }
+html.light-theme .summary-label { color:#64748b; }
+html.light-theme .summary-value.blue   { color:#1D4ED8; }
+html.light-theme .summary-value.green  { color:#059669; }
+html.light-theme .summary-value.red    { color:#DC2626; }
+html.light-theme .summary-value.yellow { color:#D97706; }
+
+/* ── Grade de turnos ── */
+.turnos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; margin-bottom:20px; }
+
+.turno-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:14px; overflow:hidden; transition:box-shadow .2s;
+}
+.turno-card:hover { box-shadow:0 4px 20px rgba(0,0,0,.18); }
+
+.turno-header {
+  padding:14px 18px 12px; display:flex; align-items:center;
+  justify-content:space-between; border-bottom:1px solid var(--border);
+}
+.turno-title { font-family:var(--font-head); font-size:15px; font-weight:800; }
+.turno-total { font-family:var(--font-head); font-size:13px; font-weight:700; }
+.turno-sub   { font-size:11px; color:var(--muted); margin-top:2px; }
+
+.turno-table { width:100%; border-collapse:collapse; }
+.turno-table th {
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  color:var(--muted); padding:8px 16px; border-bottom:1px solid var(--border);
+  text-align:left; background:var(--surface2);
+}
+.turno-table th:not(:first-child) { text-align:center; }
+.turno-table td {
+  padding:11px 16px; border-bottom:1px solid rgba(42,47,69,.35);
+  vertical-align:middle; font-size:13px;
+}
+.turno-table tr:last-child td { border-bottom:none; }
+.turno-table tr:hover td { background:var(--surface2); }
+.turno-table td:not(:first-child) { text-align:center; }
+
+html.light-theme .turno-card { background:#fff; border-color:#E2E8F0; }
+html.light-theme .turno-table th { background:#F4F7FB; color:#475569; border-bottom-color:#E2E8F0; }
+html.light-theme .turno-table td { border-bottom-color:#F1F5F9; color:#0f172a; }
+html.light-theme .turno-table tr:hover td { background:#F4F7FB; }
+
+/* input de vagas */
+.num-input {
+  width:60px; text-align:center; padding:5px 6px;
+  font-family:var(--font-head); font-size:14px; font-weight:700;
+  background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:6px; color:var(--text); outline:none;
+  transition:border-color .2s;
+}
+.num-input:focus { border-color:var(--accent); }
+.num-input:read-only { opacity:.45; cursor:not-allowed; background:var(--surface3); }
+
+html.light-theme .num-input { background:#F4F7FB; border-color:#CBD5E1; color:#0f172a; }
+
+.atual-val { font-family:var(--font-head); font-size:16px; font-weight:800; }
+
+/* badges situa��o */
+.sit-badge { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:8px; font-size:12px; font-weight:700; white-space:nowrap; }
+.sit-ok      { background:rgba(52,211,153,.15); color:#34d399; border:1px solid rgba(52,211,153,.3); }
+.sit-warn    { background:rgba(251,191,36,.15);  color:#fbbf24; border:1px solid rgba(251,191,36,.3); }
+.sit-risk    { background:rgba(248,113,113,.15); color:#f87171; border:1px solid rgba(248,113,113,.3); }
+.sit-excess  { background:rgba(34,211,238,.15);  color:#22d3ee; border:1px solid rgba(34,211,238,.3); }
+
+/* ── Sistema de Tabs ── */
+.tab-bar {
+  display:flex; gap:4px; margin-bottom:20px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:4px;
+}
+.tab-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:9px 20px; border-radius:9px; border:none;
+  font-family:var(--font-body); font-size:13px; font-weight:600;
+  cursor:pointer; transition:all .2s; color:var(--muted);
+  background:transparent; white-space:nowrap;
+}
+.tab-btn:hover { color:var(--text); background:var(--surface2); }
+.tab-btn.active {
+  background:var(--surface2); color:var(--text);
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+}
+.tab-btn.active.tab-quadro { color:var(--accent); }
+.tab-btn.active.tab-vagas  { color:var(--yellow); }
+.tab-lock {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:10px; padding:2px 7px; border-radius:20px;
+  background:rgba(251,191,36,.12); color:var(--yellow);
+  border:1px solid rgba(251,191,36,.2);
+}
+
+html.light-theme .tab-bar { background:#fff; border-color:#C8D6E3; }
+html.light-theme .tab-btn:hover { background:#F0F4F8; color:#04152E; }
+html.light-theme .tab-btn.active { background:#EBF1F7; }
+
+/* ── Aba de Gest�o de Vagas ── */
+.vagas-section {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; overflow:hidden; margin-bottom:20px;
+}
+.vagas-section-header {
+  padding:14px 20px; display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--border); background:var(--surface2);
+}
+.vagas-section-title {
+  font-family:var(--font-head); font-size:14px; font-weight:700; color:var(--text);
+}
+.vagas-section-sub { font-size:11px; color:var(--muted); margin-left:auto; }
+
+.vagas-table { width:100%; border-collapse:collapse; }
+.vagas-table th {
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  color:var(--muted); padding:9px 18px; border-bottom:1px solid var(--border);
+  text-align:left; background:var(--surface2);
+}
+.vagas-table th:not(:first-child) { text-align:center; }
+.vagas-table td {
+  padding:10px 18px; border-bottom:1px solid rgba(42,47,69,.3);
+  vertical-align:middle; font-size:13px;
+}
+.vagas-table tr:last-child td { border-bottom:none; }
+.vagas-table tr:hover td { background:var(--surface2); }
+.vagas-table td:not(:first-child) { text-align:center; }
+
+html.light-theme .vagas-section { background:#fff; border-color:#C8D6E3; }
+html.light-theme .vagas-section-header { background:#F0F4F8; border-bottom-color:#C8D6E3; }
+html.light-theme .vagas-table th { background:#F0F4F8; border-bottom-color:#C8D6E3; }
+html.light-theme .vagas-table td { border-bottom-color:#E8EDF5; }
+html.light-theme .vagas-table tr:hover td { background:#F4F8FC; }
+
+/* Info box vagas */
+.vagas-info-box {
+  background:rgba(251,191,36,.06); border:1px solid rgba(251,191,36,.2);
+  border-radius:10px; padding:12px 16px; margin-bottom:16px;
+  font-size:12px; color:var(--muted); line-height:1.6;
+  display:flex; align-items:flex-start; gap:10px;
+}
+.vagas-info-box strong { color:var(--yellow); }
+
+/* ── Afastados ── */
+.afastado-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:18px; margin-bottom:20px;
+}
+.afastado-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.afastado-title  { font-family:var(--font-head); font-size:15px; font-weight:700; color:var(--text); }
+.afastado-badge  { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; background:rgba(248,113,113,.15); color:var(--red); border:1px solid rgba(248,113,113,.3); }
+
+.afastado-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(42,47,69,.35); }
+.afastado-item:last-child { border-bottom:none; }
+.af-avatar {
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,#ef4444,#fb923c);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-head); font-size:12px; font-weight:800; color:#fff;
+}
+.af-info { flex:1; min-width:0; }
+.afastado-name { font-size:14px; font-weight:700; color:var(--text); }
+.afastado-role { font-size:11px; color:var(--muted); margin-top:2px; }
+.af-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.dias-badge {
+  padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700;
+  background:rgba(251,146,60,.15); color:var(--orange);
+  border:1px solid rgba(251,146,60,.3);
+}
+
+html.light-theme .afastado-card { background:#fff; border-color:#E2E8F0; }
+html.light-theme .afastado-name { color:#0f172a; }
+html.light-theme .afastado-role { color:#64748b; }
+
+/* ── Empty state ── */
+.empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+.empty-icon  { font-size:48px; margin-bottom:12px; }
+
+/* ── Responsive ── */
+
+/* 1024px — tablet landscape (sidebar fecha) */
+@media(max-width:1024px) {
+  .summary-row { grid-template-columns:repeat(2,1fr); }
+}
+
+/* 768px — tablet portrait */
+@media(max-width:768px) {
+  .topbar { flex-direction:column; align-items:stretch; }
+  .summary-row { grid-template-columns:1fr 1fr; }
+  .summary-value { font-size:24px; }
+  .turnos-grid { grid-template-columns:1fr; }
+  .turno-table { min-width:0; }
+  .turno-table th,
+  .turno-table td { padding:8px 10px; }
+  .vagas-table th,
+  .vagas-table td { padding:7px 10px; }
+  .vagas-section-header { flex-wrap:wrap; gap:6px; }
+  .vagas-section-sub { margin-left:0; width:100%; }
+  .tab-bar { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .tab-btn { padding:8px 14px; font-size:12px; }
+}
+
+/* 600px — tablet pequeno / celular grande */
+@media(max-width:600px) {
+  .topbar { flex-direction:column; align-items:stretch; }
+  .btn-save { width:100%; justify-content:center; }
+  .summary-row { grid-template-columns:repeat(2,1fr); gap:8px; }
+  .summary-card { padding:10px 12px; }
+  .summary-label { font-size:8px; letter-spacing:1px; }
+  .summary-value { font-size:22px; }
+  .filial-btn { padding:6px 12px; font-size:12px; }
+  .tab-btn { padding:7px 12px; font-size:11px; }
+  .tab-lock { font-size:9px; padding:1px 5px; }
+  .turno-header { padding:10px 12px; }
+  .turno-title { font-size:13px; }
+  .turno-total { font-size:12px; }
+  .turno-sub { font-size:10px; }
+  .vagas-info-box { flex-direction:column; gap:6px; }
+  .vagas-section-header { padding:10px 14px; }
+  .vagas-section-title { font-size:12px; }
+  .afastado-card { padding:12px; }
+  .afastado-title { font-size:13px; }
+  .dias-badge { font-size:10px; padding:3px 7px; }
+}
+
+/* 480px — celular */
+@media(max-width:480px) {
+  .summary-row { grid-template-columns:1fr; }
+  .summary-value { font-size:20px; }
+  .summary-card { padding:8px 10px; }
+  .turno-table th,
+  .turno-table td { padding:6px 6px; font-size:11px; }
+  .turno-table th { font-size:9px; letter-spacing:.5px; }
+  .vagas-table th,
+  .vagas-table td { padding:5px 6px; font-size:11px; }
+  .vagas-table th { font-size:9px; letter-spacing:.5px; }
+  .vagas-section-sub { display:none; }
+  .num-input { width:48px; font-size:12px; padding:4px 4px; }
+  .atual-val { font-size:14px; }
+  .sit-badge { font-size:10px; padding:4px 8px; }
+  .afastado-item { gap:8px; }
+  .af-avatar { width:28px; height:28px; font-size:10px; }
+  .afastado-name { font-size:12px; }
+  .afastado-role { font-size:10px; }
+  .af-right { gap:4px; }
+  .dias-badge { font-size:9px; padding:2px 6px; }
+  .empty-state { padding:40px 16px; }
+  .empty-icon  { font-size:36px; }
+  .vagas-info-box { font-size:11px; padding:10px 12px; }
+}

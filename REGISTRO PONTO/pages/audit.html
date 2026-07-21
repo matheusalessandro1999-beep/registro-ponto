@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<script>!function(){try{var t=localStorage.getItem("rh_theme");if(t&&JSON.parse(t)==="light"){document.documentElement.classList.add("light-theme");document.documentElement.style.colorScheme="light";}}catch(e){}}();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registros · RH Nagumo</title>
+<link rel="stylesheet" href="../sidebar.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="../light-theme.css">
+<link rel="stylesheet" href="../responsive.css">
+<link rel="stylesheet" href="audit.css">
+<script src="../db-local.js"></script>
+<script src="../permissions.js"></script>
+<script src="../shared.js"></script>
+<script src="audit.js"></script>
+</head>
+<body class="sb-collapsed">
+<style>#loading-screen{position:fixed;inset:0;z-index:999999;background:#0b0d14;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}#loading-screen.hide{display:none}.load-spinner{width:36px;height:36px;border:3px solid #2a2f45;border-top-color:#4f8ef7;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.load-text{color:#94a3b8;font-size:13px;margin-top:16px;letter-spacing:.5px}</style>
+<div id="loading-screen"><div class="load-spinner"></div><div class="load-text">Carregando...</div></div>
+
+
+<div class="toast-container" id="toast-container"></div>
+<nav id="app-sidebar"></nav>
+<script>!function(){try{var c=localStorage.getItem('rh_sb_cache_v2');if(c)document.getElementById('app-sidebar').innerHTML=c;}catch(e){}}();</script>
+
+<main class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div>
+      <div class="page-title">Registros <span>Auditoria</span></div>
+      <div class="page-sub">Log completo de alterações no sistema</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-export" onclick="recarregarLogs()" id="btn-reload">🔄 Atualizar</button>
+      <button class="btn-export" onclick="exportarCSV()">📋 Exportar CSV</button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filter-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" id="search-input"
+        placeholder="Buscar usuário ou ação..." oninput="renderLog()">
+    </div>
+    <select class="filter-select" id="filter-modulo" onchange="renderLog()">
+      <option value="">Todos os módulos</option>
+      <option value="Funcionários">Funcionários</option>
+      <option value="Líderes">Líderes</option>
+      <option value="Ponto">Ponto</option>
+      <option value="Aptidões">Aptidões</option>
+      <option value="Ocorrências">Ocorrências</option>
+      <option value="Quadro Operacional">Quadro Operacional</option>
+      <option value="Sistema">Sistema</option>
+      <option value="Configurações">Configurações</option>
+    </select>
+    <select class="filter-select" id="filter-periodo" onchange="renderLog()">
+      <option value="7">Últimos 7 dias</option>
+      <option value="3">Últimos 3 dias</option>
+      <option value="1">Hoje</option>
+    </select>
+    <div class="filter-chip active" onclick="setTipo(this,'')">Todas</div>
+    <div class="filter-chip"        onclick="setTipo(this,'criou')">Criação</div>
+    <div class="filter-chip"        onclick="setTipo(this,'editou')">Edição</div>
+    <div class="filter-chip"        onclick="setTipo(this,'excluiu')">Exclusão</div>
+    <div class="filter-chip"        onclick="setTipo(this,'desligou')">🔴 Desligamento</div>
+    <div class="filter-chip"        onclick="setTipo(this,'login')">🔑 Login</div>
+  </div>
+
+  <!-- Log -->
+  <div class="log-card">
+    <div class="log-header">
+      <div class="log-title">Log de Atividades</div>
+      <div class="log-count" id="log-count">0 eventos</div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th class="log-col-header">Data/Hora</th>
+            <th class="log-col-header">Usuário</th>
+            <th class="log-col-header">Ação</th>
+            <th class="log-col-header">Módulo</th>
+            <th class="log-col-header">Detalhes</th>
+            <th class="log-col-header">Dispositivo</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+
+</body>
+</html>

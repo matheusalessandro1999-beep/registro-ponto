@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<script>!function(){try{var t=localStorage.getItem("rh_theme");if(t&&JSON.parse(t)==="light"){document.documentElement.classList.add("light-theme");document.documentElement.style.colorScheme="light";}}catch(e){}}();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ocorrências · RH Nagumo</title>
+<link rel="stylesheet" href="../sidebar.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="../light-theme.css">
+<link rel="stylesheet" href="../responsive.css">
+<link rel="stylesheet" href="ocorrencias.css">
+<script src="../db-local.js"></script>
+<script src="../permissions.js"></script>
+<script src="../shared.js"></script>
+</head>
+<body class="sb-collapsed">
+<style>#loading-screen{position:fixed;inset:0;z-index:999999;background:#0b0d14;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}#loading-screen.hide{display:none}.load-spinner{width:36px;height:36px;border:3px solid #2a2f45;border-top-color:#4f8ef7;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.load-text{color:#94a3b8;font-size:13px;margin-top:16px;letter-spacing:.5px}</style>
+<div id="loading-screen"><div class="load-spinner"></div><div class="load-text">Carregando...</div></div>
+
+
+<div class="toast-container" id="toast-container"></div>
+<nav id="app-sidebar"></nav>
+<script>!function(){try{var c=localStorage.getItem('rh_sb_cache_v2');if(c)document.getElementById('app-sidebar').innerHTML=c;}catch(e){}}();</script>
+
+<!-- Modal Nova/Editar Ocorrência -->
+<div class="overlay" id="modal-form" role="dialog" aria-modal="true" aria-label="Formulário de ocorrência">
+  <div class="modal">
+    <div class="modal-title" id="modal-form-title">Nova Ocorrência</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">👤 Funcionário</label>
+        <select class="form-input" id="f-emp"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">📋 Tipo</label>
+        <select class="form-input" id="f-tipo" onchange="toggleCidField()">
+          <option value="justificativa">📄 Justificativa</option>
+          <option value="ajuste">✏️ Ajuste de Ponto</option>
+          <option value="atestado">🏥 Atestado Médico</option>
+          <option value="ocorrencia">⚠️ Ocorrência</option>
+          <option value="entrada">→ Entrada Manual</option>
+          <option value="saida">← Saída Manual</option>
+          <option value="advertencia">🚨 Advertência</option>
+          <option value="elogio">⭐ Elogio</option>
+        </select>
+      </div>
+      <div class="form-group" id="f-cid-wrap" style="display:none">
+        <label class="form-label">🆔 CID</label>
+        <input class="form-input" id="f-cid" placeholder="Ex: J00.0 — Código da doença" maxlength="10" autocorrect="off" autocomplete="off" spellcheck="false" oninput="this.value=this.value.replace(/[^A-Za-z0-9.]/g,'').toUpperCase()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">📅 Data / Hora</label>
+        <input class="form-input" type="datetime-local" id="f-dt">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">📝 Descrição</label>
+        <textarea class="form-input" id="f-desc" placeholder="Descreva a ocorrência em detalhes..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">📎 Observação interna (opcional)</label>
+        <textarea class="form-input" id="f-obs" placeholder="Observação para uso interno da gestão..." style="min-height:60px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-form')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarOcorrencia()">💾 Salvar</button>
+    </div>
+    <input type="hidden" id="f-edit-id">
+  </div>
+</div>
+
+<!-- Modal Detalhes -->
+<div class="overlay" id="modal-detail" role="dialog" aria-modal="true" aria-label="Detalhes da ocorrência">
+  <div class="modal">
+    <div class="modal-title" id="detail-title">Detalhes da Ocorrência</div>
+    <div class="detail-grid">
+      <div class="detail-box">
+        <div class="detail-label">👤 Funcionário</div>
+        <div class="detail-val" id="d-emp">—</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">📅 Data / Hora</div>
+        <div class="detail-val" id="d-dt">—</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">📋 Tipo</div>
+        <div class="detail-val" id="d-tipo">—</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-label">🔖 Status</div>
+        <div class="detail-val" id="d-status">—</div>
+      </div>
+    </div>
+    <div class="detail-box" style="margin-bottom:10px">
+      <div class="detail-label">📝 Descrição</div>
+      <div class="detail-val" id="d-desc">—</div>
+    </div>
+    <div class="detail-box" id="d-admissao-wrap" style="margin-bottom:10px;display:none">
+      <div class="detail-label">📅 Data de Admissão</div>
+      <div class="detail-val" id="d-admissao">—</div>
+    </div>
+    <div class="detail-box" id="d-cid-wrap" style="margin-bottom:10px;display:none">
+      <div class="detail-label">🆔 CID</div>
+      <div class="detail-val" id="d-cid">—</div>
+    </div>
+    <div class="detail-box" id="d-obs-wrap" style="margin-bottom:10px;display:none">
+      <div class="detail-label">📎 Observação Interna</div>
+      <div class="detail-val" id="d-obs">—</div>
+    </div>
+    <div class="detail-box">
+      <div class="detail-label">👨‍💼 Registrado por</div>
+      <div class="detail-val" id="d-resp">—</div>
+    </div>
+    <div class="modal-footer" id="detail-footer"></div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div>
+      <div class="page-title">📝 Ocorrências <span>Registros</span></div>
+      <div class="page-sub">Histórico de alterações, justificativas e ocorrências</div>
+    </div>
+    <button class="btn btn-primary" id="btn-novo" onclick="openFormModal()">＋ Nova Ocorrência</button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filter-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" id="search-input"
+        placeholder="Buscar funcionário..." oninput="renderTabela()">
+    </div>
+    <select class="filter-select" id="filter-tipo" onchange="renderTabela()">
+      <option value="">Todos os tipos</option>
+      <option value="justificativa">Justificativa</option>
+      <option value="ajuste">Ajuste</option>
+      <option value="atestado">Atestado Médico</option>
+      <option value="ocorrencia">Ocorrência</option>
+      <option value="entrada">Entrada</option>
+      <option value="saida">Saída</option>
+      <option value="advertencia">Advertência</option>
+      <option value="elogio">Elogio</option>
+    </select>
+    <select class="filter-select" id="filter-periodo" onchange="renderTabela()">
+      <option value="30">Últimos 30 dias</option>
+      <option value="7">Últimos 7 dias</option>
+      <option value="1">Hoje</option>
+      <option value="90">Últimos 90 dias</option>
+      <option value="0">Todos</option>
+    </select>
+    <div class="filter-chip active"     onclick="setStatus(this,'')">Todos</div>
+    <div class="filter-chip pendente"   onclick="setStatus(this,'pendente')">⏳ Pendentes</div>
+    <div class="filter-chip aprovado"   onclick="setStatus(this,'aprovado')">✅ Aprovados</div>
+    <div class="filter-chip rejeitado"  onclick="setStatus(this,'rejeitado')">❌ Rejeitados</div>
+  </div>
+
+  <!-- Tabela -->
+  <div class="log-card">
+    <div class="log-header">
+      <div class="log-title">Histórico de Registros</div>
+      <div class="log-count" id="log-count">0 registros</div>
+    </div>
+    <div class="oc-table-wrap">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th class="log-col-header" style="width:36px">Status</th>
+            <th class="log-col-header">Data/Hora</th>
+            <th class="log-col-header">Funcionário</th>
+            <th class="log-col-header">Tipo</th>
+            <th class="log-col-header">CID</th>
+            <th class="log-col-header">Descrição</th>
+            <th class="log-col-header">Responsável</th>
+            <th class="log-col-header" style="width:80px">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script src="ocorrencias.js"></script>
+</body>
+</html>

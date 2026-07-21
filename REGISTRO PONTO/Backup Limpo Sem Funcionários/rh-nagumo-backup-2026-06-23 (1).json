@@ -1,0 +1,64 @@
+{
+  "rh_store": {
+    "users": {
+      "admin": {
+        "id": "admin",
+        "name": "Administrador",
+        "pass": "admin123",
+        "avatar": null,
+        "nivel": "admin_master",
+        "setor": "",
+        "perfil": {
+          "filial": "",
+          "turno": "",
+          "depts": []
+        }
+      }
+    },
+    "config": {
+      "perfWeight": 40,
+      "aptWeight": 35,
+      "maxAbs": 36,
+      "feriadosCustom": [
+        {
+          "chave": "12-08",
+          "nome": "Aniversário de Guarulhos"
+        }
+      ]
+    },
+    "filiais": [],
+    "turnos": [],
+    "depts": [],
+    "funcoes": [],
+    "authCode": "NAGUMO2025"
+  },
+  "rh_theme": "dark",
+  "rh_quadro": {},
+  "rh_ponto": {},
+  "rh_ocorrencias": [],
+  "rh_aptidoes": [],
+  "rh_audit_log": [
+    {
+      "id": "mqncswoxqq2n",
+      "ts": "2026-06-21T05:36:17.025Z",
+      "userId": "admin",
+      "userName": "Administrador",
+      "acao": "criou",
+      "modulo": "Configurações",
+      "detalhes": "Feriado regional adicionado: <strong>Aniversário de Guarulhos</strong> — 08/12",
+      "device": "Chrome · Windows"
+    },
+    {
+      "id": "mqnch0z5bhhz",
+      "ts": "2026-06-21T05:27:02.705Z",
+      "userId": "admin",
+      "userName": "Administrador",
+      "acao": "login",
+      "modulo": "Sistema",
+      "detalhes": "Entrou no sistema",
+      "device": "Chrome · Windows"
+    }
+  ],
+  "exported_at": "2026-06-23T09:00:27.569Z",
+  "version": "2.0"
+}
