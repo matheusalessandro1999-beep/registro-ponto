@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Carregamento Perecíveis - Nagumo</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+   
+    <style>
+ @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8edf2 100%);
+}
+
+/* ========================================
+   CONFIGURAÇÕES DA PÁGINA A4
+   ======================================== */
+.pagina-a4 {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 8mm 5mm 3mm 5mm;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+}
+
+/* ========================================
+   CABEÇALHO
+   ======================================== */
+.top-header {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    border: 0.3px solid #666;
+    border-radius: 6px;
+    padding: 5px;
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 5px;
+    font-size: 16pt;
+    text-transform: uppercase;
+    margin-top: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+.header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.logo-container img {
+    height: 15px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.date-field {
+    font-weight: 700;
+    font-size: 7pt;
+}
+
+/* ========================================
+   TABELA PRINCIPAL
+   ======================================== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+/* ========================================
+   CABEÇALHO DUPLO DA TABELA
+   ======================================== */
+.header-grupo {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    font-weight: 900;
+    text-align: center;
+    padding: 0.8mm;
+    border: 0.3px solid #666;
+    font-size: 10pt;
+    text-transform: uppercase;
+    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.header-grupo-carregamento {
+    background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%);
+    font-weight: 900;
+    text-align: center;
+    padding: 0.8mm;
+    border: 0.3px solid #666;
+    font-size: 8pt;
+    text-transform: uppercase;
+    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+/* Linha em branco entre cabeçalhos duplos */
+.blank-header-row td {
+    border: none;
+    height: 1.5mm;
+    background-color: white;
+    padding: 0;
+}
+
+/* ========================================
+   CABEÇALHOS DAS COLUNAS (th)
+   ======================================== */
+th {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    border: 0.3px solid #666;
+    padding: 0.2mm 0.3mm;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 900;
+    font-size: 6pt;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 0.9;
+    height: 5.5mm;
+    background-clip: padding-box;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+
+th:hover {
+    background: linear-gradient(135deg, #CACACA 0%, #B3B3B3 100%);
+}
+
+/* ========================================
+   LARGURAS DAS COLUNAS - AJUSTE AQUI
+   ======================================== */
+th:nth-child(1) {
+    width: 25mm;
+}
+
+th:nth-child(2) {
+    width: 8mm;
+}
+
+th:nth-child(4) {
+    width: 10mm;
+}
+
+th:nth-child(9) {
+    width: 35mm;
+}
+
+th:nth-child(10) {
+    width: 10mm;
+}
+
+/* Colunas da seção CARREGAMENTO */
+th:nth-child(8),
+th:nth-child(9),
+th:nth-child(10) {
+    background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%);
+}
+
+/* Coluna Total Rota */
+.total-rota-header {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%) !important;
+    width: 16mm;
+}
+
+/* ========================================
+   CÉLULAS DA TABELA (td)
+   ======================================== */
+td {
+    padding: 0.15mm 0.3mm;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 8pt;
+    border: 0.3px solid #999;
+    line-height: 0.9;
+    height: 4.0mm;
+    transition: background-color 0.15s ease;
+    border-radius: 2px;
+    background-color: white;
+}
+
+td:hover {
+    background-color: #f8f9fa;
+}
+
+td:nth-child(1) {
+    width: 25mm;
+}
+
+td:nth-child(2) {
+    width: 8mm;
+}
+
+td:nth-child(4) {
+    width: 10mm;
+}
+
+td:nth-child(9) {
+    width: 35mm;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.2;
+    padding: 0.5mm 0.3mm;
+}
+
+td:nth-child(10) {
+    width: 10mm;
+}
+
+/* Forçar altura padrão para linhas simples (Praia Grande e Rio de Janeiro) */
+tr:has(.region-header:not([rowspan])),
+tr:has(.region-header[rowspan="1"]) {
+    height:3.0mm !important;
+}
+
+tr:has(.region-header:not([rowspan])) td,
+tr:has(.region-header[rowspan="1"]) td {
+    height: 3.0mm !important;
+    max-height: 4.0mm !important;
+    padding: 0.15mm 0.3mm !important;
+    vertical-align: middle !important;
+}
+
+tr:has(.region-header:not([rowspan])) .merged-cell,
+tr:has(.region-header[rowspan="1"]) .merged-cell {
+    height: 3.0mm !important;
+    max-height: 4.0mm !important;
+}
+
+/* ← ADICIONE ESTAS LINHAS PARA PRAIA GRANDE */
+tr:has(.region-header:not([rowspan])) {
+    height: 3.0mm !important;
+    min-height: 4.0mm !important;
+    max-height: 4.0mm !important;
+}
+
+tr:has(.region-header:not([rowspan])) * {
+    height: 3.0mm !important;
+    max-height: 4.0mm !important;
+    line-height: 0.9 !important;
+}
+
+/* ========================================
+   ESPAÇAMENTO ENTRE GRUPOS DE COLUNAS
+   ======================================== */
+.col-group-1 {
+    border-right: 2px solid #666;
+    width: 18mm;
+}
+
+.col-group-2 {
+    border-right: 2px solid #666;
+}
+
+.col-group-3 {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    background-clip: padding-box;
+    border-right: 2px solid #666;
+    width: 16mm;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+}
+
+.col-group-3 input {
+    font-weight: 900;
+    font-size: 9pt;
+    color: #000;
+}
+
+/* ========================================
+   LINHAS EM BRANCO ENTRE REGIÕES
+   ======================================== */
+.blank-row {
+    height: 1.5mm;
+    background-color: white;
+}
+
+.blank-row td {
+    border: none;
+    padding: 0;
+    height: 1.5mm;
+}
+
+/* ========================================
+   CÉLULAS ESPECIAIS
+   ======================================== */
+.region-header {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    font-weight: 900;
+    text-align: center;
+    vertical-align: middle;
+    background-clip: padding-box;
+    width: 18mm;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+
+.region-header:hover {
+    background: linear-gradient(135deg, #CACACA 0%, #B3B3B3 100%);
+}
+
+.store-cell {
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 0.3mm;
+    width: 10mm;
+    font-weight: 600;
+}
+
+.merged-cell {
+    background-color: #f9f9f9;
+    vertical-align: middle;
+    text-align: center;
+    transition: background-color 0.15s ease;
+    border-radius: 2px;
+}
+
+.merged-cell:hover {
+    background-color: #f0f0f0;
+}
+
+.merged-cell:nth-child(8) {
+    background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%);
+    font-weight: 900;
+}
+
+.merged-cell:nth-child(10) {
+    width: 10mm;
+}
+
+/* ========================================
+   ESTILOS PARA TEXTAREA MOTORISTA/PLACA
+   ======================================== */
+.motorista-placa-textarea {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 9pt;
+    font-family: Arial, sans-serif;
+    font-weight: 700;
+    padding: 2px;
+    margin: 0;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.1;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.motorista-placa-textarea:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+    border-radius: 2px;
+}
+
+/* ========================================
+   ESTILOS DE IMPRESSÃO
+   ======================================== */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+    
+    .pagina-a4 {
+        margin: 0;
+        padding: 8mm 5mm 3mm 5mm;
+        width: 210mm;
+        min-height: auto;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: auto;
+    }
+	
+	
+    
+    table {
+        page-break-inside: auto;
+    }
+    
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+	
+	.blank-row td,
+    .blank-header-row td {
+        border: none !important;
+        background: white !important;
+    }
+    
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: #000 !important;
+    }
+    
+    .top-header,
+    .header-grupo,
+    .region-header,
+    th {
+        background: #BFBFBF !important;
+        background-clip: padding-box !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #666 !important;
+    }
+    
+    .header-grupo-carregamento,
+    th:nth-child(8),
+    th:nth-child(9),
+    th:nth-child(10),
+    .merged-cell:nth-child(8) {
+        background: #D9D9D9 !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #666 !important;
+    }
+    
+    .merged-cell {
+        background: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #999 !important;
+        border-radius: 2px !important;
+    }
+    
+    td {
+        border: 0.3px solid #999 !important;
+        border-radius: 2px !important;
+        background-color: white !important;
+    }
+    
+    .total-rota-header {
+        background: #BFBFBF !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #666 !important;
+    }
+    
+    .col-group-3 {
+        background: #BFBFBF !important;
+        background-clip: padding-box !important;
+        -webkit-print-color-adjust: exact !important;
+        border-radius: 2px !important;
+    }
+    
+    .col-group-1,
+    .col-group-2 {
+        background-clip: padding-box !important;
+    }
+    
+    .col-group-1 {
+        border-right: 2px solid #666 !important;
+    }
+    
+    .col-group-2 {
+        border-right: 2px solid #666 !important;
+    }
+    
+    .controls {
+        display: none !important;
+    }
+    
+    input, textarea {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+    
+    td:nth-child(9) {
+        white-space: pre-wrap !important;
+        line-height: 1.2 !important;
+    }
+    
+    td:hover,
+    .merged-cell:hover,
+    .region-header:hover,
+    th:hover {
+        background-color: inherit !important;
+    }
+	/* Prevenir quebra na região Vale do Paraíba */
+    tbody tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    .region-header[rowspan] {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
+
+@media print {
+    html, body {
+        height: auto;
+        overflow: visible;
+    }
+}
+
+/* ========================================
+   ESTILOS PARA ELEMENTOS EDITÁVEIS
+   ======================================== */
+input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 8pt;
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+
+input:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(100, 149, 237, 0.3);
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="text"] {
+    text-align: center;
+}
+
+.merged-cell input {
+    background-color: transparent;
+}
+
+.merged-cell input:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+}
+
+/* ========================================
+   CONTROLES DA PÁGINA
+   ======================================== */
+.controls {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.controls button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 8px 0;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.controls button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.controls button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.controls button svg {
+    pointer-events: none;
+}
+
+.controls button#clearBtn {
+    background: linear-gradient(135deg, #DC143C 0%, #B22222 100%);
+}
+
+.controls button#clearBtn:hover {
+    background: linear-gradient(135deg, #FF1744 0%, #DC143C 100%);
+}
+
+.controls button#printBtn {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.controls button#printBtn:hover {
+    background: linear-gradient(135deg, #42A5F5 0%, #2196F3 100%);
+}
+
+.controls button#screenshotBtn {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.controls button#screenshotBtn:hover {
+    background: linear-gradient(135deg, #34E877 0%, #25D366 100%);
+}
+
+/* ========================================
+   CAMPO DE DATA
+   ======================================== */
+.date-input {
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 7pt;
+    text-align: left;
+    width: 80px;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+    padding: 2px 4px;
+}
+
+.date-input:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+    outline: 1px solid rgba(100, 149, 237, 0.3);
+}
+
+/* ========================================
+   MENSAGEM DE STATUS
+   ======================================== */
+.status-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.88);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 10px;
+    z-index: 1001;
+    display: none;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: fadeInOut 0.3s ease;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Forçar Vale do Paraíba a não quebrar */
+.region-header[rowspan="7"] {
+    position: relative;
+    z-index: 10;
+}
+
+tbody tr:has(.region-header[rowspan="7"]),
+tbody tr:has(.region-header[rowspan="7"]) ~ tr:nth-of-type(-n+6) {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: table-row !important;
+}
+
+
+@media print {
+    .total-caminhoes-display {
+        display: none !important;
+    }
+}
+    </style>
+</head>
+<body>
+   <div class="controls">
+    <button id="clearBtn" title="Limpar Tudo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+        </svg>
+    </button>
+    <button id="printBtn" title="Imprimir">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+    </button>
+    <button id="screenshotBtn" title="Enviar para WhatsApp">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </button>
+</div>
+   
+    <div class="status-message" id="statusMessage"></div>
+   
+    <div class="pagina-a4">
+        <!-- Cabeçalho do topo -->
+        <div class="top-header">
+            CONTROLE DE CARREGAMENTO PERECÍVEIS
+        </div>
+       
+        <!-- Linha com logo e data -->
+        <div class="header-info">
+            <div class="logo-container">
+			    <img src="data:image/png;base64,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" alt="Logo">
+            </div>
+            <div class="date-field">
+                Data: <input type="text" class="date-input" id="dateField" placeholder="__/__/____">
+            </div>
+        </div>
+        <!-- Tabela Principal -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="7" class="header-grupo">CONTAGEM MATERIAL DE APOIO</th>
+                    <th colspan="3" class="header-grupo-carregamento">CARREGAMENTO</th>
+                </tr>
+                <tr class="blank-header-row">
+                    <td colspan="10"></td>
+                </tr>
+                <tr>
+                    <th class="col-group-1">Região</th>
+                    <th class="col-group-1">Lojas</th>
+                    <th class="col-group-2">Qtde <br>Paletes</th>
+                    <th class="col-group-2">Box</th>
+                    <th class="col-group-2">Container</th>
+                    <th class="col-group-2">Câmara</th>
+                    <th class="col-group-3 total-rota-header">Total<br>Rota</th>
+                    <th>Região</th>
+                    <th>Motorista/Placa</th>
+                    <th>C°</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="blank-row"><td colspan="10"></td></tr>
+               
+                <tr class="blank-row"><td colspan="10"></td></tr>
+<!-- ABC -->
+<tr>
+    <td class="region-header col-group-1" rowspan="5">ABC</td>
+    <td class="store-cell col-group-1">01</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="5"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="5">ABC</td>
+    <td class="merged-cell" rowspan="5"><textarea class="motorista-placa-textarea" rows="3"></textarea></td>
+    <td class="merged-cell" rowspan="5"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">26</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">50</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">38</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">46</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Cinturão -->
+<tr>
+    <td class="region-header col-group-1" rowspan="9">Cinturão</td>
+    <td class="store-cell col-group-1">40</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="9"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="9">Cinturão</td>
+    <td class="merged-cell" rowspan="9"><textarea class="motorista-placa-textarea" rows="3"></textarea></td>
+    <td class="merged-cell" rowspan="9"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">02</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">52</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">19</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">27</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">23</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">30</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">47</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">39</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Zona Leste -->
+<tr>
+    <td class="region-header col-group-1" rowspan="7">Zona Leste</td>
+    <td class="store-cell col-group-1">21</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="7"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="7">Zona Leste</td>
+    <td class="merged-cell" rowspan="7"><textarea class="motorista-placa-textarea" rows="3"></textarea></td>
+    <td class="merged-cell" rowspan="7"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">29</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">04</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">03</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">16</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">06</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">17</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Miolo -->
+<tr>
+    <td class="region-header col-group-1" rowspan="8">Miolo</td>
+    <td class="store-cell col-group-1">22</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="8"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="8">Miolo</td>
+    <td class="merged-cell" rowspan="8"><textarea class="motorista-placa-textarea" rows="3"></textarea></td>
+    <td class="merged-cell" rowspan="8"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">45</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">07</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">44</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">13</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">20</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">43</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">18</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Guarulhos -->
+<tr>
+    <td class="region-header col-group-1" rowspan="12">Guarulhos</td>
+    <td class="store-cell col-group-1">56</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="12"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="12">Guarulhos</td>
+    <td class="merged-cell" rowspan="12"><textarea class="motorista-placa-textarea" rows="3"></textarea></td>
+    <td class="merged-cell" rowspan="12"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">54</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">41</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">12</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">55</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">15</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">37</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">42</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">14</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">24</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">49</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">08</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Vale do Paraíba - MESCLADO NA COLUNA 1 COM LINHA EM BRANCO -->
+<tr>
+    <td class="region-header col-group-1" rowspan="7">Vale do Paraíba</td>
+    <td class="store-cell col-group-1">48</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="3"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="3">São José<br>dos Campos</td>
+    <td class="merged-cell" rowspan="3"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>
+    <td class="merged-cell" rowspan="3"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">28</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">25</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="7"></td><td colspan="3"></td></tr>
+<tr>
+   <td class="store-cell col-group-1">11</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="3"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="3" style="background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%) !important; font-weight: 900 !important;">Taubaté<br>Lorena</td>
+    <td rowspan="3" style="background-color: #f9f9f9; vertical-align: middle; text-align: center; border: 0.3px solid #999; border-radius: 2px; width: 35mm;"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>
+    <td rowspan="3" style="background-color: #f9f9f9; vertical-align: middle; text-align: center; border: 0.3px solid #999; border-radius: 2px; width: 10mm;"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+    <td class="store-cell col-group-1">10</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">09</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Atibaia -->
+<tr>
+    <td class="region-header col-group-1" rowspan="7">Atibaia</td>
+    <td class="store-cell col-group-1">34</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="7"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="7">Atibaia</td>
+    <td class="merged-cell" rowspan="7"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>
+    <td class="merged-cell" rowspan="7"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">35</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">33</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">31</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">32</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">51</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">57</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Praia Grande -->
+<tr>
+    <td class="region-header col-group-1">Praia Grande</td>
+    <td class="store-cell col-group-1">58</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota"><input type="number" min="0" readonly></td>
+    <td class="merged-cell">Praia Grande</td>
+    <td class="merged-cell"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>
+    <td class="merged-cell"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr class="blank-row"><td colspan="10"></td></tr>
+<!-- Rio de Janeiro -->
+<tr>
+    <td class="region-header col-group-1" rowspan="2">Rio de Janeiro</td>
+    <td class="store-cell col-group-1">53</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+    <td class="col-group-3 total-rota" rowspan="2"><input type="number" min="0" readonly></td>
+    <td class="merged-cell" rowspan="2">Rio de Janeiro</td>
+    <td class="merged-cell" rowspan="2"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>
+    <td class="merged-cell" rowspan="2"><input type="number" step="0.1" class="temperatura"></td>
+</tr>
+<tr>
+    <td class="store-cell col-group-1">36</td>
+    <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+    <td class="col-group-2"><input type="number" min="0" class="box"></td>
+    <td class="col-group-2"><input type="number" min="0" class="container"></td>
+    <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+</tr>
+              
+            </tbody>
+        </table>
+		<div class="total-caminhoes-display" style="margin-top: 10px; padding: 8px; background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%); border: 0.3px solid #666; border-radius: 6px; text-align: center; font-weight: 900; font-size: 10pt;">
+            <span id="totalCaminhoes">Total de 0 caminhões carregados</span>
+        </div>
+    </div>
+    <script>
+// Variável para controlar o auto-save
+let autoSaveTimeout;
+let lastSavedData = '';
+
+// Função para mostrar mensagem de status
+function showStatus(message, duration = 2000) {
+    const statusElement = document.getElementById('statusMessage');
+    statusElement.textContent = message;
+    statusElement.style.display = 'block';
+   
+    setTimeout(() => {
+        statusElement.style.display = 'none';
+    }, duration);
+}
+
+// Função para salvar dados no localStorage
+function saveData() {
+    const inputs = document.querySelectorAll('input, textarea.motorista-placa-textarea');
+    const data = {};
+   
+    inputs.forEach((input, index) => {
+        data[`input_${index}`] = input.value;
+    });
+   
+    const dataString = JSON.stringify(data);
+   
+    // Só salva se os dados mudaram
+    if (dataString !== lastSavedData) {
+        localStorage.setItem('controleCarregamento', dataString);
+        lastSavedData = dataString;
+    }
+}
+
+// Função para carregar dados do localStorage
+function loadData() {
+    const savedData = localStorage.getItem('controleCarregamento');
+   
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        const inputs = document.querySelectorAll('input, textarea.motorista-placa-textarea');
+       
+        inputs.forEach((input, index) => {
+            if (data[`input_${index}`]) {
+                input.value = data[`input_${index}`];
+            }
+        });
+       
+        // Recalcular totais após carregar dados
+        calculateAllTotals();
+        showStatus('Dados carregados com sucesso!');
+
+        // Ajustar fonte dos textareas após carregar dados
+        document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+            autoAdjustFontSize(textarea);
+        });
+        
+        // Centralizar textareas após carregar
+        centerTextareaContent();
+		contarCaminhoes();
+    } else {
+        showStatus('Nenhum dado salvo encontrado.');
+    }
+}
+
+// Função para limpar todos os campos
+function clearData() {
+    if (confirm('Tem certeza que deseja limpar todos os dados?')) {
+        const inputs = document.querySelectorAll('input, textarea.motorista-placa-textarea');
+       
+        inputs.forEach(input => {
+            input.value = '';
+        });
+       
+        // Recalcular totais após limpar
+        calculateAllTotals();
+        localStorage.removeItem('controleCarregamento');
+        lastSavedData = '';
+        showStatus('Todos os dados foram limpos!');
+    }
+}
+
+// Função para ajustar automaticamente o tamanho da fonte
+function autoAdjustFontSize(textarea) {
+    // Resetar para tamanho padrão
+    textarea.style.fontSize = '9pt';
+    textarea.style.lineHeight = '1.1';
+    
+    // Verificar se o conteúdo excede a altura
+    const maxHeight = textarea.clientHeight;
+    let fontSize = 9;
+    
+    // Reduzir fonte gradualmente até caber
+    while (textarea.scrollHeight > maxHeight && fontSize > 6) {
+        fontSize -= 0.5;
+        textarea.style.fontSize = fontSize + 'pt';
+        textarea.style.lineHeight = '1.0';
+    }
+    
+    // Se ainda não couber, reduzir line-height
+    if (textarea.scrollHeight > maxHeight) {
+        textarea.style.lineHeight = '0.9';
+    }
+}
+
+// Função para centralizar cursor verticalmente no textarea
+function centerTextareaContent() {
+    document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+        const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight);
+        const textareaHeight = textarea.clientHeight;
+        const lines = textarea.value.split('\n').length;
+        const contentHeight = lines * lineHeight;
+        
+        // Calcular padding superior para centralizar
+        const paddingTop = Math.max(0, (textareaHeight - contentHeight) / 2);
+        
+        textarea.style.paddingTop = paddingTop + 'px';
+        textarea.style.paddingBottom = '2px';
+    });
+}
+
+// Função melhorada para contar placas de caminhões
+function contarCaminhoes() {
+    const textareas = document.querySelectorAll('.motorista-placa-textarea');
+    const placasEncontradas = new Set();
+    
+    // Regex para placas brasileiras:
+    // Padrão COMPLETO ANTIGO: 3 letras + 4 números (ex: ABC1234, abc-1234)
+    const regexPlacaAntiga = /\b[A-Za-z]{3}[-\s]?[0-9]{4}\b/g;
+    
+    // Padrão COMPLETO MERCOSUL: 3 letras + 1 número + 1 letra + 2 números (ex: ABC1D23)
+    const regexPlacaMercosul = /\b[A-Za-z]{3}[-\s]?[0-9][A-Za-z][0-9]{2}\b/g;
+    
+    // Padrão REDUZIDO: últimos 4 dígitos (ex: 1234, 1D23)
+    // Formato ANTIGO reduzido: 4 números (ex: 1234)
+    const regexReduzidoAntigo = /\b[0-9]{4}\b/g;
+    
+    // Formato MERCOSUL reduzido: 1 número + 1 letra + 2 números (ex: 1D23, 2h76)
+    const regexReduzidoMercosul = /\b[0-9][A-Za-z][0-9]{2}\b/g;
+    
+    textareas.forEach(textarea => {
+        const texto = textarea.value.trim();
+        
+        if (texto !== '') {
+            // Buscar placas completas no padrão antigo
+            let matchesAntiga = texto.match(regexPlacaAntiga);
+            if (matchesAntiga) {
+                matchesAntiga.forEach(placa => {
+                    const placaNormalizada = placa.replace(/[-\s]/g, '').toUpperCase();
+                    placasEncontradas.add(placaNormalizada);
+                });
+            }
+            
+            // Buscar placas completas no padrão Mercosul
+            let matchesMercosul = texto.match(regexPlacaMercosul);
+            if (matchesMercosul) {
+                matchesMercosul.forEach(placa => {
+                    const placaNormalizada = placa.replace(/[-\s]/g, '').toUpperCase();
+                    placasEncontradas.add(placaNormalizada);
+                });
+            }
+            
+            // Buscar placas reduzidas (4 números) - apenas se NÃO encontrou placa completa
+            if (!matchesAntiga && !matchesMercosul) {
+                let matchesReduzidoAntigo = texto.match(regexReduzidoAntigo);
+                if (matchesReduzidoAntigo) {
+                    matchesReduzidoAntigo.forEach(placa => {
+                        const placaNormalizada = placa.toUpperCase();
+                        placasEncontradas.add(placaNormalizada);
+                    });
+                }
+                
+                // Buscar placas reduzidas Mercosul (1 número + 1 letra + 2 números)
+                let matchesReduzidoMercosul = texto.match(regexReduzidoMercosul);
+                if (matchesReduzidoMercosul) {
+                    matchesReduzidoMercosul.forEach(placa => {
+                        const placaNormalizada = placa.toUpperCase();
+                        placasEncontradas.add(placaNormalizada);
+                    });
+                }
+            }
+        }
+    });
+    
+    const totalCaminhoes = placasEncontradas.size;
+    const elementoTotal = document.getElementById('totalCaminhoes');
+    
+    if (elementoTotal) {
+        if (totalCaminhoes === 0) {
+            elementoTotal.textContent = 'Nenhum caminhão carregado';
+        } else if (totalCaminhoes === 1) {
+            elementoTotal.textContent = 'Total de 1 caminhão carregado';
+        } else {
+            elementoTotal.textContent = `Total de ${totalCaminhoes} caminhões carregados`;
+        }
+    }
+}
+
+// Função para imprimir
+function printPage() {
+    window.print();
+}
+
+// Configurar data atual
+function setCurrentDate() {
+    const dateInput = document.getElementById('dateField');
+    if (dateInput && dateInput.value === '') {
+        dateInput.value = '__/__/____';
+    }
+}
+
+// Função para aplicar máscara de data
+function applyDateMask(input) {
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length === 0) {
+        input.value = '__/__/____';
+        return;
+    }
+    
+    let formatted = '';
+    
+    if (value.length <= 2) {
+        formatted = value;
+    } else if (value.length <= 4) {
+        formatted = value.slice(0, 2) + '/' + value.slice(2);
+    } else {
+        formatted = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+    }
+    
+    input.value = formatted;
+}
+
+// Função para calcular o total de uma região específica
+function calculateRegionTotal(regionRows) {
+    let total = 0;
+   
+    regionRows.forEach(row => {
+        const paletes = parseFloat(row.querySelector('.qtde-paletes')?.value) || 0;
+        const box = parseFloat(row.querySelector('.box')?.value) || 0;
+        const container = parseFloat(row.querySelector('.container')?.value) || 0;
+        const camara = parseFloat(row.querySelector('.camara')?.value) || 0;
+       
+        total += paletes + box + container + camara;
+    });
+   
+    return total;
+}
+
+// Função para calcular todos os totais por rota
+function calculateAllTotals() {
+    const totalCells = document.querySelectorAll('.total-rota');
+   
+    totalCells.forEach(totalCell => {
+        const totalInput = totalCell.querySelector('input');
+        const numRows = parseInt(totalCell.getAttribute('rowspan') || '1');
+        let currentRow = totalCell.closest('tr');
+        const regionRows = [];
+       
+        for (let i = 0; i < numRows; i++) {
+            if (currentRow && currentRow.querySelector('.store-cell')) {
+                regionRows.push(currentRow);
+            }
+            currentRow = currentRow.nextElementSibling;
+        }
+       
+        const total = calculateRegionTotal(regionRows);
+        totalInput.value = total > 0 ? total : '';
+    });
+}
+
+// Função para navegar para o campo de baixo
+function navigateToFieldBelow(currentField) {
+    const currentCell = currentField.closest('td');
+    if (!currentCell) return;
+    
+    const currentRow = currentCell.closest('tr');
+    if (!currentRow) return;
+    
+    const editableCellsInRow = Array.from(currentRow.querySelectorAll('td')).filter(td => {
+        return td.querySelector('input:not([readonly]), textarea.motorista-placa-textarea');
+    });
+    
+    const currentCellIndex = editableCellsInRow.indexOf(currentCell);
+    if (currentCellIndex === -1) return;
+    
+    let nextRow = currentRow.nextElementSibling;
+    
+    while (nextRow) {
+        if (nextRow.classList.contains('blank-row')) {
+            nextRow = nextRow.nextElementSibling;
+            continue;
+        }
+        
+        const nextRowEditableCells = Array.from(nextRow.querySelectorAll('td')).filter(td => {
+            return td.querySelector('input:not([readonly]), textarea.motorista-placa-textarea');
+        });
+        
+        if (nextRowEditableCells.length > currentCellIndex) {
+            const nextCell = nextRowEditableCells[currentCellIndex];
+            const nextField = nextCell.querySelector('input:not([readonly]), textarea.motorista-placa-textarea');
+            
+            if (nextField) {
+                nextField.focus();
+                if (nextField.tagName === 'INPUT') {
+                    nextField.select();
+                }
+                return;
+            }
+        }
+        nextRow = nextRow.nextElementSibling;
+    }
+    
+    const allFields = Array.from(document.querySelectorAll('input:not([readonly]), textarea.motorista-placa-textarea'));
+    const currentIndex = allFields.indexOf(currentField);
+    
+    if (currentIndex !== -1 && currentIndex < allFields.length - 1) {
+        const nextField = allFields[currentIndex + 1];
+        nextField.focus();
+        if (nextField.tagName === 'INPUT') {
+            nextField.select();
+        }
+    }
+}
+
+// Função para capturar screenshot
+// Função para capturar screenshot
+async function captureScreenshot() {
+    showStatus('Capturando tela...');
+    
+    const controls = document.querySelector('.controls');
+    const statusMessage = document.getElementById('statusMessage');
+    const originalControlsDisplay = controls.style.display;
+    const originalStatusDisplay = statusMessage.style.display;
+    
+    controls.style.display = 'none';
+    statusMessage.style.display = 'none';
+
+    const inputs = document.querySelectorAll('input:not(.date-input)');
+    const textareas = document.querySelectorAll('textarea');
+    const dateInput = document.getElementById('dateField');
+    
+    const inputData = [];
+    const textareaData = [];
+    
+    inputs.forEach((input) => {
+        const value = input.value;
+        const parent = input.parentElement;
+        const isReadonly = input.hasAttribute('readonly');
+        const isTotalRota = parent.classList.contains('total-rota') || parent.classList.contains('col-group-3');
+        
+        const span = document.createElement('span');
+        span.textContent = value;
+        span.style.display = 'flex';
+        span.style.alignItems = 'center';
+        span.style.justifyContent = 'center';
+        span.style.border = 'none';
+        span.style.background = 'transparent';
+        span.style.width = '100%';
+        span.style.height = '100%';
+        span.style.textAlign = 'center';
+        span.style.fontSize = '8pt';
+        span.style.lineHeight = '1';
+        span.style.padding = '0';
+        span.style.margin = '0';
+        
+        if (isTotalRota || isReadonly) {
+            span.style.fontWeight = '900';
+            span.style.fontSize = '9pt';
+            span.style.color = '#000';
+        }
+        
+        span.className = 'temp-capture-text';
+        
+        inputData.push({ input, parent, span, value });
+        input.style.display = 'none';
+        parent.appendChild(span);
+    });
+    
+    textareas.forEach((textarea) => {
+        const value = textarea.value;
+        const parent = textarea.parentElement;
+        const div = document.createElement('div');
+        div.textContent = value;
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'center';
+        div.style.border = 'none';
+        div.style.background = 'transparent';
+        div.style.width = '100%';
+        div.style.height = '100%';
+        div.style.textAlign = 'center';
+        div.style.fontSize = '9pt';
+        div.style.fontWeight = '700';
+        div.style.lineHeight = '1.2';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.wordWrap = 'break-word';
+        div.style.padding = '0';
+        div.style.margin = '0';
+        div.className = 'temp-capture-text';
+        
+        textareaData.push({ textarea, parent, div, value });
+        textarea.style.display = 'none';
+        parent.appendChild(div);
+    });
+    
+    let dateSpan = null;
+    if (dateInput) {
+        const dateValue = dateInput.value;
+        const dateParent = dateInput.parentElement;
+        
+        dateSpan = document.createElement('span');
+        
+        if (dateValue !== '__/__/____' && dateValue.replace(/\D/g, '').length > 0) {
+            dateSpan.textContent = dateValue;
+        } else {
+            dateSpan.textContent = '';
+        }
+        
+        dateSpan.style.fontWeight = '700';
+        dateSpan.style.fontSize = '7pt';
+        dateSpan.style.fontFamily = 'Arial, sans-serif';
+        dateSpan.style.color = '#000';
+        dateSpan.className = 'temp-capture-text';
+        
+        dateInput.style.display = 'none';
+        dateParent.insertBefore(dateSpan, dateInput);
+    }
+
+    try {
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        const canvas = await html2canvas(document.querySelector('.pagina-a4'), {
+            scale: 3,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#FFFFFF',
+            scrollX: 0,
+            scrollY: -window.scrollY,
+            width: document.querySelector('.pagina-a4').scrollWidth,
+            height: document.querySelector('.pagina-a4').scrollHeight,
+            logging: false,
+            removeContainer: true,
+            imageTimeout: 0,
+            onclone: function(clonedDoc) {
+                // Forçar todas as células a renderizarem juntas
+                const table = clonedDoc.querySelector('table');
+                if (table) {
+                    table.style.pageBreakInside = 'avoid';
+                    table.style.breakInside = 'avoid';
+                }
+                
+                const tbody = clonedDoc.querySelector('tbody');
+                if (tbody) {
+                    tbody.style.pageBreakInside = 'avoid';
+                    tbody.style.breakInside = 'avoid';
+                }
+                
+                // Forçar células mescladas específicas
+                const allRows = clonedDoc.querySelectorAll('tbody tr');
+                allRows.forEach(row => {
+                    row.style.pageBreakInside = 'avoid';
+                    row.style.breakInside = 'avoid';
+                });
+                
+                const mergedCells = clonedDoc.querySelectorAll('.region-header[rowspan], .merged-cell[rowspan], td[rowspan]');
+                mergedCells.forEach(cell => {
+                    cell.style.pageBreakInside = 'avoid';
+                    cell.style.breakInside = 'avoid';
+                    cell.style.display = 'table-cell';
+                });
+                
+                // Adicionar altura mínima forçada para evitar colapso
+                const paginaA4 = clonedDoc.querySelector('.pagina-a4');
+                if (paginaA4) {
+                    paginaA4.style.minHeight = paginaA4.scrollHeight + 'px';
+                }
+            },
+            ignoreElements: (element) => {
+                return element.tagName === 'IMG' && !element.complete;
+            }
+        });
+
+        // Restaurar elementos originais
+        inputData.forEach(({ input, parent, span }) => {
+            parent.removeChild(span);
+            input.style.display = '';
+        });
+        
+        textareaData.forEach(({ textarea, parent, div }) => {
+            parent.removeChild(div);
+            textarea.style.display = '';
+        });
+        
+        if (dateSpan && dateInput) {
+            dateSpan.parentElement.removeChild(dateSpan);
+            dateInput.style.display = '';
+        }
+        
+        controls.style.display = originalControlsDisplay;
+        statusMessage.style.display = originalStatusDisplay;
+
+        // Processar e salvar a imagem
+        try {
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+            
+            // Criar um link temporário para download
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const date = new Date();
+            const timestamp = date.toISOString().slice(0, 19).replace(/[:.]/g, '-');
+            link.download = `controle-carregamento-${timestamp}.png`;
+            link.href = url;
+            link.click();
+            
+            // Tentar copiar para área de transferência também
+            try {
+                const item = new ClipboardItem({ 'image/png': blob });
+                await navigator.clipboard.write([item]);
+                showStatus('✅ PRONTO! Agora abra o WhatsApp, e cole a imagem (CTRL+V)');
+            } catch (copyError) {
+                showStatus('✅ Imagem salva nos Downloads!');
+            }
+            
+            // Aguardar um momento e abrir WhatsApp Web
+            setTimeout(() => {
+                window.open('https://web.whatsapp.com', '_blank');
+            }, 500);
+            
+            // Limpar URL temporária
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 1000);
+            
+        } catch (processError) {
+            console.error('Erro ao processar:', processError);
+            fallbackDownload(canvas);
+        }
+
+    } catch (error) {
+        console.error('Erro ao capturar:', error);
+        
+        inputData.forEach(({ input, parent, span }) => {
+            if (span.parentElement) parent.removeChild(span);
+            input.style.display = '';
+        });
+        
+        textareaData.forEach(({ textarea, parent, div }) => {
+            if (div.parentElement) parent.removeChild(div);
+            textarea.style.display = '';
+        });
+        
+        if (dateSpan && dateSpan.parentElement) {
+            dateSpan.parentElement.removeChild(dateSpan);
+            if (dateInput) dateInput.style.display = '';
+        }
+        
+        controls.style.display = originalControlsDisplay;
+        statusMessage.style.display = originalStatusDisplay;
+        showStatus('Erro ao capturar imagem. Tente novamente.');
+    }
+}
+
+// Função fallback para download
+function fallbackDownload(canvas) {
+    canvas.toBlob(function(blob) {
+        const link = document.createElement('a');
+        const date = new Date();
+        const timestamp = date.toISOString().slice(0, 19).replace(/[:.]/g, '-');
+        
+        link.download = `controle-carregamento-${timestamp}.png`;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        
+        setTimeout(() => {
+            URL.revokeObjectURL(link.href);
+            showStatus('📥 Download da imagem iniciado!');
+        }, 100);
+    }, 'image/png');
+}
+
+// ========== EVENT LISTENERS ==========
+
+// Event listener para máscara de data
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('dateField');
+    
+    if (dateInput) {
+        dateInput.value = '__/__/____';
+        
+        dateInput.addEventListener('focus', function() {
+            if (this.value === '__/__/____') {
+                this.value = '';
+            }
+        });
+        
+        dateInput.addEventListener('blur', function() {
+            if (this.value === '' || this.value.replace(/\D/g, '').length === 0) {
+                this.value = '__/__/____';
+            }
+        });
+        
+        dateInput.addEventListener('input', function() {
+            applyDateMask(this);
+        });
+        
+        dateInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const numbers = pastedText.replace(/\D/g, '');
+            this.value = '';
+            
+            for (let i = 0; i < numbers.length && i < 8; i++) {
+                this.value += numbers[i];
+                applyDateMask(this);
+            }
+        });
+    }
+    
+    // Adicionar event listeners aos botões
+    document.getElementById('clearBtn').addEventListener('click', clearData);
+    document.getElementById('printBtn').addEventListener('click', printPage);
+    document.getElementById('screenshotBtn').addEventListener('click', captureScreenshot);
+});
+
+// Configurar data ao carregar
+window.addEventListener('load', function() {
+    setCurrentDate();
+    loadData();
+    
+    document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+        autoAdjustFontSize(textarea);
+    });
+});
+
+// Event listener para campos numéricos
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('qtde-paletes') ||
+        e.target.classList.contains('box') ||
+        e.target.classList.contains('container') ||
+        e.target.classList.contains('camara')) {
+       
+        setTimeout(calculateAllTotals, 10);
+       
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(saveData, 1000);
+    }
+    
+    if (e.target.classList.contains('motorista-placa-textarea')) {
+        autoAdjustFontSize(e.target);
+		centerTextareaContent();
+		contarCaminhoes();
+        
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(saveData, 1000);
+    }
+});
+
+// Event listener para navegação com Enter
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        
+        if (e.target.classList.contains('motorista-placa-textarea')) {
+            const textarea = e.target;
+            const cursorPosition = textarea.selectionStart;
+            const currentValue = textarea.value;
+            
+            textarea.value = currentValue.substring(0, cursorPosition) + '\n' + currentValue.substring(cursorPosition);
+            textarea.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+            
+            autoAdjustFontSize(textarea);
+        } else {
+            navigateToFieldBelow(e.target);
+        }
+    }
+});
+
+// Auto-save quando fechar
+window.addEventListener('beforeunload', saveData);  
+    </script>
+</body>
+</html>

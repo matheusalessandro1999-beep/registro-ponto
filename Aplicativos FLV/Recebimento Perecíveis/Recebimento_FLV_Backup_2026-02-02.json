@@ -1,0 +1,1563 @@
+{
+  "conferentes": [
+    {
+      "nome": "Antonio",
+      "ativo": true,
+      "id": 43
+    },
+    {
+      "nome": "Christian",
+      "ativo": true,
+      "id": 44
+    },
+    {
+      "nome": "Davi",
+      "ativo": true,
+      "id": 45
+    },
+    {
+      "nome": "Douglas R",
+      "ativo": true,
+      "id": 46
+    },
+    {
+      "nome": "Geilton",
+      "ativo": true,
+      "id": 47
+    },
+    {
+      "nome": "Marcos",
+      "ativo": true,
+      "id": 48
+    },
+    {
+      "nome": "Daniel",
+      "ativo": true,
+      "id": 49
+    },
+    {
+      "nome": "Alison",
+      "ativo": true,
+      "id": 50
+    },
+    {
+      "nome": "Gercica",
+      "ativo": false,
+      "id": 51
+    }
+  ],
+  "dadosPorMes": {
+    "Abril 2026": [],
+    "Agosto 2026": [],
+    "Dezembro": [
+      {
+        "conferente": "Davi",
+        "data": "2025-12-01",
+        "fornecedor": "Maccain",
+        "carga": "3438502",
+        "palete": "9",
+        "batida": "0"
+      },
+      {
+        "conferente": "Gercica",
+        "data": "2025-12-01",
+        "fornecedor": "Szura",
+        "carga": "3438507",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-01",
+        "fornecedor": "Minerva",
+        "carga": "3439863",
+        "palete": "17",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-01",
+        "fornecedor": "Jbs",
+        "carga": "3439906",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-12-02",
+        "fornecedor": "Brf",
+        "carga": "3440712",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-02",
+        "fornecedor": "Brf",
+        "carga": "3441292",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Gercica",
+        "data": "2025-12-03",
+        "fornecedor": "Brf",
+        "carga": "3441768",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Gercica",
+        "data": "2025-12-03",
+        "fornecedor": "Mc Cain",
+        "carga": "3441728",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Brf",
+        "carga": "3442510",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Brf",
+        "carga": "3441350",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Brf",
+        "carga": "3441574",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Minerva",
+        "carga": "3441635",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Brf",
+        "carga": "3441581",
+        "palete": "19",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Confianca",
+        "carga": "3441726",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Santa Ibes ",
+        "carga": "3442140",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Brf",
+        "carga": "3443276",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Minerva",
+        "carga": "3443363",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Itambe",
+        "carga": "3443710",
+        "palete": "3",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Plena",
+        "carga": "3444510",
+        "palete": "8",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Brf",
+        "carga": "3444368",
+        "palete": "7",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-04",
+        "fornecedor": "Gtf",
+        "carga": "3444654",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-05",
+        "fornecedor": "Luza",
+        "carga": "3445590",
+        "palete": "20",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-05",
+        "fornecedor": "Netfeira",
+        "carga": "3445747",
+        "palete": "2",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-05",
+        "fornecedor": "Plena",
+        "carga": "3444424",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-05",
+        "fornecedor": "Jbs",
+        "carga": "3443035",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-05",
+        "fornecedor": "Polenghi",
+        "carga": "3446921",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-05",
+        "fornecedor": "Polenghi",
+        "carga": "3446919",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-05",
+        "fornecedor": "C Vale",
+        "carga": "3447199",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-05",
+        "fornecedor": "C Vale",
+        "carga": "3447148",
+        "palete": "20",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-12-06",
+        "fornecedor": "Vigor",
+        "carga": "3443711",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-12-08",
+        "fornecedor": "Jbs",
+        "carga": "3448040",
+        "palete": "14",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-12-08",
+        "fornecedor": "Minerva",
+        "carga": "3447287",
+        "palete": "22",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-08",
+        "fornecedor": "Frooty",
+        "carga": "3449295",
+        "palete": "1",
+        "batida": "0"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-12-08",
+        "fornecedor": "Deale",
+        "carga": "3447650",
+        "palete": "7",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-08",
+        "fornecedor": "Better Beef",
+        "carga": "3448319",
+        "palete": "13",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-08",
+        "fornecedor": "Minerva",
+        "carga": "3449439",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-09",
+        "fornecedor": "Ludimix",
+        "carga": "3450075",
+        "palete": "1",
+        "batida": "0"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-12-09",
+        "fornecedor": "Catupiry",
+        "carga": "3449870",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-09",
+        "fornecedor": "Minerva",
+        "carga": "3447450",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-10",
+        "fornecedor": "Jbs",
+        "carga": "3451628",
+        "palete": "3",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-12-10",
+        "fornecedor": "Minerva",
+        "carga": "3450856",
+        "palete": "30",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-11",
+        "fornecedor": "Jbs",
+        "carga": "3449924",
+        "palete": "27",
+        "batida": "3"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-11",
+        "fornecedor": "Brf",
+        "carga": "3452024",
+        "palete": "14",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-12",
+        "fornecedor": "Netfeira",
+        "carga": "3454614",
+        "palete": "4",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-12",
+        "fornecedor": "Teixeira Boni",
+        "carga": "3454859",
+        "palete": "1",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-12",
+        "fornecedor": "Teixeira",
+        "carga": "3454848",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-12",
+        "fornecedor": "C Vale",
+        "carga": "3451908",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-13",
+        "fornecedor": "Minerva",
+        "carga": "3454678",
+        "palete": "15",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-13",
+        "fornecedor": "Jbs ",
+        "carga": "3451228",
+        "palete": "11",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-13",
+        "fornecedor": "Jbs ",
+        "carga": "3451039",
+        "palete": "11",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-12-15",
+        "fornecedor": "Szura",
+        "carga": "3454791",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-12-15",
+        "fornecedor": "Jbs",
+        "carga": "3457477",
+        "palete": "21",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-15",
+        "fornecedor": "Confianca ",
+        "carga": "3459077",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-16",
+        "fornecedor": "Minerva",
+        "carga": "3458119",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-16",
+        "fornecedor": "Minerva",
+        "carga": "3458045",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-16",
+        "fornecedor": "Rohden",
+        "carga": "3459187",
+        "palete": "4",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-16",
+        "fornecedor": "Deale",
+        "carga": "3460145",
+        "palete": "7",
+        "batida": "3"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-16",
+        "fornecedor": "Confiança",
+        "carga": "3459185",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-16",
+        "fornecedor": "Minerva",
+        "carga": "3459286",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-12-17",
+        "fornecedor": "Opergel",
+        "carga": "3460884",
+        "palete": "0",
+        "batida": "1"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-12-17",
+        "fornecedor": "Gtfoods",
+        "carga": "3459425",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-17",
+        "fornecedor": "Jbs",
+        "carga": "3461121",
+        "palete": "3",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-17",
+        "fornecedor": "Plena",
+        "carga": "3462061",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-17",
+        "fornecedor": "Jbs",
+        "carga": "3460866",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-17",
+        "fornecedor": "Jbs",
+        "carga": "3460903",
+        "palete": "7",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-17",
+        "fornecedor": "Brf",
+        "carga": "3460889",
+        "palete": "21",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-18",
+        "fornecedor": "So Minas ",
+        "carga": "3464151",
+        "palete": "0",
+        "batida": "2"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-18",
+        "fornecedor": "Vigor ",
+        "carga": "3462118",
+        "palete": "7",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-18",
+        "fornecedor": "Brf",
+        "carga": "3461510",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-19",
+        "fornecedor": "Carga Fob Aurora",
+        "carga": "34662066",
+        "palete": "12",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-19",
+        "fornecedor": "Carga Fob Aurora",
+        "carga": "3466224",
+        "palete": "14",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-19",
+        "fornecedor": "Carga Fob Aurora",
+        "carga": "3466139",
+        "palete": "12",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-19",
+        "fornecedor": "Carga Fob Aurora",
+        "carga": "3466236",
+        "palete": "14",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-20",
+        "fornecedor": "Lactojara",
+        "carga": "3462646",
+        "palete": "11",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-20",
+        "fornecedor": "C Vale",
+        "carga": "3466226",
+        "palete": "21",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-20",
+        "fornecedor": "Minerva",
+        "carga": "3465287",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-20",
+        "fornecedor": "Boni Brf",
+        "carga": "3465701",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-20",
+        "fornecedor": "Brf Boni",
+        "carga": "3465021",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-21",
+        "fornecedor": "Szura ",
+        "carga": "3467177",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-21",
+        "fornecedor": "Gtfoods",
+        "carga": "3466355",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-21",
+        "fornecedor": "Minerva",
+        "carga": "3467384",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-21",
+        "fornecedor": "Carga Pallets ",
+        "carga": "3467385",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-22",
+        "fornecedor": "Minerva",
+        "carga": "3467978",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-22",
+        "fornecedor": "Jbs",
+        "carga": "3467431",
+        "palete": "4",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-22",
+        "fornecedor": "Frigol",
+        "carga": "3469061",
+        "palete": "2",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-23",
+        "fornecedor": "Kazume",
+        "carga": "3469797",
+        "palete": "1",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-23",
+        "fornecedor": "Brf",
+        "carga": "3469537",
+        "palete": "9",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-23",
+        "fornecedor": "Teixera",
+        "carga": "3466928",
+        "palete": "6",
+        "batida": "6"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-23",
+        "fornecedor": "Marfrig",
+        "carga": "3470868",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-23",
+        "fornecedor": "Marfrig Plts",
+        "carga": "3470879",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-24",
+        "fornecedor": "Minerva",
+        "carga": "3471115",
+        "palete": "15",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-24",
+        "fornecedor": "Minerva Paletes ",
+        "carga": "3471616",
+        "palete": "15",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-26",
+        "fornecedor": "Brf",
+        "carga": "3472223",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-12-26",
+        "fornecedor": "Szura",
+        "carga": "3472221",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-26",
+        "fornecedor": "Deale ",
+        "carga": "3473039",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-26",
+        "fornecedor": "Brf ",
+        "carga": "3472460",
+        "palete": "13",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-27",
+        "fornecedor": "Szura",
+        "carga": "3473799",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-27",
+        "fornecedor": "Brf",
+        "carga": "3473706",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-29",
+        "fornecedor": "Santa Ines ",
+        "carga": "3475076",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-29",
+        "fornecedor": "Goias Minas ",
+        "carga": "3474448",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-29",
+        "fornecedor": "Goias Minas Plts ",
+        "carga": "3476262",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-29",
+        "fornecedor": "Brf",
+        "carga": "3476001",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-30",
+        "fornecedor": "So Minas",
+        "carga": "3476134",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-30",
+        "fornecedor": "So Minas",
+        "carga": "3476135",
+        "palete": "2",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-12-30",
+        "fornecedor": "Itambé",
+        "carga": "3476348",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-30",
+        "fornecedor": "Brf",
+        "carga": "3476942",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-12-30",
+        "fornecedor": "Minerva",
+        "carga": "3477262",
+        "palete": "25",
+        "batida": "0"
+      }
+    ],
+    "Dezembro 2026": [
+      {
+        "conferente": "Christian",
+        "data": "2026-01-02",
+        "fornecedor": "",
+        "carga": "",
+        "palete": "0",
+        "batida": "0"
+      }
+    ],
+    "Fevereiro": [],
+    "Fevereiro 2026": [],
+    "Janeiro": [
+      {
+        "conferente": "Davi",
+        "data": "2026-01-19",
+        "fornecedor": "Brf",
+        "carga": "3498669",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-19",
+        "fornecedor": "Brf",
+        "carga": "3498670",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-19",
+        "fornecedor": "Costa",
+        "carga": "3499618",
+        "palete": "0",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-15",
+        "fornecedor": "Szura",
+        "carga": "3495414",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-12",
+        "fornecedor": "Italac",
+        "carga": "3489984",
+        "palete": "4",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-10",
+        "fornecedor": "Brf",
+        "carga": "3489091",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-10",
+        "fornecedor": "Loja 30",
+        "carga": "3489759",
+        "palete": "0",
+        "batida": "3"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-09",
+        "fornecedor": "Brf",
+        "carga": "3487196",
+        "palete": "0",
+        "batida": "4"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2026-01-08",
+        "fornecedor": "Brf",
+        "carga": "3485570",
+        "palete": "13",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-08",
+        "fornecedor": "Somave",
+        "carga": "3485220",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-08",
+        "fornecedor": "Brf ",
+        "carga": "3485207",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-07",
+        "fornecedor": "Teixeira",
+        "carga": "3483234/3483278",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-07",
+        "fornecedor": "Brf",
+        "carga": "3480248",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-07",
+        "fornecedor": "Brf",
+        "carga": "3480254",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Gercica",
+        "data": "2026-01-07",
+        "fornecedor": "Brf",
+        "carga": "3483231",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-07",
+        "fornecedor": "Szura",
+        "carga": "3484069",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-06",
+        "fornecedor": "Brf",
+        "carga": "3481775",
+        "palete": "23",
+        "batida": "2"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-06",
+        "fornecedor": "Brf ",
+        "carga": "3484551",
+        "palete": "17",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-06",
+        "fornecedor": "Brf ",
+        "carga": "3482401",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-06",
+        "fornecedor": "Brf",
+        "carga": "3483011",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-05",
+        "fornecedor": "Brfr ",
+        "carga": "3480933",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-05",
+        "fornecedor": "Brf ",
+        "carga": "3481291",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-05",
+        "fornecedor": "Brf",
+        "carga": "3480254",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-03",
+        "fornecedor": "Tirolez",
+        "carga": "3479510",
+        "palete": "18",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-03",
+        "fornecedor": "Minerva ",
+        "carga": "3470162",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-03",
+        "fornecedor": "Minerva Plts ",
+        "carga": "34750120",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-02",
+        "fornecedor": "Minerva ",
+        "carga": "3479388",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-19",
+        "fornecedor": "Brf",
+        "carga": "3498669",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-19",
+        "fornecedor": "Brf",
+        "carga": "3498670",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-19",
+        "fornecedor": "Costa",
+        "carga": "3499618",
+        "palete": "0",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-15",
+        "fornecedor": "Szura",
+        "carga": "3495414",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-12",
+        "fornecedor": "Italac",
+        "carga": "3489984",
+        "palete": "4",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-10",
+        "fornecedor": "Brf",
+        "carga": "3489091",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-10",
+        "fornecedor": "Loja 30",
+        "carga": "3489759",
+        "palete": "0",
+        "batida": "3"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-09",
+        "fornecedor": "Brf",
+        "carga": "3487196",
+        "palete": "0",
+        "batida": "4"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2026-01-08",
+        "fornecedor": "Brf",
+        "carga": "3485570",
+        "palete": "13",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-08",
+        "fornecedor": "Somave",
+        "carga": "3485220",
+        "palete": "6",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-08",
+        "fornecedor": "Brf ",
+        "carga": "3485207",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-07",
+        "fornecedor": "Teixeira",
+        "carga": "3483234/3483278",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-07",
+        "fornecedor": "Brf",
+        "carga": "3480248",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-07",
+        "fornecedor": "Brf",
+        "carga": "3480254",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Gercica",
+        "data": "2026-01-07",
+        "fornecedor": "Brf",
+        "carga": "3483231",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-07",
+        "fornecedor": "Szura",
+        "carga": "3484069",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-06",
+        "fornecedor": "Brf",
+        "carga": "3481775",
+        "palete": "23",
+        "batida": "2"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-06",
+        "fornecedor": "Brf ",
+        "carga": "3484551",
+        "palete": "17",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-06",
+        "fornecedor": "Brf ",
+        "carga": "3482401",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-06",
+        "fornecedor": "Brf",
+        "carga": "3483011",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-05",
+        "fornecedor": "Brfr ",
+        "carga": "3480933",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-05",
+        "fornecedor": "Brf ",
+        "carga": "3481291",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-05",
+        "fornecedor": "Brf",
+        "carga": "3480254",
+        "palete": "24",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-03",
+        "fornecedor": "Tirolez",
+        "carga": "3479510",
+        "palete": "18",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-03",
+        "fornecedor": "Minerva ",
+        "carga": "3470162",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-03",
+        "fornecedor": "Minerva Plts ",
+        "carga": "34750120",
+        "palete": "27",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-02",
+        "fornecedor": "Minerva ",
+        "carga": "3479388",
+        "palete": "25",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-19",
+        "fornecedor": "Jbs ",
+        "carga": "3500079",
+        "palete": "18",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-21",
+        "fornecedor": "Kazume",
+        "carga": "3501101",
+        "palete": "0",
+        "batida": "1"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-21",
+        "fornecedor": "Italac",
+        "carga": "3500184/3500185",
+        "palete": "0",
+        "batida": "1"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-21",
+        "fornecedor": "Deale",
+        "carga": "3502583",
+        "palete": "4",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-21",
+        "fornecedor": "Texeira",
+        "carga": "3501725",
+        "palete": "16",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-22",
+        "fornecedor": "Opergel",
+        "carga": "3503774",
+        "palete": "5",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-22",
+        "fornecedor": "Szura ",
+        "carga": "3503383",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-23",
+        "fornecedor": "Só Minas",
+        "carga": "3505142",
+        "palete": "18",
+        "batida": "0"
+      },
+      {
+        "conferente": "Geilton",
+        "data": "2026-01-23",
+        "fornecedor": "Jhbg",
+        "carga": "654165214",
+        "palete": "02",
+        "batida": "0"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2026-01-23",
+        "fornecedor": "Marnobre",
+        "carga": "3506431",
+        "palete": "7",
+        "batida": "0"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2026-01-26",
+        "fornecedor": "Szura",
+        "carga": "3507841",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-27",
+        "fornecedor": "Netfeira",
+        "carga": "3509411",
+        "palete": "0",
+        "batida": "2"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-27",
+        "fornecedor": "Frimesa",
+        "carga": "3510159",
+        "palete": "16",
+        "batida": "0"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2026-01-28",
+        "fornecedor": "Lactojara",
+        "carga": "3510471",
+        "palete": "14",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-28",
+        "fornecedor": "Deale",
+        "carga": "3510728",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-28",
+        "fornecedor": "Confianca ",
+        "carga": "3511995",
+        "palete": "28",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-28",
+        "fornecedor": "Confiança ",
+        "carga": "3512407",
+        "palete": "16",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-29",
+        "fornecedor": "Confiaça",
+        "carga": "3512787",
+        "palete": "15",
+        "batida": "0"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-29",
+        "fornecedor": "Patagonia ",
+        "carga": "3513793",
+        "palete": "9",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-30",
+        "fornecedor": "Brf",
+        "carga": "3514487",
+        "palete": "23",
+        "batida": "0"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-30",
+        "fornecedor": "Só Minas ",
+        "carga": "3514593",
+        "palete": "0",
+        "batida": "2"
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2026-01-30",
+        "fornecedor": "Deale",
+        "carga": "3514560",
+        "palete": "26",
+        "batida": "0"
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2026-01-30",
+        "fornecedor": "Brf",
+        "carga": "3514441",
+        "palete": "0",
+        "batida": "1"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2026-01-30",
+        "fornecedor": "Szura ",
+        "carga": "3515684",
+        "palete": "26",
+        "batida": "0"
+      }
+    ],
+    "Janeiro 2026": [],
+    "Julho 2026": [],
+    "Junho": [],
+    "Junho 2026": [],
+    "Maio 2026": [],
+    "Março": [],
+    "Março 2026": [],
+    "Novembro": [],
+    "Novembro 2026": [],
+    "Outubro 2026": [],
+    "Setembro 2026": []
+  },
+  "config": {
+    "mesAtual": "Fevereiro"
+  }
+}

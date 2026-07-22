@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema moderno de Controle de Pesagem com abas para múltiplos produtos">
+  <title>Controle de Pesagem</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+  :root {
+  --primary: #3498db;
+  --primary-dark: #008000 ;
+  --secondary: #2ecc71;
+  --secondary-dark: #27ae60;
+  --danger: #e74c3c;
+  --danger-dark: #c0392b;
+  --accent: #9b59b6;
+  --accent-dark: #8e44ad;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --gray: #5a6268;
+  --gray-light: #e9ecef;
+  --border-radius: 8px;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.container {
+  max-width: 1100px;
+  width: calc(100% - 200px);
+  margin-left: 160px;
+  margin-right: 60px;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sidebar {
+  position: fixed;
+  top: 20px;
+  left: 40px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--primary);
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header .date-display {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-btn {
+  padding: 8px;
+  width: 120px;
+  height: 40px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.tab-btn.active {
+  background: var(--primary-dark);
+}
+
+.tab-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.delete-tab-btn {
+  background: transparent;
+  color: var(--danger);
+  padding: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-tab-btn:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.delete-tab-btn.disabled {
+  color: var(--gray);
+  cursor: not-allowed;
+}
+
+.add-tab-btn {
+  background: var(--accent);
+  color: white;
+  padding: 8px;
+  width: 110px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.add-tab-btn:hover {
+  background: var(--accent-dark);
+  transform: scale(1.05);
+}
+
+.tab-content {
+  display: none;
+  flex: 1;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+.left-section {
+  width: 40%;
+  padding: 15px;
+  border-right: 1px solid var(--gray-light);
+}
+
+.right-section {
+  width: 60%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-section {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-section-title {
+  font-size: 15px;
+  color: var(--primary);
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--gray-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark);
+  min-width: 140px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray);
+}
+
+input, select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  font-size: 13px;
+  transition: var(--transition);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+}
+
+input:not(:placeholder-shown) {
+  border-color: var(--primary);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.readonly {
+  background-color: var(--gray-light);
+  font-weight: 500;
+}
+
+.table-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-header {
+  background: var(--primary);
+  color: white;
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.table-split {
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  flex: 1;
+  overflow: auto;
+  padding: 2px;
+  border-radius: var(--border-radius);
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid var(--primary);
+  padding: 5px;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background-color: var(--primary);
+  color: var(--light);
+  font-weight: 500;
+  text-align: center;
+  font-size: 12px;
+  border-bottom: 2px solid var(--light);
+  border: 1px solid var(--light);
+}
+
+th:nth-child(1) {
+  width: 80px;
+}
+
+th:nth-child(2), th:nth-child(3) {
+  width: 100px;
+}
+
+td {
+  vertical-align: middle;
+  font-size: 12px;
+}
+
+tr:hover {
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+td[contenteditable="true"] {
+  outline: none;
+  background-color: transparent;
+  padding: 5px;
+  cursor: text;
+}
+
+td[contenteditable="true"]:focus {
+  border: 1px solid var(--primary);
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  color: var(--dark);
+}
+
+.summary-section {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding: 8px;
+}
+
+.summary-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 11px;
+  color: var(--gray);
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.summary-value.updated {
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+.footer {
+  background: white;
+  border-top: 1px solid var(--gray-light);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+button:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.save-btn {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: var(--secondary-dark);
+}
+
+.save-btn.loading {
+  cursor: progress;
+  background-color: var(--secondary-dark);
+}
+
+.clear-btn {
+  background-color: var(--danger);
+  color: white;
+}
+
+.clear-btn:hover {
+  background-color: var(--danger-dark);
+}
+
+.print-btn {
+  background-color: var(--accent);
+  color: white;
+}
+
+.print-btn:hover {
+  background-color: var(--accent-dark);
+}
+
+.status {
+  font-size: 13px;
+  color: var(--gray);
+}
+
+@media (max-width: 1200px) {
+  .container {
+    width: 90%;
+    margin-left: 140px;
+    margin-right: 60px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    margin-right: 50px;
+  }
+  
+  .sidebar {
+    position: static;
+    width: 100%;
+    max-width: 90%;
+    padding: 15px;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border-bottom: 1px solid var(--gray-light);
+    box-sizing: border-box;
+  }
+  
+  .main-content {
+    width: 100%;
+  }
+  
+  .tab-content {
+    flex-direction: column;
+  }
+  
+  .left-section, .right-section {
+    width: 100%;
+    border-right: none;
+  }
+  
+  .form-group label {
+    min-width: 120px;
+  }
+  
+  .table-split {
+    flex-direction: column;
+  }
+  
+  .summary-section {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 85%;
+    margin: 0 auto;
+    margin-right: 50px;
+  }
+  
+  .sidebar {
+    padding: 10px;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    gap: 4px;
+    max-width: 90%;
+  }
+  
+  .tab-btn, .add-tab-btn {
+    padding: 6px;
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+    flex: 0 0 auto;
+  }
+  
+  .delete-tab-btn {
+    padding: 4px;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    flex: 0 0 auto;
+  }
+  
+  .header h1 {
+    font-size: 18px;
+  }
+  
+  .form-group label {
+    min-width: 100px;
+    font-size: 12px;
+  }
+  
+  input, select {
+    font-size: 12px;
+    padding: 5px 7px;
+  }
+}
+
+/* Estilos para impressão */
+.print-pages {
+  display: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-pages, .print-pages * {
+    visibility: visible;
+  }
+  .print-pages {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .print-page {
+    width: 210mm;
+    height: 297mm;
+    page-break-after: always;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
+  .page-content {
+    width: 190mm;
+    height: 277mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .page-content .item {
+    font-size: 48pt;
+    font-family: "Arial Black", Arial, sans-serif;
+    text-align: center;
+    width: 190mm;
+    word-wrap: break-word;
+    line-height: 1.2;
+  }
+  .page-content .plu,
+  .page-content .data-label,
+  .page-content .data-value,
+  .page-content .validade-label,
+  .page-content .validade-value {
+    font-size: 40pt;
+    text-align: center;
+    margin-top: 10mm;
+    line-height: 1.2;
+  }
+  .page-content .spacer {
+    height: 10mm;
+  }
+}
+
+/* Estilo para o campo de temperatura */
+input[id^="temperatura-"] {
+  font-family: monospace;
+}
+
+/* Estilo para o botão de tela cheia */
+.fullscreen-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 2000;
+  transition: var(--transition);
+}
+
+.fullscreen-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.fullscreen-btn:active {
+  transform: scale(0.95);
+}
+
+/* Estilo para a janela de impressão */
+.print-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  z-index: 1000;
+}
+
+.print-window-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.print-window-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--dark);
+}
+
+.close-print-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.close-print-btn:hover {
+  background: var(--danger-dark);
+}
+
+.print-preview {
+  width: 100%;
+  height: 400px;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  overflow: auto;
+}
+
+.print-controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+   </style>
+</head>
+<body>
+  <button id="fullscreenBtn" class="fullscreen-btn" title="Entrar na Tela Cheia">
+    <i class="fas fa-expand"></i>
+  </button>
+  <div class="sidebar" id="sidebar"></div>
+  <div class="container">
+    <div class="main-content">
+      <div class="header">
+        <h1><i class="fas fa-weight"></i> Controle de Pesagem CD Nagumo</h1>
+        <div class="date-display">
+          <i class="far fa-calendar-alt"></i>
+          <span id="currentDate"></span>
+        </div>
+      </div>
+      <div id="tab-content"></div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+  const { jsPDF } = window.jspdf;
+
+// Estrutura de dados para armazenar produtos (abas)
+let products = [];
+
+// Função utilitária para debounce
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+// Atualiza a data atual exibida no cabeçalho
+function updateCurrentDate() {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+  document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
+}
+
+// Normaliza entrada numérica
+function normalizeNumberInput(value) {
+  if (!value || isNaN(value.replace(',', '.'))) return 0;
+  const num = parseFloat(value.replace(',', '.'));
+  return num >= 0 ? num : 0;
+}
+
+// Formata número com separadores de milhar
+function formatNumberWithThousands(value) {
+  if (isNaN(value) || value === 0) return '0';
+  const num = parseFloat(value.toFixed(3));
+  const isInteger = num % 1 === 0;
+  let [integerPart, decimalPart] = num.toString().split('.');
+
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+  if (!isInteger && decimalPart) {
+    decimalPart = decimalPart.replace(/0+$/, '');
+    if (decimalPart.length === 0) decimalPart = '0';
+    return `${integerPart},${decimalPart}`;
+  }
+  return integerPart;
+}
+
+// Normaliza entrada de temperatura
+function normalizeTemperatureInput(value) {
+  if (!value) return '';
+  let cleaned = value.trim().replace(/\s+/g, '');
+  const regex = /^(\d{1,2})º?\/(\d{1,2})º?$/;
+  const match = cleaned.match(regex);
+  if (match) {
+    const temp1 = parseInt(match[1]).toString().padStart(2, '0');
+    const temp2 = parseInt(match[2]).toString().padStart(2, '0');
+    return `${temp1}º/${temp2}º`;
+  }
+  return '';
+}
+
+// Carrega produtos do localStorage
+function loadProducts() {
+  const saved = localStorage.getItem('pesagemProducts');
+  if (saved) {
+    products = JSON.parse(saved);
+  }
+  if (!products || products.length === 0) {
+    products = [{
+      id: 1,
+      name: 'Produto 1',
+      tabId: 'tab-1',
+      date: new Date().toISOString().split('T')[0],
+      carga: '',
+      fornecedor: '',
+      item: '',
+      plu: '',
+      validade: '',
+      conferente: '',
+      temperatura: '',
+      taraEmb: 0,
+      paletes: [],
+      totals: { caixas: 0, pesoBruto: 0, pesoLiquido: 0, paletes: 0, pesoPaletes: 0, taraTotal: 0 }
+    }];
+  }
+  products.forEach(product => renderTab(product));
+  updateTabs();
+  switchTab(products[0].tabId);
+}
+
+// Salva produtos no localStorage
+function saveProducts() {
+  localStorage.setItem('pesagemProducts', JSON.stringify(products));
+}
+
+// Renderiza uma aba
+function renderTab(product) {
+  const tabId = product.tabId;
+  const tabIndex = product.id;
+  const tabContent = document.createElement('div');
+  tabContent.className = 'tab-content';
+  tabContent.id = tabId;
+  tabContent.innerHTML = `
+    <div class="left-section">
+      <section class="form-section" role="region" aria-labelledby="general-info-title-${tabIndex}">
+        <div class="form-section-title" id="general-info-title-${tabIndex}">
+          <i class="fas fa-info-circle"></i> Informações Gerais
+        </div>
+        <div class="form-group">
+          <label for="date-${tabIndex}" id="date-label-${tabIndex}">Data:</label>
+          <div class="input-wrapper">
+            <input type="date" id="date-${tabIndex}" value="${product.date}" aria-describedby="date-label-${tabIndex}" required>
+            <i class="fas fa-calendar-alt input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="carga-${tabIndex}" id="carga-label-${tabIndex}">Carga:</label>
+          <div class="input-wrapper">
+            <input type="text" id="carga-${tabIndex}" value="${product.carga}" placeholder="Informe a carga" aria-describedby="carga-label-${tabIndex}">
+            <i class="fas fa-truck input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="fornecedor-${tabIndex}" id="fornecedor-label-${tabIndex}">Fornecedor:</label>
+          <div class="input-wrapper">
+            <input type="text" id="fornecedor-${tabIndex}" value="${product.fornecedor}" placeholder="Informe o fornecedor" aria-describedby="fornecedor-label-${tabIndex}">
+            <i class="fas fa-building input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="item-${tabIndex}" id="item-label-${tabIndex}">Item:</label>
+          <div class="input-wrapper">
+            <input type="text" id="item-${tabIndex}" value="${product.item}" placeholder="Informe o produto" aria-describedby="item-label-${tabIndex}">
+            <i class="fas fa-box input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="plu-${tabIndex}" id="plu-label-${tabIndex}">PLU:</label>
+          <div class="input-wrapper">
+            <input type="text" id="plu-${tabIndex}" value="${product.plu}" placeholder="Código do produto" aria-describedby="plu-label-${tabIndex}">
+            <i class="fas fa-barcode input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="validade-${tabIndex}" id="validade-label-${tabIndex}">Validade:</label>
+          <div class="input-wrapper">
+            <input type="date" id="validade-${tabIndex}" value="${product.validade}" aria-describedby="validade-label-${tabIndex}">
+            <i class="fas fa-calendar-check input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="conferente-${tabIndex}" id="conferente-label-${tabIndex}">Conferente:</label>
+          <div class="input-wrapper">
+            <input type="text" id="conferente-${tabIndex}" value="${product.conferente}" placeholder="Informe o conferente" aria-describedby="conferente-label-${tabIndex}">
+            <i class="fas fa-user input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="temperatura-${tabIndex}" id="temperatura-label-${tabIndex}">Temp. Prod./Veículo:</label>
+          <div class="input-wrapper">
+            <input type="text" id="temperatura-${tabIndex}" value="${product.temperatura}" placeholder="Ex: 02º/07º" aria-describedby="temperatura-label-${tabIndex}">
+            <i class="fas fa-thermometer-half input-icon"></i>
+          </div>
+        </div>
+      </section>
+      
+      <section class="form-section" role="region" aria-labelledby="weight-info-title-${tabIndex}">
+        <div class="form-section-title" id="weight-info-title-${tabIndex}">
+          <i class="fas fa-balance-scale"></i> Informações de Peso
+        </div>
+        <div class="form-group">
+          <label for="taraEmb-${tabIndex}" id="taraEmb-label-${tabIndex}">Tara Embalagem (kg):</label>
+          <div class="input-wrapper">
+            <input type="number" id="taraEmb-${tabIndex}" step="0.001" min="0" value="${product.taraEmb || '0'}" required aria-describedby="taraEmb-label-${tabIndex}">
+            <i class="fas fa-weight input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="totalTaraEmb-${tabIndex}" id="totalTaraEmb-label-${tabIndex}">Tara Total Embal (kg):</label>
+          <div class="input-wrapper">
+            <input type="number" id="totalTaraEmb-${tabIndex}" readonly class="readonly" value="${formatNumberWithThousands(product.totals.taraTotal)}" aria-describedby="totalTaraEmb-label-${tabIndex}">
+            <i class="fas fa-weight input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="totalPalete-${tabIndex}" id="totalPalete-label-${tabIndex}">Total Paletes:</label>
+          <div class="input-wrapper">
+            <input type="number" id="totalPalete-${tabIndex}" readonly class="readonly" value="${product.totals.paletes}" aria-describedby="totalPalete-label-${tabIndex}">
+            <i class="fas fa-pallet input-icon"></i>
+          </div>
+        </div> 
+        <div class="form-group">
+          <label for="pesoTotalPalete-${tabIndex}" id="pesoTotalPalete-label-${tabIndex}">Peso Total Paletes (kg):</label>
+          <div class="input-wrapper">
+            <input type="number" id="pesoTotalPalete-${tabIndex}" readonly class="readonly" value="${formatNumberWithThousands(product.totals.pesoPaletes)}" aria-describedby="pesoTotalPalete-label-${tabIndex}">
+            <i class="fas fa-weight input-icon"></i>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <div class="right-section">
+      <div class="table-container">
+        <div class="table-header" id="paletes-header-${tabIndex}">
+          <i class="fas fa-pallet"></i> Registro de Paletes
+        </div>
+        <div class="table-split">
+          <div class="table-wrapper">
+            <table id="paleteTable1-${tabIndex}" role="grid" aria-labelledby="paletes-header-${tabIndex}">
+              <thead>
+                <tr>
+                  <th scope="col">Palete #</th>
+                  <th scope="col">Qtde Caixas</th>
+                  <th scope="col">Peso Bruto (kg)</th>
+                </tr>
+              </thead>
+              <tbody id="paleteBody1-${tabIndex}">
+                ${Array(15).fill(0).map((_, i) => `
+                  <tr>
+                    <td contenteditable="true" class="palete" role="gridcell">${product.paletes[i]?.palete || ''}</td>
+                    <td contenteditable="true" class="qtdeCxs" role="gridcell">${product.paletes[i]?.qtdeCxs || ''}</td>
+                    <td contenteditable="true" class="pesoBruto" role="gridcell">${product.paletes[i]?.pesoBruto || ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="table-wrapper">
+            <table id="paleteTable2-${tabIndex}" role="grid" aria-labelledby="paletes-header-${tabIndex}">
+              <thead>
+                <tr>
+                  <th scope="col">Palete #</th>
+                  <th scope="col">Qtde Caixas</th>
+                  <th scope="col">Peso Bruto (kg)</th>
+                </tr>
+              </thead>
+              <tbody id="paleteBody2-${tabIndex}">
+                ${Array(15).fill(0).map((_, i) => `
+                  <tr>
+                    <td contenteditable="true" class="palete" role="gridcell">${product.paletes[i + 15]?.palete || ''}</td>
+                    <td contenteditable="true" class="qtdeCxs" role="gridcell">${product.paletes[i + 15]?.qtdeCxs || ''}</td>
+                    <td contenteditable="true" class="pesoBruto" role="gridcell">${product.paletes[i + 15]?.pesoBruto || ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-card">
+            <span class="summary-label">Total Caixas</span>
+            <span class="summary-value" id="summaryTotalCaixas-${tabIndex}">${formatNumberWithThousands(product.totals.caixas)}</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">Peso Líquido (kg)</span>
+            <span class="summary-value" id="summaryPesoLiquido-${tabIndex}">${formatNumberWithThousands(product.totals.pesoLiquido)}</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">Peso Bruto (kg)</span>
+            <span class="summary-value" id="summaryPesoBruto-${tabIndex}">${formatNumberWithThousands(product.totals.pesoBruto)}</span>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="status">
+            <span id="statusMessage-${tabIndex}">${product.paletes.length > 0 ? `${product.paletes.length} palete(s) registrado(s)` : 'Pronto para registro'}</span>
+          </div>
+          <div class="buttons">
+            <button class="save-btn" onclick="saveAsPDF()">
+              <i class="fas fa-save"></i> Salvar Pesagem
+            </button>
+            <button class="clear-btn" onclick="clearTab('tab-${tabIndex}')">
+              <i class="fas fa-trash-alt"></i> Limpar Dados
+            </button>
+            <button class="print-btn" onclick="generatePrint('tab-${tabIndex}')">
+              <i class="fas fa-print"></i> Imprimir Folhas
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('tab-content').appendChild(tabContent);
+  addTabEvents(tabId);
+  calculateTotals(tabId);
+}
+// Adiciona uma nova aba
+function addTab() {
+  const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+  const tabId = `tab-${newId}`;
+  const firstProduct = products[0] || {};
+  const product = {
+    id: newId,
+    name: `Produto ${newId}`,
+    tabId: tabId,
+    date: firstProduct.date || new Date().toISOString().split('T')[0],
+    carga: firstProduct.carga || '',
+    fornecedor: firstProduct.fornecedor || '',
+    item: '',
+    plu: '',
+    validade: '',
+    conferente: firstProduct.conferente || '',
+    temperatura: firstProduct.temperatura || '',
+    taraEmb: 0,
+    paletes: [],
+    totals: { caixas: 0, pesoBruto: 0, pesoLiquido: 0, paletes: 0, pesoPaletes: 0, taraTotal: 0 }
+  };
+  products.push(product);
+  saveProducts();
+  renderTab(product);
+  updateTabs();
+  switchTab(tabId);
+}
+
+// Apaga uma aba
+function deleteTab(tabId) {
+  if (products.length <= 1) return;
+  products = products.filter(p => p.tabId !== tabId);
+  document.getElementById(tabId).remove();
+  saveProducts();
+  updateTabs();
+  const newActiveTab = products[0].tabId;
+  switchTab(newActiveTab);
+  document.getElementById(`statusMessage-${newActiveTab.split('-')[1]}`).textContent = 'Produto removido com sucesso';
+  setTimeout(() => {
+    document.getElementById(`statusMessage-${newActiveTab.split('-')[1]}`).textContent = products[0].paletes.length > 0 ? `${products[0].paletes.length} palete(s) registrado(s)` : 'Pronto para registro';
+  }, 2000);
+}
+
+// Atualiza a barra de abas
+function updateTabs() {
+  const sidebarContainer = document.getElementById('sidebar');
+  sidebarContainer.innerHTML = products.map(p => `
+    <button class="tab-btn ${p.tabId === document.querySelector('.tab-content.active')?.id ? 'active' : ''}" data-tab="${p.tabId}">
+      <span><i class="fas fa-box"></i> ${p.name}</span>
+      ${p.id !== 1 ? `<i class="fas fa-trash-alt delete-tab-btn" onclick="deleteTab('${p.tabId}')"></i>` : ''}
+    </button>
+  `).join('') + `
+    <button class="add-tab-btn" onclick="addTab()">
+      <i class="fas fa-plus"></i> Adicionar Produto
+    </button>
+  `;
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.removeEventListener('click', handleTabClick);
+    btn.addEventListener('click', handleTabClick);
+  });
+}
+
+function handleTabClick(e) {
+  if (!e.target.classList.contains('delete-tab-btn')) {
+    switchTab(e.currentTarget.dataset.tab);
+  }
+}
+
+// Alterna entre abas
+function switchTab(tabId) {
+  saveTabData(document.querySelector('.tab-content.active')?.id);
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.tab === tabId) btn.classList.add('active');
+  });
+  const product = products.find(p => p.tabId === tabId);
+  if (product) {
+    document.getElementById(`statusMessage-${tabId.split('-')[1]}`).textContent = product.paletes.length > 0 ? `${product.paletes.length} palete(s) registrado(s)` : 'Pronto para registro';
+  }
+}
+
+// Salva os dados da aba atual
+function saveTabData(tabId) {
+  if (!tabId) return;
+  const product = products.find(p => p.tabId === tabId);
+  if (!product) return;
+
+  const tabIndex = tabId.split('-')[1];
+  product.date = document.getElementById(`date-${tabIndex}`).value;
+  product.carga = document.getElementById(`carga-${tabIndex}`).value;
+  product.fornecedor = document.getElementById(`fornecedor-${tabIndex}`).value;
+  product.item = document.getElementById(`item-${tabIndex}`).value;
+  product.plu = document.getElementById(`plu-${tabIndex}`).value;
+  product.validade = document.getElementById(`validade-${tabIndex}`).value;
+  product.conferente = document.getElementById(`conferente-${tabIndex}`).value;
+  product.temperatura = normalizeTemperatureInput(document.getElementById(`temperatura-${tabIndex}`).value);
+  product.taraEmb = normalizeNumberInput(document.getElementById(`taraEmb-${tabIndex}`).value);
+
+  product.paletes = [];
+  const rows1 = document.getElementById(`paleteBody1-${tabIndex}`).getElementsByTagName('tr');
+  const rows2 = document.getElementById(`paleteBody2-${tabIndex}`).getElementsByTagName('tr');
+
+  const processRows = (rows, startIndex) => {
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      const paleteValue = cells[0].textContent.trim();
+      const qtdeCxsValue = normalizeNumberInput(cells[1].textContent);
+      const pesoBrutoValue = normalizeNumberInput(cells[2].textContent);
+
+      const parsedPalete = paleteValue ? parseFloat(paleteValue.replace(',', '.')) : 0;
+      const validPalete = isNaN(parsedPalete) ? 0 : parsedPalete;
+
+      if (validPalete || qtdeCxsValue || pesoBrutoValue) {
+        product.paletes[startIndex + i] = {
+          palete: validPalete,
+          qtdeCxs: qtdeCxsValue,
+          pesoBruto: pesoBrutoValue
+        };
+      }
+    }
+  };
+
+  processRows(rows1, 0);
+  processRows(rows2, 15);
+  product.paletes = product.paletes.filter(p => p);
+  saveProducts();
+}
+
+// Formata número para input
+function formatNumberForInput(value) {
+  if (isNaN(value) || value === 0) return '0';
+  const num = parseFloat(value.toFixed(3));
+  if (Number.isInteger(num)) return num.toString();
+  return parseFloat(num.toFixed(3)).toString().replace(/\.?0+$/, '');
+}
+
+// Calcula totais
+function calculateTotals(tabId) {
+  saveTabData(tabId);
+  const product = products.find(p => p.tabId === tabId);
+  if (!product) return;
+
+  const tabIndex = tabId.split('-')[1];
+  const paletes = product.paletes;
+  const taraEmb = product.taraEmb || 0;
+
+  const totalCaixas = paletes.reduce((sum, p) => sum + (p.qtdeCxs || 0), 0);
+  const totalPesoBruto = paletes.reduce((sum, p) => sum + (p.pesoBruto || 0), 0);
+  const totalTaraEmb = (taraEmb || 0) * (totalCaixas || 0);
+  const totalPaletes = paletes.filter(p => p.palete > 0).length;
+  const pesoTotalPaletes = paletes.reduce((sum, p) => sum + (p.palete || 0), 0);
+  const totalPesoLiquido = totalPesoBruto - totalTaraEmb - pesoTotalPaletes;
+
+  product.totals = {
+    caixas: totalCaixas,
+    pesoBruto: totalPesoBruto,
+    pesoLiquido: totalPesoLiquido,
+    paletes: totalPaletes,
+    pesoPaletes: pesoTotalPaletes,
+    taraTotal: totalTaraEmb
+  };
+
+  document.getElementById(`totalTaraEmb-${tabIndex}`).value = formatNumberForInput(totalTaraEmb);
+  document.getElementById(`totalPalete-${tabIndex}`).value = totalPaletes;
+  document.getElementById(`pesoTotalPalete-${tabIndex}`).value = formatNumberForInput(pesoTotalPaletes);
+  document.getElementById(`summaryTotalCaixas-${tabIndex}`).textContent = formatNumberWithThousands(totalCaixas);
+  document.getElementById(`summaryPesoLiquido-${tabIndex}`).textContent = formatNumberWithThousands(totalPesoLiquido);
+  document.getElementById(`summaryPesoBruto-${tabIndex}`).textContent = formatNumberWithThousands(totalPesoBruto);
+
+  document.getElementById(`statusMessage-${tabIndex}`).textContent = paletes.length > 0 ? `${paletes.length} palete(s) registrado(s)` : 'Pronto para registro';
+
+  document.querySelectorAll(`#tab-${tabIndex} .summary-value`).forEach(el => {
+    el.classList.add('updated');
+    setTimeout(() => el.classList.remove('updated'), 300);
+  });
+}
+
+// Limpa os dados de uma aba
+function clearTab(tabId) {
+  const tabIndex = tabId.split('-')[1];
+  const product = products.find(p => p.tabId === tabId);
+  if (!product) return;
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  product.date = `${year}-${month}-${day}`;
+  product.carga = '';
+  product.fornecedor = '';
+  product.item = '';
+  product.plu = '';
+  product.validade = '';
+  product.conferente = '';
+  product.temperatura = '';
+  product.taraEmb = 0;
+  product.paletes = [];
+  product.totals = { caixas: 0, pesoBruto: 0, pesoLiquido: 0, paletes: 0, pesoPaletes: 0, taraTotal: 0 };
+
+  document.getElementById(`date-${tabIndex}`).value = product.date;
+  document.getElementById(`carga-${tabIndex}`).value = '';
+  document.getElementById(`fornecedor-${tabIndex}`).value = '';
+  document.getElementById(`item-${tabIndex}`).value = '';
+  document.getElementById(`plu-${tabIndex}`).value = '';
+  document.getElementById(`validade-${tabIndex}`).value = '';
+  document.getElementById(`conferente-${tabIndex}`).value = '';
+  document.getElementById(`temperatura-${tabIndex}`).value = '';
+  document.getElementById(`taraEmb-${tabIndex}`).value = '';
+  document.getElementById(`totalTaraEmb-${tabIndex}`).value = '0';
+  document.getElementById(`totalPalete-${tabIndex}`).value = '0';
+  document.getElementById(`pesoTotalPalete-${tabIndex}`).value = '0';
+  document.getElementById(`summaryTotalCaixas-${tabIndex}`).textContent = '0';
+  document.getElementById(`summaryPesoLiquido-${tabIndex}`).textContent = '0';
+  document.getElementById(`summaryPesoBruto-${tabIndex}`).textContent = '0';
+
+  const cells = document.querySelectorAll(`#paleteTable1-${tabIndex} .palete, #paleteTable1-${tabIndex} .qtdeCxs, #paleteTable1-${tabIndex} .pesoBruto, #paleteTable2-${tabIndex} .palete, #paleteTable2-${tabIndex} .qtdeCxs, #paleteTable2-${tabIndex} .pesoBruto`);
+  cells.forEach(cell => {
+    cell.textContent = '';
+  });
+
+  saveProducts();
+  document.getElementById(`statusMessage-${tabIndex}`).textContent = 'Formulário limpo com sucesso';
+  setTimeout(() => {
+    document.getElementById(`statusMessage-${tabIndex}`).textContent = 'Pronto para registro';
+  }, 2000);
+}
+
+// Adiciona eventos de input
+function addTabEvents(tabId) {
+  const tabIndex = tabId.split('-')[1];
+  const debouncedCalculateTotals = debounce(() => {
+    saveTabData(tabId);
+    calculateTotals(tabId);
+  }, 300);
+
+  const inputs = document.querySelectorAll(`#tab-${tabIndex} input:not([readonly])`);
+  inputs.forEach(input => {
+    input.removeEventListener('input', debouncedCalculateTotals);
+    input.addEventListener('input', debouncedCalculateTotals);
+  });
+
+  const cells = document.querySelectorAll(`#paleteTable1-${tabIndex} .palete, #paleteTable1-${tabIndex} .qtdeCxs, #paleteTable1-${tabIndex} .pesoBruto, #paleteTable2-${tabIndex} .palete, #paleteTable2-${tabIndex} .qtdeCxs, #paleteTable2-${tabIndex} .pesoBruto`);
+  cells.forEach(cell => {
+    cell.removeEventListener('input', debouncedCalculateTotals);
+    cell.removeEventListener('keydown', handleCellKeydown);
+    cell.addEventListener('input', debouncedCalculateTotals);
+    cell.addEventListener('keydown', handleCellKeydown);
+  });
+}
+
+function handleCellKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const row = e.target.parentElement;
+    const table = row.parentElement;
+    const rowIndex = Array.from(table.children).indexOf(row);
+    const cellIndex = Array.from(row.children).indexOf(e.target);
+    const nextRow = table.children[rowIndex + 1];
+    if (nextRow) {
+      const nextCell = nextRow.children[cellIndex];
+      if (nextCell) {
+        nextCell.focus();
+      }
+    }
+  }
+}
+
+// Formata data
+function formatDate(dateString) {
+  if (!dateString) return 'N/A';
+  const parts = dateString.split('-');
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}/${parts[0].slice(2)}`;
+  }
+  return dateString;
+}
+
+// Gera o cabeçalho do PDF
+function generatePDFHeader(doc) {
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor(50, 50, 50);
+  doc.text('Controle de Pesagem', 105, 20, { align: 'center' });
+  doc.setDrawColor(100, 100, 100);
+  doc.line(20, 25, 190, 25);
+}
+
+// Gera a seção de Informações Gerais no PDF
+function generatePDFGeneralInfo(doc, y, product) {
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text('Informações Gerais', 20, y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+
+  y += 8;
+  doc.text(`Data: ${formatDate(product.date)}`, 20, y);
+  y += 6;
+  doc.text(`Carga: ${product.carga || 'N/A'}`, 20, y);
+  y += 6;
+  doc.text(`Fornecedor: ${product.fornecedor || 'N/A'}`, 20, y);
+  if (product.temperatura) {
+    y += 6;
+    doc.text(`Temp. Prod./Veículo: ${product.temperatura}`, 20, y);
+  }
+  y += 6;
+  doc.text(`Conferente: ${product.conferente || 'N/A'}`, 20, y);
+  return y + 8;
+}
+
+// Gera a seção de cada produto no PDF
+function generatePDFProductSection(doc, product, y, isFirst) {
+  if (y > 260) {
+    doc.addPage();
+    y = 20;
+  }
+
+  if (!isFirst) {
+    doc.setDrawColor(100, 100, 100);
+    doc.line(20, y, 190, y);
+    y += 8;
+  }
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text(`Produto: ${product.name}`, 20, y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+
+  y += 8;
+  doc.text(`Item: ${product.item || 'N/A'}`, 20, y);
+  y += 6;
+  doc.text(`PLU: ${product.plu || 'N/A'}`, 20, y);
+  y += 6;
+  doc.text(`Validade: ${formatDate(product.validade)}`, 20, y);
+  y += 6;
+  doc.text(`Tara Embalagem: ${formatNumberWithThousands(product.taraEmb)} kg`, 20, y);
+  y += 6;
+  doc.text(`Tara Total Embal: ${formatNumberWithThousands(product.totals.taraTotal)} kg`, 20, y);
+  y += 6;
+  doc.text(`Total Caixas: ${formatNumberWithThousands(product.totals.caixas)}`, 20, y);
+  y += 6;
+  doc.text(`Peso Líquido: ${formatNumberWithThousands(product.totals.pesoLiquido)} kg`, 20, y);
+  y += 6;
+  doc.text(`Peso Bruto: ${formatNumberWithThousands(product.totals.pesoBruto)} kg`, 20, y);
+
+  return y + 8;
+}
+
+// Gera a seção de Resumo no PDF
+function generatePDFSummary(doc, y) {
+  if (y > 260) {
+    doc.addPage();
+    y = 20;
+  }
+
+  doc.setDrawColor(100, 100, 100);
+  doc.line(20, y, 190, y);
+  y += 8;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text('Resumo Geral', 20, y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+
+  const totalCaixas = products.reduce((sum, p) => sum + p.totals.caixas, 0);
+  const totalPesoLiquido = products.reduce((sum, p) => sum + p.totals.pesoLiquido, 0);
+  const totalPesoBruto = products.reduce((sum, p) => sum + p.totals.pesoBruto, 0);
+  const totalPaletes = products.reduce((sum, p) => sum + p.totals.paletes, 0);
+  const pesoTotalPaletes = products.reduce((sum, p) => sum + p.totals.pesoPaletes, 0);
+  const totalTaraEmb = products.reduce((sum, p) => sum + p.totals.taraTotal, 0);
+
+  y += 8;
+  doc.text(`Total Caixas: ${formatNumberWithThousands(totalCaixas)}`, 20, y);
+  y += 6;
+  doc.text(`Peso Líquido: ${formatNumberWithThousands(totalPesoLiquido)} kg`, 20, y);
+  y += 6;
+  doc.text(`Peso Bruto: ${formatNumberWithThousands(totalPesoBruto)} kg`, 20, y);
+  y += 6;
+  doc.text(`Total Paletes: ${formatNumberWithThousands(totalPaletes)}`, 20, y);
+  y += 6;
+  doc.text(`Peso Total Paletes: ${formatNumberWithThousands(pesoTotalPaletes)} kg`, 20, y);
+  y += 6;
+  doc.text(`Tara Total Embal: ${formatNumberWithThousands(totalTaraEmb)} kg`, 20, y);
+
+  return y + 8;
+}
+
+// Gera o rodapé do PDF
+function generatePDFFooter(doc) {
+  doc.setDrawColor(100, 100, 100);
+  doc.line(20, 277, 190, 277);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Documento gerado em ${new Date().toLocaleString('pt-BR')}`, 105, 282, { align: 'center' });
+}
+
+// Gera e salva o PDF
+function saveAsPDF() {
+  try {
+    saveTabData(document.querySelector('.tab-content.active').id);
+    const saveBtn = document.querySelector('.save-btn');
+    saveBtn.classList.add('loading');
+    document.querySelector(`#statusMessage-${document.querySelector('.tab-content.active').id.split('-')[1]}`).textContent = 'Gerando PDF...';
+
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    generatePDFHeader(doc);
+    let y = 35;
+
+    if (products.length > 0) {
+      y = generatePDFGeneralInfo(doc, y, products[0]);
+    }
+
+    let isFirst = true;
+    products.forEach(product => {
+      if (product.paletes.length > 0) {
+        y = generatePDFProductSection(doc, product, y, isFirst);
+        isFirst = false;
+      }
+    });
+
+    y = generatePDFSummary(doc, y);
+    generatePDFFooter(doc);
+
+    doc.save(`controle_pesagem_${new Date().toISOString().split('T')[0]}.pdf`);
+
+    document.querySelector(`#statusMessage-${document.querySelector('.tab-content.active').id.split('-')[1]}`).textContent = 'PDF salvo com sucesso';
+  } catch (error) {
+    document.querySelector(`#statusMessage-${document.querySelector('.tab-content.active').id.split('-')[1]}`).textContent = 'Erro ao gerar PDF';
+    console.error('Erro:', error);
+  } finally {
+    const saveBtn = document.querySelector('.save-btn');
+    saveBtn.classList.remove('loading');
+    setTimeout(() => {
+      document.querySelector(`#statusMessage-${document.querySelector('.tab-content.active').id.split('-')[1]}`).textContent = 'Pronto para registro';
+    }, 2000);
+  }
+}
+
+// Gera a interface de impressão
+function generatePrint(tabId) {
+  try {
+    saveTabData(tabId);
+
+    const tabIndex = tabId.split('-')[1];
+    const statusMessageElement = document.getElementById(`statusMessage-${tabIndex}`);
+    if (!statusMessageElement) throw new Error('Elemento de status não encontrado');
+
+    statusMessageElement.textContent = 'Preparando impressão...';
+
+    const product = products.find(p => p.tabId === tabId);
+    if (!product) throw new Error('Produto não encontrado');
+
+    const totalPaletes = product.totals.paletes || 0;
+    if (totalPaletes === 0) {
+  alert('Nenhum palete registrado! Por favor, insira os dados dos paletes para poder imprimir.');
+  statusMessageElement.textContent = 'Nenhum palete registrado para impressão';
+  setTimeout(() => {
+    statusMessageElement.textContent = product.paletes.length > 0
+      ? `${product.paletes.length} palete(s) registrado(s)`
+      : 'Pronto para registro';
+  }, 2000);
+  return; // Exit the function to prevent further execution
+}
+
+    const item = product.item || 'N/A';
+    const plu = product.plu || 'N/A';
+    const data = formatDate(product.date) || 'N/A';
+    const validade = formatDate(product.validade) || 'N/A';
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) throw new Error('Não foi possível abrir a janela de impressão');
+
+    printWindow.document.write(`
+      <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Impressão de Etiquetas</title>
+    <style>
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        font-family: Arial, sans-serif;
+      }
+      .print-page {
+        width: 210mm;
+        height: 297mm;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        page-break-after: always;
+        box-sizing: border-box;
+      }
+            .page-content {
+        width: 190mm;
+        height: 277mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        box-sizing: border-box;
+      }
+            .item {
+              font-size: 48pt;
+              font-weight: bold;
+              margin-bottom: 20mm; /* Espaçamento aumentado */
+              word-break: break-word;
+			  width: 100%;
+            }
+            .plu {
+              font-size: 46pt;
+              margin-bottom: 20mm; /* Espaçamento aumentado */
+            }
+            .label {
+              font-size: 36pt;
+              margin-bottom: 3mm;
+              text-transform: uppercase;
+            }
+            .value {
+              font-size: 36pt;
+              font-weight: bold;
+              margin-bottom: 20mm; /* Espaçamento aumentado */
+            }
+          </style>
+        </head>
+        <body onload="window.print(); window.close();">
+          ${Array(totalPaletes).fill(0).map(() => `
+            <div class="print-page">
+              <div class="page-content">
+                <div class="item">${item}</div>
+                <div class="plu">PLU: ${plu}</div>
+                <div class="label">DATA DE RECEBIMENTO:</div>
+                <div class="value">${data}</div>
+                <div class="label">DATA DE VALIDADE:</div>
+                <div class="value">${validade}</div>
+              </div>
+            </div>
+          `).join('')}
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+
+    statusMessageElement.textContent = `${totalPaletes} etiqueta(s) enviada(s) para impressão`;
+    setTimeout(() => {
+      statusMessageElement.textContent = product.paletes.length > 0
+        ? `${product.paletes.length} palete(s) registrado(s)`
+        : 'Pronto para registro';
+    }, 2000);
+
+  } catch (error) {
+    console.error('Erro em generatePrint:', error);
+    const tabIndex = tabId.split('-')[1];
+    const statusMessageElement = document.getElementById(`statusMessage-${tabIndex}`);
+    if (statusMessageElement) {
+      statusMessageElement.textContent = error.message || 'Erro ao preparar impressão';
+      setTimeout(() => {
+        const produto = products.find(p => p.tabId === tabId);
+        statusMessageElement.textContent = produto?.paletes.length > 0
+          ? `${produto.paletes.length} palete(s) registrado(s)`
+          : 'Pronto para registro';
+      }, 2000);
+    }
+  }
+}
+
+// Inicializa a aplicação
+document.addEventListener('DOMContentLoaded', () => {
+  updateCurrentDate();
+  loadProducts();
+
+  // Tenta ativar o modo tela cheia automaticamente com delay
+  setTimeout(() => {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn('Falha ao ativar modo tela cheia automaticamente:', err.message);
+        });
+      } else {
+        console.warn('API de tela cheia não suportada neste navegador.');
+      }
+    } catch (err) {
+      console.warn('Erro ao tentar ativar o modo tela cheia:', err);
+    }
+  }, 100);
+
+  // Adiciona evento ao botão de tela cheia
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  fullscreenBtn.addEventListener('click', () => {
+    try {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          fullscreenBtn.querySelector('i').classList.remove('fa-expand');
+          fullscreenBtn.querySelector('i').classList.add('fa-compress');
+          fullscreenBtn.title = 'Sair da Tela Cheia';
+        }).catch(err => {
+          console.warn('Falha ao entrar no modo tela cheia:', err.message);
+        });
+      } else {
+        document.exitFullscreen().then(() => {
+          fullscreenBtn.querySelector('i').classList.remove('fa-compress');
+          fullscreenBtn.querySelector('i').classList.add('fa-expand');
+          fullscreenBtn.title = 'Entrar na Tela Cheia';
+        }).catch(err => {
+          console.warn('Falha ao sair do modo tela cheia:', err.message);
+        });
+      }
+    } catch (err) {
+      console.warn('Erro ao alternar modo tela cheia:', err);
+    }
+  });
+
+  // Atualiza o ícone do botão quando o estado de tela cheia muda
+  document.addEventListener('fullscreenchange', () => {
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (!document.fullscreenElement) {
+      fullscreenBtn.querySelector('i').classList.remove('fa-compress');
+      fullscreenBtn.querySelector('i').classList.add('fa-expand');
+      fullscreenBtn.title = 'Entrar na Tela Cheia';
+    } else {
+      fullscreenBtn.querySelector('i').classList.remove('fa-expand');
+      fullscreenBtn.querySelector('i').classList.add('fa-compress');
+      fullscreenBtn.title = 'Sair da Tela Cheia';
+    }
+  });
+});
+  </script>
+</body>
+</html>

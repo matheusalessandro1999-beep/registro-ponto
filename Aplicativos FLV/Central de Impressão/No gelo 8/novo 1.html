@@ -1,0 +1,3752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Carregamento Perecíveis - Nagumo</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+   
+    <style>
+ @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8edf2 100%);
+}
+
+/* ========================================
+   CONFIGURAÇÕES DA PÁGINA A4
+   ======================================== */
+.pagina-a4 {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 8mm 5mm 3mm 5mm;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+}
+
+/* ========================================
+   CABEÇALHO
+   ======================================== */
+.top-header {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    border: 0.3px solid #666;
+    border-radius: 6px;
+    padding: 5px;
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 5px;
+    font-size: 16pt;
+    text-transform: uppercase;
+    margin-top: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+.header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.logo-container img {
+    height: 15px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.date-field {
+    font-weight: 700;
+    font-size: 7pt;
+}
+
+/* ========================================
+   TABELA PRINCIPAL
+   ======================================== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+/* ========================================
+   CABEÇALHO DUPLO DA TABELA
+   ======================================== */
+.header-grupo {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    font-weight: 900;
+    text-align: center;
+    padding: 0.8mm;
+    border: 0.3px solid #666;
+    font-size: 10pt;
+    text-transform: uppercase;
+    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.header-grupo-carregamento {
+    background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%);
+    font-weight: 900;
+    text-align: center;
+    padding: 0.8mm;
+    border: 0.3px solid #666;
+    font-size: 8pt;
+    text-transform: uppercase;
+    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+/* Linha em branco entre cabeçalhos duplos */
+.blank-header-row td {
+    border: none;
+    height: 1.5mm;
+    background-color: white;
+    padding: 0;
+}
+
+/* ========================================
+   CABEÇALHOS DAS COLUNAS (th)
+   ======================================== */
+th {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    border: 0.3px solid #666;
+    padding: 0.2mm 0.3mm;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 900;
+    font-size: 6pt;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 0.9;
+    height: 5.5mm;
+    background-clip: padding-box;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+
+th:hover {
+    background: linear-gradient(135deg, #CACACA 0%, #B3B3B3 100%);
+}
+
+/* ========================================
+   LARGURAS DAS COLUNAS - AJUSTE AQUI
+   ======================================== */
+th:nth-child(1) {
+    width: 25mm;  /* Região */
+}
+
+th:nth-child(2) {
+    width: 12mm;  /* Lojas - ← AUMENTADO */
+}
+
+th:nth-child(3) {
+    width: 12mm;  /* Qtde Paletes - ← NOVO */
+}
+
+th:nth-child(4) {
+    width: 12mm;  /* Box - ← AUMENTADO */
+}
+
+th:nth-child(5) {
+    width: 12mm;  /* Container - ← NOVO */
+}
+
+th:nth-child(6) {
+    width: 12mm;  /* Câmara - ← NOVO */
+}
+
+th:nth-child(7) {
+    width: 16mm;  /* Total Rota */
+}
+
+th:nth-child(8) {
+    width: 20mm;  /* Região (Carregamento) - ← NOVO */
+}
+
+th:nth-child(9) {
+    width: 50mm;  /* Motorista/Placa - ← AUMENTADO */
+}
+
+th:nth-child(10) {
+    width: 10mm;  /* C° */
+}
+
+/* Colunas da seção CARREGAMENTO */
+th:nth-child(8),
+th:nth-child(9),
+th:nth-child(10) {
+    background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%);
+}
+
+/* Coluna Total Rota */
+.total-rota-header {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%) !important;
+    width: 16mm;
+}
+
+/* ========================================
+   CÉLULAS DA TABELA (td)
+   ======================================== */
+td {
+    padding: 0.15mm 0.3mm;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 8pt;
+    border: 0.3px solid #999;
+    line-height: 0.9;
+    height: 4.0mm;
+    transition: background-color 0.15s ease;
+    border-radius: 2px;
+    background-color: white;
+}
+
+td:hover {
+    background-color: #f8f9fa;
+}
+
+td:nth-child(1) {
+    width: 25mm;  /* Região */
+}
+
+td:nth-child(2) {
+    width: 12mm;  /* Lojas - ← AUMENTADO */
+}
+
+td:nth-child(3) {
+    width: 12mm;  /* Qtde Paletes - ← NOVO */
+}
+
+td:nth-child(4) {
+    width: 12mm;  /* Box - ← AUMENTADO */
+}
+
+td:nth-child(5) {
+    width: 12mm;  /* Container - ← NOVO */
+}
+
+td:nth-child(6) {
+    width: 12mm;  /* Câmara - ← NOVO */
+}
+
+td:nth-child(7) {
+    width: 16mm;  /* Total Rota */
+}
+
+td:nth-child(8) {
+    width: 20mm;  /* Região (Carregamento) - ← NOVO */
+}
+
+td:nth-child(9) {
+    width: 50mm;  /* Motorista/Placa - ← AUMENTADO */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.2;
+    padding: 0.5mm 0.3mm;
+}
+
+td:nth-child(10) {
+    width: 10mm;  /* C° */
+}
+
+/* Forçar textareas de Praia Grande e Rio de Janeiro a terem altura fixa */
+tr:has(.region-header:not([rowspan])) .motorista-placa-textarea,
+tr:has(.region-header[rowspan="1"]) .motorista-placa-textarea,
+tr:has(.region-header[rowspan="2"]) .motorista-placa-textarea {
+    max-height: 4.0mm !important;
+    min-height: 4.0mm !important;
+    line-height: 0.9 !important;
+    font-size: 8pt !important;
+}
+
+/* ========================================
+   CORREÇÃO DE ALTURA - PRAIA GRANDE E RIO DE JANEIRO
+   ======================================== */
+
+/* Forçar altura padrão para linhas simples */
+tr:has(.region-header:not([rowspan])) td,
+tr:has(.region-header[rowspan="1"]) td,
+tr:has(.region-header[rowspan="2"]) td {
+    height: 4.0mm !important;
+    max-height: 4.0mm !important;
+    min-height: 4.0mm !important;
+    padding: 0.15mm 0.3mm !important;
+    vertical-align: middle !important;
+    line-height: 0.9 !important;
+}
+
+/* Forçar nas células mescladas também */
+tr:has(.region-header:not([rowspan])) .merged-cell,
+tr:has(.region-header[rowspan="1"]) .merged-cell,
+tr:has(.region-header[rowspan="2"]) .merged-cell {
+    height: 4.0mm !important;
+    max-height: 4.0mm !important;
+    min-height: 4.0mm !important;
+}
+
+/* Garantir que a linha inteira respeite */
+tr:has(.region-header:not([rowspan])),
+tr:has(.region-header[rowspan="1"]),
+tr:has(.region-header[rowspan="2"]) {
+    height: 4.0mm !important;
+    min-height: 4.0mm !important;
+    max-height: 4.0mm !important;
+}
+
+/* Forçar nos elementos internos */
+tr:has(.region-header:not([rowspan])) *,
+tr:has(.region-header[rowspan="1"]) *,
+tr:has(.region-header[rowspan="2"]) * {
+    line-height: 0.9 !important;
+}
+
+/* ========================================
+   ESPAÇAMENTO ENTRE GRUPOS DE COLUNAS
+   ======================================== */
+.col-group-1 {
+    border-right: 2px solid #666;
+    width: 25mm;  /* ← Mantém região larga */
+}
+
+.col-group-2 {
+    border-right: 2px solid #666;
+}
+
+.col-group-3 {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    background-clip: padding-box;
+    border-right: 2px solid #666;
+    width: 16mm;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+}
+
+.col-group-3 input {
+    font-weight: 900;
+    font-size: 9pt;
+    color: #000;
+}
+
+/* ========================================
+   LINHAS EM BRANCO ENTRE REGIÕES
+   ======================================== */
+.blank-row {
+    height: 1.5mm;
+    background-color: white;
+}
+
+.blank-row td {
+    border: none;
+    padding: 0;
+    height: 1.5mm;
+}
+
+/* ========================================
+   CÉLULAS ESPECIAIS
+   ======================================== */
+.region-header {
+    background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%);
+    font-weight: 900;
+    text-align: center;
+    vertical-align: middle;
+    background-clip: padding-box;
+    width: 18mm;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+
+.region-header:hover {
+    background: linear-gradient(135deg, #CACACA 0%, #B3B3B3 100%);
+}
+
+.store-cell {
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 0.3mm;
+    width: 12mm;  /* ← AUMENTADO */
+    font-weight: 600;
+}
+
+.merged-cell {
+    background-color: #f9f9f9;
+    vertical-align: middle;
+    text-align: center;
+    transition: background-color 0.15s ease;
+    border-radius: 2px;
+}
+
+.merged-cell:hover {
+    background-color: #f0f0f0;
+}
+
+.merged-cell:nth-child(8) {
+    background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%);
+    font-weight: 900;
+}
+
+.merged-cell:nth-child(10) {
+    width: 10mm;
+}
+
+/* ========================================
+   ESTILOS PARA TEXTAREA MOTORISTA/PLACA
+   ======================================== */
+.motorista-placa-textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 9pt;
+    font-family: Arial, sans-serif;
+    font-weight: 700;
+    padding: 2px;
+    margin: 0;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.2;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.motorista-placa-textarea:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+    border-radius: 2px;
+}
+
+/* ========================================
+   ESTILOS DE IMPRESSÃO
+   ======================================== */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+    
+    .pagina-a4 {
+        margin: 0;
+        padding: 8mm 5mm 3mm 5mm;
+        width: 210mm;
+        min-height: auto;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: auto;
+    }
+    
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse !important;
+    }
+    
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    .blank-row td,
+    .blank-header-row td {
+        border: none !important;
+        background: white !important;
+    }
+    
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: #000 !important;
+    }
+    
+    .top-header,
+    .header-grupo,
+    .region-header,
+    th {
+        background: #BFBFBF !important;
+        background-clip: padding-box !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #666 !important;
+    }
+    
+    .header-grupo-carregamento,
+    th:nth-child(8),
+    th:nth-child(9),
+    th:nth-child(10),
+    .merged-cell:nth-child(8) {
+        background: #D9D9D9 !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #666 !important;
+    }
+    
+    .merged-cell {
+        background: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #999 !important;
+        border-radius: 2px !important;
+    }
+    
+    td {
+        border: 0.3px solid #999 !important;
+        border-radius: 2px !important;
+        background-color: white !important;
+        border-collapse: collapse !important;
+        box-sizing: border-box !important;
+    }
+    
+    th {
+        border-collapse: collapse !important;
+        box-sizing: border-box !important;
+    }
+    
+    .total-rota-header {
+        background: #BFBFBF !important;
+        -webkit-print-color-adjust: exact !important;
+        border: 0.3px solid #666 !important;
+    }
+    
+    .col-group-3 {
+        background: #BFBFBF !important;
+        background-clip: padding-box !important;
+        -webkit-print-color-adjust: exact !important;
+        border-radius: 2px !important;
+    }
+    
+    .col-group-1,
+    .col-group-2 {
+        background-clip: padding-box !important;
+    }
+    
+    .col-group-1 {
+        border-right: 2px solid #666 !important;
+    }
+    
+    .col-group-2 {
+        border-right: 2px solid #666 !important;
+    }
+    
+    .controls {
+        display: none !important;
+    }
+    
+    input, textarea {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+    
+    td:nth-child(9) {
+        white-space: pre-wrap !important;
+        line-height: 1.2 !important;
+    }
+    
+    td:hover,
+    .merged-cell:hover,
+    .region-header:hover,
+    th:hover {
+        background-color: inherit !important;
+    }
+    
+    tbody tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    .region-header[rowspan] {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        border-collapse: collapse !important;
+        box-sizing: border-box !important;
+    }
+    
+    tbody tr:has(.region-header[rowspan="7"]),
+    tbody tr:has(.region-header[rowspan="7"]) ~ tr:nth-of-type(-n+6) {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        border-collapse: collapse !important;
+    }
+    
+    .total-caminhoes-display {
+        display: none !important;
+    }
+}
+
+@media print {
+    html, body {
+        height: auto;
+        overflow: visible;
+    }
+	
+	/* Forçar impressão da célula Taubaté/Lorena */
+    td.merged-cell[style*="D9D9D9"] {
+        background: #D9D9D9 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+
+/* ========================================
+   ESTILOS PARA ELEMENTOS EDITÁVEIS
+   ======================================== */
+input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 8pt;
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+}
+
+input:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(100, 149, 237, 0.3);
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="text"] {
+    text-align: center;
+}
+
+.merged-cell input {
+    background-color: transparent;
+}
+
+.merged-cell input:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+}
+
+
+.controls button#manageBtn {
+    background: #000000;
+    padding: 6px;
+}
+
+.controls button#manageBtn:hover {
+    background: #1a1a1a;
+    transform: translateY(-3px) scale(1.08);
+}
+
+.controls button#manageBtn svg {
+    filter: brightness(0) invert(1);
+}
+
+/* ========================================
+   MODAL DE GERENCIAMENTO - DESIGN PROFISSIONAL
+   ======================================== */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    width: 380px;
+    max-width: 90vw;
+    height: 720px;
+    max-height: 95vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;  /* CERTIFIQUE-SE QUE TEM ESTA LINHA */
+    z-index: 2001;
+    animation: slideUp 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #ffffff;
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    font-size: 28px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    font-weight: 300;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.modal-close:active {
+    transform: scale(0.95);
+}
+
+.modal-body {
+    padding: 0;
+    background: #f8f9fa;
+    flex: 1;
+    overflow-y: auto;  /* ← ALTERAÇÃO: permite scroll */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Scrollbar moderna estilo iOS */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.region-section {
+    margin-bottom: 24px;
+    border-radius: 16px;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.region-section:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.region-section h3 {
+    margin: 0 0 16px 0;
+    font-size: 17px;
+    color: #1a1a1a;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.stores-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.store-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8f9fa;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    transition: all 0.2s ease;
+}
+
+.store-item:hover {
+    background: #ffffff;
+    border-color: #d0d0d0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.store-item input {
+    flex: 1;
+    border: 1px solid #d0d0d0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.store-item input:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.store-item button {
+    background: #ffffff;
+    color: #ff3b30;
+    border: 1px solid #e8e8e8;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.store-item button:hover {
+    background: #ff3b30;
+    color: #ffffff;
+    border-color: #ff3b30;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+}
+
+.store-item button:active {
+    transform: translateY(0);
+}
+
+.store-item .move-btn {
+    background: #ffffff;
+    color: #007aff;
+    border: 1px solid #e8e8e8;
+    padding: 8px 12px;
+    font-size: 16px;
+    min-width: 40px;
+    font-weight: 600;
+}
+
+.store-item .move-btn:hover {
+    background: #007aff;
+    color: #ffffff;
+    border-color: #007aff;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+.add-store-btn {
+    background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);
+    color: #ffffff;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3);
+}
+
+.add-store-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+}
+
+.add-store-btn:active {
+    transform: translateY(0);
+}
+
+.modal-footer {
+    padding: 20px 28px;
+    background: #ffffff;
+    border-top: 1px solid #e8e8e8;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-footer button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: -0.2px;
+}
+
+.modal-footer button:hover {
+    transform: translateY(-2px);
+}
+
+.modal-footer button:active {
+    transform: translateY(0);
+}
+
+.btn-cancel {
+    background: #f0f0f0;
+    color: #1a1a1a;
+}
+
+.btn-cancel:hover {
+    background: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(52, 199, 89, 0.3);
+}
+
+.btn-save:hover {
+    box-shadow: 0 6px 20px rgba(52, 199, 89, 0.4);
+}
+
+/* Botão Reset especial */
+#resetBtn {
+    background: #ff3b30 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(255, 59, 48, 0.3) !important;
+}
+
+#resetBtn:hover {
+    box-shadow: 0 6px 20px rgba(255, 59, 48, 0.4) !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-container {
+        width: 95%;
+        border-radius: 16px;
+    }
+    
+    .modal-header {
+        padding: 20px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-footer {
+        padding: 16px 20px;
+        flex-direction: column;
+    }
+    
+    .modal-footer button {
+        width: 100%;
+    }
+}
+
+@media print {
+    .modal-overlay,
+    .modal-container {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   CONTROLES DA PÁGINA
+   ======================================== */
+.controls {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.controls button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 8px 0;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.controls button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.controls button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.controls button svg {
+    pointer-events: none;
+}
+
+.controls button#clearBtn {
+    background: linear-gradient(135deg, #DC143C 0%, #B22222 100%);
+}
+
+.controls button#clearBtn:hover {
+    background: linear-gradient(135deg, #FF1744 0%, #DC143C 100%);
+}
+
+.controls button#printBtn {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.controls button#printBtn:hover {
+    background: linear-gradient(135deg, #42A5F5 0%, #2196F3 100%);
+}
+
+.controls button#screenshotBtn {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.controls button#screenshotBtn:hover {
+    background: linear-gradient(135deg, #34E877 0%, #25D366 100%);
+}
+
+/* ========================================
+   CAMPO DE DATA
+   ======================================== */
+.date-input {
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 7pt;
+    text-align: left;
+    width: 80px;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+    padding: 2px 4px;
+}
+
+.date-input:focus {
+    background-color: rgba(100, 149, 237, 0.08);
+    outline: 1px solid rgba(100, 149, 237, 0.3);
+}
+
+/* ========================================
+   MENSAGEM DE STATUS
+   ======================================== */
+.status-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.88);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 10px;
+    z-index: 1001;
+    display: none;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: fadeInOut 0.3s ease;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Forçar Vale do Paraíba a não quebrar */
+.region-header[rowspan="7"] {
+    position: relative;
+    z-index: 10;
+}
+
+tbody tr:has(.region-header[rowspan="7"]),
+tbody tr:has(.region-header[rowspan="7"]) ~ tr:nth-of-type(-n+6) {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: table-row !important;
+}
+
+
+@media print {
+    .total-caminhoes-display {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   MODAL ADMINISTRATIVO - RETRATO CLEAN
+   ======================================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 2000;
+    backdrop-filter: blur(6px);
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    width: 380px;
+    max-width: 90vw;
+    height: 720px;
+    max-height: 95vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 2001;
+    animation: slideUp 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modal-header {
+    background: #1a1a1a;
+    color: #ffffff;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    font-weight: 300;
+    opacity: 0.7;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.modal-body {
+    padding: 0;
+    background: #f8f9fa;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ABAS ESCONDIDAS */
+.admin-tabs {
+    display: none;
+}
+
+.tab-content {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-bottom: 0;  /* ADICIONE ESTA LINHA */
+}
+
+.tab-content.active {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;  /* ← ALTERAÇÃO: remove espaço extra */
+    overflow: visible;
+}
+
+.tab-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.tab-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+}
+
+.tab-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   CARDS DAS ROTAS - LISTA VERTICAL
+   ======================================== */
+.route-cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 0 0 auto;  /* ← ALTERAÇÃO: força altura mínima */
+    overflow-y: visible; /* ← ALTERAÇÃO: remove scroll interno */
+}
+
+.route-card {
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 10px;
+    transition: all 0.15s ease;
+    cursor: grab;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 24px;
+    user-select: none;
+}
+
+.route-card:active {
+    cursor: grabbing;
+}
+
+.route-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.route-card-edit-handle {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    font-size: 15px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.route-card-edit-handle:hover {
+    opacity: 1;
+    background: #f3f4f6;
+    transform: scale(1.1);
+}
+
+.route-card:hover .route-card-edit-handle {
+    opacity: 0.7;
+}
+
+.route-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+    flex: 1;
+}
+
+.route-card-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.icon-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.btn-delete {
+    background: transparent;
+    color: #ef4444;
+}
+
+.btn-delete:hover {
+    background: #fee2e2;
+}
+
+/* ESTADOS DRAG & DROP */
+.route-card.dragging {
+    opacity: 0.5;
+    background: #dbeafe !important;
+    border: 2px solid #3b82f6 !important;
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+    cursor: grabbing;
+    z-index: 1000;
+}
+
+.route-card.drag-over {
+    background: #dcfce7 !important;
+    border: 2px solid #22c55e !important;
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.route-cards-grid.drag-active {
+    background: #f0f9ff;
+    border: 2px dashed #3b82f6;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.floating-add-btn {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    padding: 12px 16px;
+    border-radius: 0;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-top: auto;  /* ← ADICIONAR: empurra botão para baixo */
+    margin-bottom: 0;
+}
+
+.floating-add-btn:hover {
+    background: #2d2d2d;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.floating-add-btn:active {
+    transform: translateY(1px);
+}
+
+/* ESTADO VAZIO */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9ca3af;
+}
+
+.empty-state-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.empty-state-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+/* ========================================
+   EDITOR DE LOJAS
+   ======================================== */
+.store-editor-header {
+    background: #ffffff;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+.store-editor-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.stores-section {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.subregion-block {
+    margin-bottom: 24px;
+}
+
+.subregion-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.stores-drag-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+    padding: 12px;
+    background: #f9fafb;
+    border: 2px dashed #e5e7eb;
+    border-radius: 8px;
+    min-height: 100px;
+    transition: all 0.3s ease;
+}
+
+.stores-drag-container.drag-active {
+    background: #E0F7FA;
+    border-color: #3CCBDB;
+    border-style: solid;
+}
+
+.store-drag-card {
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 6px;
+    text-align: center;
+    cursor: move;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+}
+
+.store-drag-card:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.15);
+}
+
+.store-drag-card.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transition: none;
+    z-index: 1000;
+    border: 3px solid #2563eb;
+    background: white !important;
+}
+
+.store-drag-card.drag-over {
+    background: #3CCBDB !important;
+    border-color: #023665 !important;
+    border-style: solid !important;
+    transform: scale(1.06);
+}
+
+.store-drag-card.drag-over::after {
+    content: 'SOLTE AQUI';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    font-weight: 900;
+    color: #FFFFFF;
+    background: #023665;
+    padding: 4px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 100;
+    animation: pulse-drop 0.6s infinite;
+}
+
+@keyframes pulse-drop {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 1;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1); 
+        opacity: 0.8;
+    }
+}
+
+.store-drag-handle {
+    font-size: 10px;
+    color: #d1d5db;
+    margin-bottom: 2px;
+}
+
+.store-number {
+    font-size: 18px;
+    font-weight: 900;
+    color: #2563eb;
+    line-height: 1;
+}
+
+.store-label {
+    font-size: 10px;
+    color: #9ca3af;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.remove-store-btn {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 10px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.store-drag-card:hover .remove-store-btn {
+    opacity: 1;
+}
+
+.remove-store-btn:hover {
+    background: #dc2626;
+    color: white;
+    transform: scale(1.1);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.game-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.game-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+.btn-back {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.btn-back:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.editor-actions-bar {
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+.editor-actions-left,
+.editor-actions-right {
+    display: flex;
+    gap: 8px;
+}
+
+/* ========================================
+   MODAL DE LOJAS - LAYOUT LIMPO VERTICAL
+   ======================================== */
+.stores-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 2100;
+    backdrop-filter: blur(6px);
+    animation: fadeIn 0.2s ease;
+}
+
+.stores-modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    width: 380px;
+    max-width: 90vw;
+    height: 720px;
+    max-height: 95vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 2101;
+    animation: slideUp 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.stores-modal-header {
+    background: #1a1a1a;
+    color: #ffffff;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.stores-modal-header h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.stores-modal-close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    font-weight: 300;
+    opacity: 0.7;
+}
+
+.stores-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.stores-modal-body {
+    padding: 0;
+    background: #f8f9fa;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.stores-modal-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.stores-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.stores-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+}
+
+.stores-modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* LISTA DE LOJAS VERTICAL */
+.stores-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    flex: 1;
+}
+
+.store-list-card {
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: all 0.15s ease;
+    cursor: grab;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    user-select: none;
+}
+
+.store-list-card:active {
+    cursor: grabbing;
+}
+
+.store-list-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.store-list-card-drag-handle {
+    color: #cbd5e1;
+    font-size: 16px;
+    cursor: grab;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+}
+
+.store-list-card:hover .store-list-card-drag-handle {
+    opacity: 0.8;
+}
+
+.store-list-card-number {
+    font-size: 18px;
+    font-weight: 900;
+    color: #2563eb;
+    min-width: 50px;
+    text-align: center;
+}
+
+.store-list-card-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    flex: 1;
+}
+
+.store-list-card-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.store-list-card .icon-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    opacity: 0.6;
+    background: transparent;
+}
+
+.store-list-card .icon-btn:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.store-list-card .btn-delete {
+    color: #ef4444;
+}
+
+.store-list-card .btn-delete:hover {
+    background: #fee2e2;
+}
+
+/* ESTADOS DRAG & DROP PARA LOJAS */
+.store-list-card.dragging {
+    opacity: 0.5;
+    background: #dbeafe !important;
+    border: 2px solid #3b82f6 !important;
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+    cursor: grabbing;
+    z-index: 1000;
+}
+
+.store-list-card.drag-over {
+    background: #dcfce7 !important;
+    border: 2px solid #22c55e !important;
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.stores-list-vertical.drag-active {
+    background: #f0f9ff;
+    border: 2px dashed #3b82f6;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+/* BOTÕES DO MODAL DE LOJAS */
+.stores-modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+.stores-modal-btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.stores-modal-add-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 0;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.stores-modal-add-btn:hover {
+    background: #2d2d2d;
+}
+
+/* ESTADO VAZIO NO MODAL DE LOJAS */
+.stores-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}
+
+.stores-empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.stores-empty-state-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .modal-container,
+    .stores-modal-container {
+        width: 95%;
+        height: 90vh;
+        border-radius: 10px;
+    }
+    
+    .stores-drag-container {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 8px;
+    }
+    
+    .store-editor-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .editor-actions-bar {
+        flex-direction: column;
+    }
+    
+    .editor-actions-left,
+    .editor-actions-right {
+        width: 100%;
+    }
+    
+    .game-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+    </style>
+</head>
+<body>
+   <div class="controls">
+    <button id="manageBtn" title="Gerenciar Lojas">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path d="M12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5zm7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65c-.04-.24-.25-.42-.5-.42h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66z"/>
+    </svg>
+    </button>
+    <button id="clearBtn" title="Limpar Tudo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+        </svg>
+    </button>
+    <button id="printBtn" title="Imprimir">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+    </button>
+    <button id="screenshotBtn" title="Enviar para WhatsApp">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </button>
+</div>
+   
+    <div class="status-message" id="statusMessage"></div>
+   
+    <div class="pagina-a4">
+        <!-- Cabeçalho do topo -->
+        <div class="top-header">
+            CONTROLE DE CARREGAMENTO PERECÍVEIS
+        </div>
+       
+        <!-- Linha com logo e data -->
+        <div class="header-info">
+            <div class="logo-container">
+			    <img src="data:image/png;base64,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" alt="Logo">
+            </div>
+            <div class="date-field">
+                Data: <input type="text" class="date-input" id="dateField" placeholder="__/__/____">
+            </div>
+        </div>
+        <!-- Tabela Principal -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="7" class="header-grupo">CONTAGEM MATERIAL DE APOIO</th>
+                    <th colspan="3" class="header-grupo-carregamento">CARREGAMENTO</th>
+                </tr>
+                <tr class="blank-header-row">
+                    <td colspan="10"></td>
+                </tr>
+                <tr>
+                    <th class="col-group-1">Região</th>
+                    <th class="col-group-1">Lojas</th>
+                    <th class="col-group-2">Qtde <br>Paletes</th>
+                    <th class="col-group-2">Box</th>
+                    <th class="col-group-2">Container</th>
+                    <th class="col-group-2">Câmara</th>
+                    <th class="col-group-3 total-rota-header">Total<br>Rota</th>
+                    <th>Região</th>
+                    <th>Motorista/Placa</th>
+                    <th>C°</th>
+                </tr>
+            </thead>
+            <tbody id="dynamicTableBody">
+                 
+            </tbody>
+        </table>
+		<div class="total-caminhoes-display" style="margin-top: 10px; padding: 8px; background: linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%); border: 0.3px solid #666; border-radius: 6px; text-align: center; font-weight: 900; font-size: 10pt;">
+            <span id="totalCaminhoes">Total de 0 caminhões carregados</span>
+        </div>
+    </div>
+	
+	<!-- Modal de Gerenciamento de Lojas -->
+<!-- ========================================
+   MODAL ADMINISTRATIVO - RETRATO CLEAN
+   ======================================== -->
+<div class="modal-overlay" id="manageModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>⚙️ Gerenciar Rotas</h2>
+            <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Abas -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="routes">
+                    📍 Rotas
+                </button>
+                <button class="admin-tab" data-tab="stores">
+                    🏪 Editar Lojas
+                </button>
+            </div>
+
+            <!-- Conteúdo: Lista de Rotas -->
+            <div class="tab-content active" id="tab-routes">
+                <div class="route-cards-grid" id="routeCardsContainer">
+                    <!-- Cards das rotas serão gerados aqui -->
+                </div>
+            </div>
+
+            <!-- Conteúdo: Editar Lojas -->
+            <div class="tab-content" id="tab-stores">
+                <div id="storeEditorContainer">
+                    <!-- Editor de lojas será carregado aqui -->
+                </div>
+            </div>
+            
+            <!-- Botão Adicionar Rota - Apenas na aba Rotas -->
+            <button class="floating-add-btn" id="floatingAddBtn" onclick="createNewRoute()" style="display: none;">
+                ➕ Nova Rota
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================
+   MODAL DE LOJAS - LAYOUT LIMPO VERTICAL
+   ======================================== -->
+<div class="stores-modal-overlay" id="storesModal">
+    <div class="stores-modal-container">
+        <div class="stores-modal-header">
+            <h2 id="storesModalTitle">🏪 Lojas - [Rota]</h2>
+            <button class="stores-modal-close" id="closeStoresModal">&times;</button>
+        </div>
+        <div class="stores-modal-body" id="storesModalBody">
+            <!-- Lista de lojas será gerada aqui -->
+        </div>
+        <div class="stores-modal-footer">
+            <div class="stores-modal-btn-group">
+                <button class="game-btn btn-back" id="backToRoutesFromStores">
+                    ⬅️ Voltar
+                </button>
+            </div>
+            <div class="stores-modal-btn-group">
+                <button class="game-btn btn-primary" id="saveStoresFromModal">
+                    💾 Salvar
+                </button>
+            </div>
+        </div>
+        <button class="stores-modal-add-btn" id="addStoreFromModal">
+            ➕ Adicionar Loja
+        </button>
+    </div>
+</div>
+    <script>
+// Variável para controlar o auto-save
+let autoSaveTimeout;
+let lastSavedData = '';
+
+// Função para mostrar mensagem de status
+function showStatus(message, duration = 2000) {
+    const statusElement = document.getElementById('statusMessage');
+    statusElement.textContent = message;
+    statusElement.style.display = 'block';
+   
+    setTimeout(() => {
+        statusElement.style.display = 'none';
+    }, duration);
+}
+
+// Função para salvar dados no localStorage
+function saveData() {
+    const inputs = document.querySelectorAll('input, textarea.motorista-placa-textarea');
+    const data = {};
+   
+    inputs.forEach((input, index) => {
+        data[`input_${index}`] = input.value;
+    });
+   
+    const dataString = JSON.stringify(data);
+   
+    // Só salva se os dados mudaram
+    if (dataString !== lastSavedData) {
+        localStorage.setItem('controleCarregamento', dataString);
+        lastSavedData = dataString;
+    }
+}
+
+// Função para carregar dados do localStorage
+function loadData() {
+    const savedData = localStorage.getItem('controleCarregamento');
+   
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        const inputs = document.querySelectorAll('input, textarea.motorista-placa-textarea');
+       
+        inputs.forEach((input, index) => {
+            if (data[`input_${index}`]) {
+                input.value = data[`input_${index}`];
+            }
+        });
+       
+        // Recalcular totais após carregar dados
+        calculateAllTotals();
+        showStatus('Dados carregados com sucesso!');
+
+        // Ajustar fonte dos textareas após carregar dados
+        document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+            autoAdjustFontSize(textarea);
+        });
+        
+        // Centralizar textareas após carregar
+        centerTextareaContent();
+		contarCaminhoes();
+    } else {
+        showStatus('Nenhum dado salvo encontrado.');
+    }
+}
+
+// Função para limpar todos os campos
+function clearData() {
+    if (confirm('Tem certeza que deseja limpar todos os dados?')) {
+        const inputs = document.querySelectorAll('input, textarea.motorista-placa-textarea');
+       
+        inputs.forEach(input => {
+            input.value = '';
+        });
+       
+        // Recalcular totais após limpar
+        calculateAllTotals();
+        localStorage.removeItem('controleCarregamento');
+        lastSavedData = '';
+        showStatus('Todos os dados foram limpos!');
+    }
+}
+
+// Função para ajustar automaticamente o tamanho da fonte
+function autoAdjustFontSize(textarea) {
+    // Resetar para tamanho padrão
+    textarea.style.fontSize = '9pt';
+    textarea.style.lineHeight = '1.1';
+    
+    // Verificar se o conteúdo excede a altura
+    const maxHeight = textarea.clientHeight;
+    let fontSize = 9;
+    
+    // Reduzir fonte gradualmente até caber
+    while (textarea.scrollHeight > maxHeight && fontSize > 6) {
+        fontSize -= 0.5;
+        textarea.style.fontSize = fontSize + 'pt';
+        textarea.style.lineHeight = '1.0';
+    }
+    
+    // Se ainda não couber, reduzir line-height
+    if (textarea.scrollHeight > maxHeight) {
+        textarea.style.lineHeight = '0.9';
+    }
+}
+
+
+// Função para centralizar cursor verticalmente no textarea
+function centerTextareaContent() {
+    document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+        // Resetar estilos de posicionamento forçado
+        textarea.style.position = '';
+        textarea.style.top = '';
+        textarea.style.transform = '';
+        textarea.style.paddingTop = '';
+        textarea.style.paddingBottom = '';
+        
+        // Aplicar centralização natural
+        const parent = textarea.closest('td');
+        if (parent) {
+            parent.style.verticalAlign = 'middle';
+            parent.style.textAlign = 'center';
+        }
+        
+        // Calcular padding para centralização vertical baseado no conteúdo
+        const textareaHeight = textarea.clientHeight;
+        const lines = textarea.value.split('\n').length;
+        const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight) || 14;
+        const contentHeight = lines * lineHeight;
+        
+        // Se o conteúdo for menor que a altura, centralizar verticalmente
+        if (contentHeight < textareaHeight) {
+            const paddingTop = Math.max(0, (textareaHeight - contentHeight) / 2);
+            textarea.style.paddingTop = paddingTop + 'px';
+            textarea.style.paddingBottom = '2px';
+        } else {
+            // Se não couber, usar padding mínimo
+            textarea.style.padding = '2px';
+        }
+        
+        // Garantir display correto
+        textarea.style.display = 'block';
+        textarea.style.width = '100%';
+        textarea.style.height = '100%';
+    });
+}
+
+// Função melhorada para contar placas de caminhões
+function contarCaminhoes() {
+    const textareas = document.querySelectorAll('.motorista-placa-textarea');
+    const placasEncontradas = new Set();
+    
+    // Regex para placas brasileiras:
+    // Padrão COMPLETO ANTIGO: 3 letras + 4 números (ex: ABC1234, abc-1234)
+    const regexPlacaAntiga = /\b[A-Za-z]{3}[-\s]?[0-9]{4}\b/g;
+    
+    // Padrão COMPLETO MERCOSUL: 3 letras + 1 número + 1 letra + 2 números (ex: ABC1D23)
+    const regexPlacaMercosul = /\b[A-Za-z]{3}[-\s]?[0-9][A-Za-z][0-9]{2}\b/g;
+    
+    // Padrão REDUZIDO: últimos 4 dígitos (ex: 1234, 1D23)
+    // Formato ANTIGO reduzido: 4 números (ex: 1234)
+    const regexReduzidoAntigo = /\b[0-9]{4}\b/g;
+    
+    // Formato MERCOSUL reduzido: 1 número + 1 letra + 2 números (ex: 1D23, 2h76)
+    const regexReduzidoMercosul = /\b[0-9][A-Za-z][0-9]{2}\b/g;
+    
+    textareas.forEach(textarea => {
+        const texto = textarea.value.trim();
+        
+        if (texto !== '') {
+            // Buscar placas completas no padrão antigo
+            let matchesAntiga = texto.match(regexPlacaAntiga);
+            if (matchesAntiga) {
+                matchesAntiga.forEach(placa => {
+                    const placaNormalizada = placa.replace(/[-\s]/g, '').toUpperCase();
+                    placasEncontradas.add(placaNormalizada);
+                });
+            }
+            
+            // Buscar placas completas no padrão Mercosul
+            let matchesMercosul = texto.match(regexPlacaMercosul);
+            if (matchesMercosul) {
+                matchesMercosul.forEach(placa => {
+                    const placaNormalizada = placa.replace(/[-\s]/g, '').toUpperCase();
+                    placasEncontradas.add(placaNormalizada);
+                });
+            }
+            
+            // Buscar placas reduzidas (4 números) - apenas se NÃO encontrou placa completa
+            if (!matchesAntiga && !matchesMercosul) {
+                let matchesReduzidoAntigo = texto.match(regexReduzidoAntigo);
+                if (matchesReduzidoAntigo) {
+                    matchesReduzidoAntigo.forEach(placa => {
+                        const placaNormalizada = placa.toUpperCase();
+                        placasEncontradas.add(placaNormalizada);
+                    });
+                }
+                
+                // Buscar placas reduzidas Mercosul (1 número + 1 letra + 2 números)
+                let matchesReduzidoMercosul = texto.match(regexReduzidoMercosul);
+                if (matchesReduzidoMercosul) {
+                    matchesReduzidoMercosul.forEach(placa => {
+                        const placaNormalizada = placa.toUpperCase();
+                        placasEncontradas.add(placaNormalizada);
+                    });
+                }
+            }
+        }
+    });
+    
+    const totalCaminhoes = placasEncontradas.size;
+    const elementoTotal = document.getElementById('totalCaminhoes');
+    
+    if (elementoTotal) {
+        if (totalCaminhoes === 0) {
+            elementoTotal.textContent = 'Nenhum caminhão carregado';
+        } else if (totalCaminhoes === 1) {
+            elementoTotal.textContent = 'Total de 1 caminhão carregado';
+        } else {
+            elementoTotal.textContent = `Total de ${totalCaminhoes} caminhões carregados`;
+        }
+    }
+}
+
+// Função para imprimir
+function printPage() {
+    window.print();
+}
+
+// Configurar data atual
+function setCurrentDate() {
+    const dateInput = document.getElementById('dateField');
+    if (dateInput && dateInput.value === '') {
+        dateInput.value = '__/__/____';
+    }
+}
+
+// Função para aplicar máscara de data
+function applyDateMask(input) {
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length === 0) {
+        input.value = '__/__/____';
+        return;
+    }
+    
+    let formatted = '';
+    
+    if (value.length <= 2) {
+        formatted = value;
+    } else if (value.length <= 4) {
+        formatted = value.slice(0, 2) + '/' + value.slice(2);
+    } else {
+        formatted = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+    }
+    
+    input.value = formatted;
+}
+
+// Função para calcular o total de uma região específica
+// Função para calcular o total de uma região específica
+function calculateRegionTotal(regionRows) {
+    let total = 0;
+   
+    regionRows.forEach(row => {
+        // ALTERAÇÃO: Agora soma APENAS os paletes
+        const paletes = parseFloat(row.querySelector('.qtde-paletes')?.value) || 0;
+        
+        total += paletes; // Removido: box, container, camara
+    });
+   
+    return total;
+}
+
+// Função para calcular todos os totais por rota
+function calculateAllTotals() {
+    const totalCells = document.querySelectorAll('.total-rota');
+   
+    totalCells.forEach(totalCell => {
+        const totalInput = totalCell.querySelector('input');
+        const numRows = parseInt(totalCell.getAttribute('rowspan') || '1');
+        let currentRow = totalCell.closest('tr');
+        const regionRows = [];
+       
+        for (let i = 0; i < numRows; i++) {
+            if (currentRow && currentRow.querySelector('.store-cell')) {
+                regionRows.push(currentRow);
+            }
+            currentRow = currentRow.nextElementSibling;
+        }
+       
+        const total = calculateRegionTotal(regionRows);
+        totalInput.value = total > 0 ? total : '';
+    });
+}
+
+// Função para navegar para o campo de baixo
+function navigateToFieldBelow(currentField) {
+    const currentCell = currentField.closest('td');
+    if (!currentCell) return;
+    
+    const currentRow = currentCell.closest('tr');
+    if (!currentRow) return;
+    
+    const editableCellsInRow = Array.from(currentRow.querySelectorAll('td')).filter(td => {
+        return td.querySelector('input:not([readonly]), textarea.motorista-placa-textarea');
+    });
+    
+    const currentCellIndex = editableCellsInRow.indexOf(currentCell);
+    if (currentCellIndex === -1) return;
+    
+    let nextRow = currentRow.nextElementSibling;
+    
+    while (nextRow) {
+        if (nextRow.classList.contains('blank-row')) {
+            nextRow = nextRow.nextElementSibling;
+            continue;
+        }
+        
+        const nextRowEditableCells = Array.from(nextRow.querySelectorAll('td')).filter(td => {
+            return td.querySelector('input:not([readonly]), textarea.motorista-placa-textarea');
+        });
+        
+        if (nextRowEditableCells.length > currentCellIndex) {
+            const nextCell = nextRowEditableCells[currentCellIndex];
+            const nextField = nextCell.querySelector('input:not([readonly]), textarea.motorista-placa-textarea');
+            
+            if (nextField) {
+                nextField.focus();
+                if (nextField.tagName === 'INPUT') {
+                    nextField.select();
+                }
+                return;
+            }
+        }
+        nextRow = nextRow.nextElementSibling;
+    }
+    
+    const allFields = Array.from(document.querySelectorAll('input:not([readonly]), textarea.motorista-placa-textarea'));
+    const currentIndex = allFields.indexOf(currentField);
+    
+    if (currentIndex !== -1 && currentIndex < allFields.length - 1) {
+        const nextField = allFields[currentIndex + 1];
+        nextField.focus();
+        if (nextField.tagName === 'INPUT') {
+            nextField.select();
+        }
+    }
+}
+
+// Função para capturar screenshot - VERSÃO CORRIGIDA
+async function captureScreenshot() {
+    showStatus('Capturando tela...');
+    
+    const controls = document.querySelector('.controls');
+    const statusMessage = document.getElementById('statusMessage');
+    const originalControlsDisplay = controls.style.display;
+    const originalStatusDisplay = statusMessage.style.display;
+    
+    controls.style.display = 'none';
+    statusMessage.style.display = 'none';
+
+    const inputs = document.querySelectorAll('input:not(.date-input)');
+    const textareas = document.querySelectorAll('textarea');
+    const dateInput = document.getElementById('dateField');
+    
+    const inputData = [];
+    const textareaData = [];
+    
+    inputs.forEach((input) => {
+        const value = input.value;
+        const parent = input.parentElement;
+        const isReadonly = input.hasAttribute('readonly');
+        const isTotalRota = parent.classList.contains('total-rota') || parent.classList.contains('col-group-3');
+        
+        const span = document.createElement('span');
+        span.textContent = value;
+        span.style.display = 'flex';
+        span.style.alignItems = 'center';
+        span.style.justifyContent = 'center';
+        span.style.border = 'none';
+        span.style.background = 'transparent';
+        span.style.width = '100%';
+        span.style.height = '100%';
+        span.style.textAlign = 'center';
+        span.style.fontSize = '8pt';
+        span.style.lineHeight = '1';
+        span.style.padding = '0';
+        span.style.margin = '0';
+        
+        if (isTotalRota || isReadonly) {
+            span.style.fontWeight = '900';
+            span.style.fontSize = '9pt';
+            span.style.color = '#000';
+        }
+        
+        span.className = 'temp-capture-text';
+        
+        inputData.push({ input, parent, span, value });
+        input.style.display = 'none';
+        parent.appendChild(span);
+    });
+    
+    textareas.forEach((textarea) => {
+        const value = textarea.value;
+        const parent = textarea.parentElement;
+        const div = document.createElement('div');
+        div.textContent = value;
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'center';
+        div.style.border = 'none';
+        div.style.background = 'transparent';
+        div.style.width = '100%';
+        div.style.height = '100%';
+        div.style.textAlign = 'center';
+        div.style.fontSize = '9pt';
+        div.style.fontWeight = '700';
+        div.style.lineHeight = '1.2';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.wordWrap = 'break-word';
+        div.style.padding = '0';
+        div.style.margin = '0';
+        div.className = 'temp-capture-text';
+        
+        textareaData.push({ textarea, parent, div, value });
+        textarea.style.display = 'none';
+        parent.appendChild(div);
+    });
+    
+    let dateSpan = null;
+    if (dateInput) {
+        const dateValue = dateInput.value;
+        const dateParent = dateInput.parentElement;
+        
+        dateSpan = document.createElement('span');
+        
+        if (dateValue !== '__/__/____' && dateValue.replace(/\D/g, '').length > 0) {
+            dateSpan.textContent = dateValue;
+        } else {
+            dateSpan.textContent = '';
+        }
+        
+        dateSpan.style.fontWeight = '700';
+        dateSpan.style.fontSize = '7pt';
+        dateSpan.style.fontFamily = 'Arial, sans-serif';
+        dateSpan.style.color = '#000';
+        dateSpan.className = 'temp-capture-text';
+        
+        dateInput.style.display = 'none';
+        dateParent.insertBefore(dateSpan, dateInput);
+    }
+
+    try {
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        const canvas = await html2canvas(document.querySelector('.pagina-a4'), {
+            scale: 3,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#FFFFFF',
+            scrollX: 0,
+            scrollY: -window.scrollY,
+            width: document.querySelector('.pagina-a4').scrollWidth,
+            height: document.querySelector('.pagina-a4').scrollHeight,
+            logging: false,
+            removeContainer: true,
+            imageTimeout: 0,
+            onclone: function(clonedDoc) {
+                // CORREÇÃO APENAS para a célula "Vale do Paraíba"
+                const regionHeaders = clonedDoc.querySelectorAll('.region-header');
+                
+                regionHeaders.forEach(cell => {
+                    if (cell.textContent.includes('Vale do Paraíba')) {
+                        // Aplicar estilos específicos para remover linha branca
+                        cell.style.position = 'relative';
+                        cell.style.overflow = 'hidden';
+                        cell.style.border = '0.3px solid #666';
+                        
+                        // Garantir que o background cubra toda a célula
+                        const rowspan = parseInt(cell.getAttribute('rowspan') || '1');
+                        if (rowspan > 1) {
+                            cell.style.background = 'linear-gradient(135deg, #BFBFBF 0%, #A8A8A8 100%)';
+                            cell.style.backgroundClip = 'border-box'; // Mudado de padding-box para border-box
+                            cell.style.boxShadow = 'none';
+                            cell.style.outline = 'none';
+                            
+                            // Remover qualquer pseudo-elemento que possa criar linha branca
+                            cell.style.setProperty('--before-display', 'none');
+                            cell.style.setProperty('--after-display', 'none');
+                        }
+                    }
+                });
+                
+                // Manter os estilos originais para impressão (que já funcionam bem)
+                const style = clonedDoc.createElement('style');
+                style.textContent = `
+                    @media print {
+                        .region-header[rowspan] {
+                            background: #BFBFBF !important;
+                            background-clip: border-box !important;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            border: 0.3px solid #666 !important;
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
+                        }
+                    }
+                `;
+                clonedDoc.head.appendChild(style);
+            },
+            ignoreElements: (element) => {
+                return element.tagName === 'IMG' && !element.complete;
+            }
+        });
+
+        // Restaurar elementos originais
+        inputData.forEach(({ input, parent, span }) => {
+            parent.removeChild(span);
+            input.style.display = '';
+        });
+        
+        textareaData.forEach(({ textarea, parent, div }) => {
+            parent.removeChild(div);
+            textarea.style.display = '';
+        });
+        
+        if (dateSpan && dateInput) {
+            dateSpan.parentElement.removeChild(dateSpan);
+            dateInput.style.display = '';
+        }
+        
+        controls.style.display = originalControlsDisplay;
+        statusMessage.style.display = originalStatusDisplay;
+
+        // Processar e salvar a imagem
+        try {
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+            
+            // Criar um link temporário para download
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const date = new Date();
+            const timestamp = date.toISOString().slice(0, 19).replace(/[:.]/g, '-');
+            link.download = `controle-carregamento-${timestamp}.png`;
+            link.href = url;
+            link.click();
+            
+            // Tentar copiar para área de transferência também
+            try {
+                const item = new ClipboardItem({ 'image/png': blob });
+                await navigator.clipboard.write([item]);
+                showStatus('✅ PRONTO! Agora abra o WhatsApp, e cole a imagem (CTRL+V)');
+            } catch (copyError) {
+                showStatus('✅ Imagem salva nos Downloads!');
+            }
+            
+            // Aguardar um momento e abrir WhatsApp Web
+            setTimeout(() => {
+                window.open('https://web.whatsapp.com', '_blank');
+            }, 500);
+            
+            // Limpar URL temporária
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 1000);
+            
+        } catch (processError) {
+            console.error('Erro ao processar:', processError);
+            fallbackDownload(canvas);
+        }
+
+    } catch (error) {
+        console.error('Erro ao capturar:', error);
+        
+        inputData.forEach(({ input, parent, span }) => {
+            if (span.parentElement) parent.removeChild(span);
+            input.style.display = '';
+        });
+        
+        textareaData.forEach(({ textarea, parent, div }) => {
+            if (div.parentElement) parent.removeChild(div);
+            textarea.style.display = '';
+        });
+        
+        if (dateSpan && dateSpan.parentElement) {
+            dateSpan.parentElement.removeChild(dateSpan);
+            if (dateInput) dateInput.style.display = '';
+        }
+        
+        controls.style.display = originalControlsDisplay;
+        statusMessage.style.display = originalStatusDisplay;
+        showStatus('Erro ao capturar imagem. Tente novamente.');
+    }
+}
+
+// Função fallback para download
+function fallbackDownload(canvas) {
+    canvas.toBlob(function(blob) {
+        const link = document.createElement('a');
+        const date = new Date();
+        const timestamp = date.toISOString().slice(0, 19).replace(/[:.]/g, '-');
+        
+        link.download = `controle-carregamento-${timestamp}.png`;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        
+        setTimeout(() => {
+            URL.revokeObjectURL(link.href);
+            showStatus('📥 Download da imagem iniciado!');
+        }, 100);
+    }, 'image/png');
+}
+
+// ========== EVENT LISTENERS ==========
+
+// Event listener para máscara de data
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('dateField');
+    
+    if (dateInput) {
+        dateInput.value = '__/__/____';
+        
+        dateInput.addEventListener('focus', function() {
+            if (this.value === '__/__/____') {
+                this.value = '';
+            }
+        });
+        
+        dateInput.addEventListener('blur', function() {
+            if (this.value === '' || this.value.replace(/\D/g, '').length === 0) {
+                this.value = '__/__/____';
+            }
+        });
+        
+        dateInput.addEventListener('input', function() {
+            applyDateMask(this);
+        });
+        
+        dateInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const numbers = pastedText.replace(/\D/g, '');
+            this.value = '';
+            
+            for (let i = 0; i < numbers.length && i < 8; i++) {
+                this.value += numbers[i];
+                applyDateMask(this);
+            }
+        });
+    }
+    
+    // Adicionar event listeners aos botões
+    document.getElementById('clearBtn').addEventListener('click', clearData);
+    document.getElementById('printBtn').addEventListener('click', printPage);
+    document.getElementById('screenshotBtn').addEventListener('click', captureScreenshot);
+});
+
+// Configurar data ao carregar
+// Configurar data ao carregar
+window.addEventListener('load', function() {
+    setCurrentDate();
+    
+    // NOVO: Gerar tabela dinâmica primeiro
+    generateCompleteTable();
+    
+    // Depois carregar dados
+    loadData();
+    
+    document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+        autoAdjustFontSize(textarea);
+    });
+});
+
+// Event listener para campos numéricos
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('qtde-paletes') ||
+        e.target.classList.contains('box') ||
+        e.target.classList.contains('container') ||
+        e.target.classList.contains('camara')) {
+       
+        setTimeout(calculateAllTotals, 10);
+       
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(saveData, 1000);
+    }
+    
+    if (e.target.classList.contains('motorista-placa-textarea')) {
+        autoAdjustFontSize(e.target);
+		centerTextareaContent();
+		contarCaminhoes();
+        
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(saveData, 1000);
+    }
+});
+
+// Event listener para navegação com Enter
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        
+        if (e.target.classList.contains('motorista-placa-textarea')) {
+            const textarea = e.target;
+            const cursorPosition = textarea.selectionStart;
+            const currentValue = textarea.value;
+            
+            textarea.value = currentValue.substring(0, cursorPosition) + '\n' + currentValue.substring(cursorPosition);
+            textarea.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+            
+            autoAdjustFontSize(textarea);
+        } else {
+            navigateToFieldBelow(e.target);
+        }
+    }
+});
+
+// ========== GERAÇÃO DINÂMICA DA TABELA ==========
+
+// Gerar HTML para uma região simples
+function generateSimpleRegion(regionName, stores, regionData = {}) {
+    const rowCount = stores.length;
+    const regionLabel = regionData.label || regionName;
+    const carregamentoLabel = regionData.carregamentoLabel || regionName;
+    
+    let html = '';
+    
+    stores.forEach((store, index) => {
+        html += '<tr>';
+        
+        // Primeira coluna (Região) - apenas na primeira linha
+        if (index === 0) {
+            html += `<td class="region-header col-group-1" rowspan="${rowCount}">${regionLabel}</td>`;
+        }
+        
+        // Coluna da Loja
+        html += `<td class="store-cell col-group-1">${store}</td>`;
+        
+        // Colunas de dados
+        html += `
+            <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+            <td class="col-group-2"><input type="number" min="0" class="box"></td>
+            <td class="col-group-2"><input type="number" min="0" class="container"></td>
+            <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+        `;
+        
+        // Total Rota - apenas na primeira linha
+        if (index === 0) {
+            html += `<td class="col-group-3 total-rota" rowspan="${rowCount}"><input type="number" min="0" readonly></td>`;
+            html += `<td class="merged-cell" rowspan="${rowCount}">${carregamentoLabel}</td>`;
+            html += `<td class="merged-cell" rowspan="${rowCount}"><textarea class="motorista-placa-textarea" rows="3"></textarea></td>`;
+            html += `<td class="merged-cell" rowspan="${rowCount}"><input type="number" step="0.1" class="temperatura"></td>`;
+        }
+        
+        html += '</tr>';
+    });
+    
+    return html;
+}
+
+// Gerar HTML para Vale do Paraíba (região especial com sub-regiões)
+function generateValeParaibaRegion(valeConfig) {
+    const sjcStores = valeConfig['São José dos Campos'] || [];
+    const taubateStores = valeConfig['Taubaté/Lorena'] || [];
+    const totalRows = sjcStores.length + taubateStores.length + 1; // +1 para linha em branco
+    
+    let html = '';
+    let rowIndex = 0;
+    
+    // São José dos Campos
+    sjcStores.forEach((store, index) => {
+        html += '<tr>';
+        
+        // Região Vale do Paraíba (mescla todas as linhas)
+        if (rowIndex === 0) {
+            html += `<td class="region-header col-group-1" rowspan="${totalRows}">Vale do Paraíba</td>`;
+        }
+        
+        html += `<td class="store-cell col-group-1">${store}</td>`;
+        html += `
+            <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+            <td class="col-group-2"><input type="number" min="0" class="box"></td>
+            <td class="col-group-2"><input type="number" min="0" class="container"></td>
+            <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+        `;
+        
+        // Total e dados de carregamento para SJC
+        if (index === 0) {
+            html += `<td class="col-group-3 total-rota" rowspan="${sjcStores.length}"><input type="number" min="0" readonly></td>`;
+            html += `<td class="merged-cell" rowspan="${sjcStores.length}">São José<br>dos Campos</td>`;
+            html += `<td class="merged-cell" rowspan="${sjcStores.length}"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>`;
+            html += `<td class="merged-cell" rowspan="${sjcStores.length}"><input type="number" step="0.1" class="temperatura"></td>`;
+        }
+        
+        html += '</tr>';
+        rowIndex++;
+    });
+    
+    // Linha em branco
+    html += '<tr class="blank-row"><td colspan="7"></td><td colspan="3"></td></tr>';
+    rowIndex++;
+    
+    // Taubaté/Lorena
+    taubateStores.forEach((store, index) => {
+        html += '<tr>';
+        html += `<td class="store-cell col-group-1">${store}</td>`;
+        html += `
+            <td class="col-group-2"><input type="number" min="0" class="qtde-paletes"></td>
+            <td class="col-group-2"><input type="number" min="0" class="box"></td>
+            <td class="col-group-2"><input type="number" min="0" class="container"></td>
+            <td class="col-group-2"><input type="number" min="0" class="camara"></td>
+        `;
+        
+        if (index === 0) {
+            html += `<td class="col-group-3 total-rota" rowspan="${taubateStores.length}"><input type="number" min="0" readonly></td>`;
+            html += `<td class="merged-cell" rowspan="${taubateStores.length}" style="background: linear-gradient(135deg, #D9D9D9 0%, #C5C5C5 100%) !important; font-weight: 900 !important;">Taubaté<br>Lorena</td>`;
+            html += `<td rowspan="${taubateStores.length}" style="background-color: #f9f9f9; vertical-align: middle; text-align: center; border: 0.3px solid #999; border-radius: 2px; width: 35mm;"><textarea class="motorista-placa-textarea" rows="1"></textarea></td>`;
+            html += `<td rowspan="${taubateStores.length}" style="background-color: #f9f9f9; vertical-align: middle; text-align: center; border: 0.3px solid #999; border-radius: 2px; width: 10mm;"><input type="number" step="0.1" class="temperatura"></td>`;
+        }
+        
+        html += '</tr>';
+    });
+    
+    return html;
+}
+
+// Gerar tabela completa
+function generateCompleteTable() {
+    const config = loadRoutesConfig();
+    const tbody = document.getElementById('dynamicTableBody');
+    
+    let html = '<tr class="blank-row"><td colspan="10"></td></tr>';
+    
+    // Ordem das regiões
+    const regionOrder = [
+        'ABC',
+        'Cinturão',
+        'Zona Leste',
+        'Miolo',
+        'Guarulhos',
+        'Vale do Paraíba',
+        'Atibaia',
+        'Praia Grande',
+        'Rio de Janeiro'
+    ];
+    
+    regionOrder.forEach(region => {
+        if (!config[region]) return;
+        
+        // Vale do Paraíba é especial
+        if (region === 'Vale do Paraíba') {
+            html += generateValeParaibaRegion(config[region]);
+        } else {
+            // Regiões normais
+            html += generateSimpleRegion(region, config[region]);
+        }
+        
+        // Linha em branco entre regiões (exceto última)
+        if (region !== 'Rio de Janeiro') {
+            html += '<tr class="blank-row"><td colspan="10"></td></tr>';
+        }
+    });
+    
+    tbody.innerHTML = html;
+    
+    // Reconfigurar event listeners após gerar tabela
+    setupTableEventListeners();
+    
+    // Ajustar textareas
+    document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+        autoAdjustFontSize(textarea);
+    });
+    
+    // Carregar dados salvos
+    loadData();
+    
+    // Calcular totais
+    calculateAllTotals();
+    
+    // Contar caminhões
+    contarCaminhoes();
+}
+
+// Configurar event listeners da tabela
+function setupTableEventListeners() {
+    // Event listener para campos numéricos
+    document.querySelectorAll('.qtde-paletes, .box, .container, .camara').forEach(input => {
+        input.addEventListener('input', function() {
+            setTimeout(calculateAllTotals, 10);
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(saveData, 1000);
+        });
+    });
+    
+    // Event listener para textareas de motorista/placa
+    document.querySelectorAll('.motorista-placa-textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            autoAdjustFontSize(this);
+            centerTextareaContent();
+            contarCaminhoes();
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(saveData, 1000);
+        });
+    });
+    
+    // Event listener para temperatura
+    document.querySelectorAll('.temperatura').forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(saveData, 1000);
+        });
+    });
+}
+
+// ========== SISTEMA DE GERENCIAMENTO DE LOJAS - VERSÃO GAMIFICADA ==========
+
+// Estrutura padrão das rotas (backup inicial)
+const defaultRoutes = {
+    'ABC': ['01', '26', '50', '38', '46'],
+    'Cinturão': ['40', '02', '52', '19', '27', '23', '30', '47', '39'],
+    'Zona Leste': ['21', '29', '04', '03', '16', '06', '17'],
+    'Miolo': ['22', '45', '07', '44', '13', '20', '43', '18'],
+    'Guarulhos': ['56', '54', '41', '12', '55', '15', '37', '42', '14', '24', '49', '08'],
+    'Vale do Paraíba': {
+        'São José dos Campos': ['48', '28', '25'],
+        'Taubaté/Lorena': ['11', '10', '09']
+    },
+    'Atibaia': ['34', '35', '33', '31', '32', '51', '57'],
+    'Praia Grande': ['58'],
+    'Rio de Janeiro': ['53', '36']
+};
+
+// Carregar configuração salva ou usar padrão
+function loadRoutesConfig() {
+    const saved = localStorage.getItem('routesConfig');
+    return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultRoutes));
+}
+
+// Salvar configuração
+function saveRoutesConfig(config) {
+    localStorage.setItem('routesConfig', JSON.stringify(config));
+}
+
+// Abrir modal principal
+function openManageModal() {
+    const modal = document.getElementById('manageModal');
+    modal.style.display = 'block';
+    renderRouteCards();
+}
+
+// Fechar modal
+function closeManageModal() {
+    document.getElementById('manageModal').style.display = 'none';
+}
+
+function renderRouteCards() {
+    const container = document.getElementById('routeCardsContainer');
+    const floatingBtn = document.getElementById('floatingAddBtn');
+    const config = loadRoutesConfig();
+    
+    if (floatingBtn) {
+        floatingBtn.style.display = 'flex';
+    }
+    
+    let html = '';
+    const routes = Object.keys(config);
+    
+    if (routes.length === 0) {
+        html = '<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">Nenhuma rota cadastrada</div></div>';
+    } else {
+      routes.forEach(routeName => {
+    const safeId = 'route_' + Math.random().toString(36).substr(2, 9);
+    
+    html += `
+        <div class="route-card" id="${safeId}" data-route-name="${routeName}" draggable="true">
+            <button class="route-card-edit-handle" title="Editar nome da rota">✏️</button>
+            <div class="route-card-title">${routeName}</div>
+            <div class="route-card-actions">
+                <button class="icon-btn btn-delete" title="Excluir">🗑️</button>
+            </div>
+        </div>
+    `;
+});
+    }
+    
+    container.innerHTML = html;
+    
+   // Event listeners para os cards
+   document.querySelectorAll('.route-card').forEach(card => {
+    const routeName = card.dataset.routeName;
+    
+    // Botão EDITAR (✏️) - Renomear rota
+    card.querySelector('.route-card-edit-handle')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        renameRoute(routeName);
+    });
+    
+    // Botão DELETE (🗑️)
+    card.querySelector('.btn-delete')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteRoute(routeName);
+    });
+
+    // CLIQUE SIMPLES no card - Abre modal de lojas
+    card.addEventListener('click', (e) => {
+        // Ignorar cliques nos botões
+        if (e.target.closest('.route-card-edit-handle') || 
+            e.target.closest('.btn-delete')) {
+            return;
+        }
+        openStoresModal(routeName);
+    });
+});
+    
+    // Inicializar drag & drop para rotas
+    initializeRouteDragAndDrop();
+}
+
+function initializeRouteDragAndDrop() {
+    const draggables = document.querySelectorAll('.route-card[draggable="true"]');
+    const container = document.getElementById('routeCardsContainer');
+    
+    let draggedElement = null;
+    
+    draggables.forEach(draggable => {
+        // Início do arrasto
+        draggable.addEventListener('dragstart', (e) => {
+            draggedElement = draggable;
+            draggable.classList.add('dragging');
+            container.classList.add('drag-active');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        // Fim do arrasto
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+            container.classList.remove('drag-active');
+            
+            // Limpar todas as classes drag-over
+            document.querySelectorAll('.route-card').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+            
+            draggedElement = null;
+            
+            // Salvar nova ordem
+            saveRouteOrder();
+        });
+        
+        // Arrastar sobre outro card
+        draggable.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            
+            // Não destacar o próprio card sendo arrastado
+            if (draggable === draggedElement) {
+                return;
+            }
+            
+            // Limpar drag-over de outros cards
+            document.querySelectorAll('.route-card').forEach(card => {
+                if (card !== draggable && card !== draggedElement) {
+                    card.classList.remove('drag-over');
+                }
+            });
+            
+            // Adicionar drag-over ao card atual
+            draggable.classList.add('drag-over');
+        });
+        
+        // Sair do card
+        draggable.addEventListener('dragleave', (e) => {
+            // Só remover se realmente saiu
+            if (!draggable.contains(e.relatedTarget)) {
+                draggable.classList.remove('drag-over');
+            }
+        });
+        
+        // Soltar sobre card
+        draggable.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!draggedElement || draggedElement === draggable) {
+                return;
+            }
+            
+            // Trocar posições
+            const allCards = [...container.querySelectorAll('.route-card')];
+            const draggedIndex = allCards.indexOf(draggedElement);
+            const targetIndex = allCards.indexOf(draggable);
+            
+            if (draggedIndex < targetIndex) {
+                draggable.parentNode.insertBefore(draggedElement, draggable.nextSibling);
+            } else {
+                draggable.parentNode.insertBefore(draggedElement, draggable);
+            }
+            
+            // Remover destaque
+            draggable.classList.remove('drag-over');
+        });
+    });
+}
+
+// Salvar nova ordem das rotas
+function saveRouteOrder() {
+    const cards = document.querySelectorAll('.route-card');
+    const config = loadRoutesConfig();
+    const newConfig = {};
+    
+    // Reconstruir config na nova ordem
+    cards.forEach(card => {
+        const routeName = card.dataset.routeName;
+        if (routeName && config[routeName]) {
+            newConfig[routeName] = config[routeName];
+        }
+    });
+    
+    saveRoutesConfig(newConfig);
+    
+    // Limpar dados da tabela
+    localStorage.removeItem('controleCarregamento');
+    lastSavedData = '';
+    
+    // Regenerar tabela
+    generateCompleteTable();
+    
+    showStatus('✅ Ordem das rotas atualizada!');
+}
+
+function createNewRoute() {
+    const routeName = prompt('📝 Digite o nome da nova rota:');
+    
+    if (!routeName || routeName.trim() === '') {
+        return;
+    }
+    
+    const config = loadRoutesConfig();
+    
+    if (config[routeName.trim()]) {
+        alert('⚠️ Já existe uma rota com este nome!');
+        return;
+    }
+    
+    config[routeName.trim()] = [];
+    saveRoutesConfig(config);
+    
+    // REGENERAR a tabela principal
+    generateCompleteTable();
+    
+    // Atualizar cards no modal
+    renderRouteCards();
+    
+    showStatus('✅ Nova rota criada com sucesso!');
+}
+
+function renameRoute(oldName) {
+    const newName = prompt('✏️ Digite o novo nome da rota:', oldName);
+    
+    if (!newName || newName.trim() === '' || newName.trim() === oldName) {
+        return;
+    }
+    
+    const config = loadRoutesConfig();
+    
+    if (config[newName.trim()]) {
+        alert('⚠️ Já existe uma rota com este nome!');
+        return;
+    }
+    
+    // Copiar dados da rota antiga para a nova
+    config[newName.trim()] = JSON.parse(JSON.stringify(config[oldName]));
+    delete config[oldName];
+    
+    saveRoutesConfig(config);
+    
+    // LIMPAR dados salvos da tabela
+    localStorage.removeItem('controleCarregamento');
+    lastSavedData = '';
+    
+    // REGENERAR a tabela principal
+    generateCompleteTable();
+    
+    // Atualizar cards no modal
+    renderRouteCards();
+    
+    showStatus('✅ Rota renomeada! Tabela atualizada.', 2000);
+}
+
+// Excluir rota
+function deleteRoute(routeName) {
+    if (!confirm(`🗑️ Tem certeza que deseja excluir a rota "${routeName}"?`)) {
+        return;
+    }
+    
+    const config = loadRoutesConfig();
+    delete config[routeName];
+    
+    saveRoutesConfig(config);
+    renderRouteCards();
+    showStatus('✅ Rota excluída com sucesso!');
+}
+
+// ========================================
+//  MODAL DE LOJAS - VERSÃO VERTICAL
+// ========================================
+
+let currentEditingRoute = null;
+
+// Abrir modal de lojas
+function openStoresModal(routeName) {
+    currentEditingRoute = routeName;
+    const modal = document.getElementById('storesModal');
+    const title = document.getElementById('storesModalTitle');
+    
+    title.textContent = `🏪 Lojas - ${routeName}`;
+    modal.style.display = 'block';
+    
+    renderStoresList(routeName);
+}
+
+// Fechar modal de lojas
+function closeStoresModal() {
+    document.getElementById('storesModal').style.display = 'none';
+    currentEditingRoute = null;
+}
+
+// Renderizar lista de lojas
+function renderStoresList(routeName) {
+    const container = document.getElementById('storesModalBody');
+    const config = loadRoutesConfig();
+    const stores = config[routeName];
+    
+    let html = '<div class="stores-list-vertical" id="storesListContainer">';
+    
+    // Se for rota com sub-regiões (Vale do Paraíba)
+    if (!Array.isArray(stores)) {
+        Object.keys(stores).forEach(subRegion => {
+            html += `<div style="padding: 0 16px; margin: 12px 0 8px 0;">
+                        <div style="font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">
+                            ${subRegion}
+                        </div>
+                     </div>`;
+            
+            stores[subRegion].forEach((store, index) => {
+                html += generateStoreListCard(store, index, subRegion);
+            });
+        });
+    } else {
+        // Rota simples
+        if (stores.length === 0) {
+            html += `
+                <div class="stores-empty-state">
+                    <div class="stores-empty-state-icon">📦</div>
+                    <div class="stores-empty-state-text">Nenhuma loja cadastrada</div>
+                </div>
+            `;
+        } else {
+            stores.forEach((store, index) => {
+                html += generateStoreListCard(store, index);
+            });
+        }
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
+    
+    // Inicializar drag & drop
+    initializeStoresDragAndDrop();
+}
+
+// Gerar HTML do card de loja
+function generateStoreListCard(store, index, subRegion) {
+    const dataSubregion = subRegion ? `data-subregion="${subRegion}"` : '';
+    
+    return `
+        <div class="store-list-card" draggable="true" data-index="${index}" data-store="${store}" ${dataSubregion}>
+            <div class="store-list-card-drag-handle">⋮⋮</div>
+            <div class="store-list-card-number">${store}</div>
+            <div class="store-list-card-label">Loja ${store}</div>
+            <div class="store-list-card-actions">
+                <button class="icon-btn btn-delete" onclick="removeStoreFromList(${index}, '${subRegion || ''}')">🗑️</button>
+            </div>
+        </div>
+    `;
+}
+
+// Inicializar Drag & Drop para lojas
+function initializeStoresDragAndDrop() {
+    const draggables = document.querySelectorAll('.store-list-card[draggable="true"]');
+    const container = document.getElementById('storesListContainer');
+    
+    let draggedElement = null;
+    
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', (e) => {
+            draggedElement = draggable;
+            draggable.classList.add('dragging');
+            container.classList.add('drag-active');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+            container.classList.remove('drag-active');
+            
+            document.querySelectorAll('.store-list-card').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+            
+            draggedElement = null;
+        });
+        
+        draggable.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            
+            if (draggable === draggedElement) {
+                return;
+            }
+            
+            document.querySelectorAll('.store-list-card').forEach(card => {
+                if (card !== draggable && card !== draggedElement) {
+                    card.classList.remove('drag-over');
+                }
+            });
+            
+            draggable.classList.add('drag-over');
+        });
+        
+        draggable.addEventListener('dragleave', (e) => {
+            if (!draggable.contains(e.relatedTarget)) {
+                draggable.classList.remove('drag-over');
+            }
+        });
+        
+        draggable.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!draggedElement || draggedElement === draggable) {
+                return;
+            }
+            
+            const allCards = [...container.querySelectorAll('.store-list-card')];
+            const draggedIndex = allCards.indexOf(draggedElement);
+            const targetIndex = allCards.indexOf(draggable);
+            
+            if (draggedIndex < targetIndex) {
+                draggable.parentNode.insertBefore(draggedElement, draggable.nextSibling);
+            } else {
+                draggable.parentNode.insertBefore(draggedElement, draggable);
+            }
+            
+            draggable.classList.remove('drag-over');
+        });
+    });
+}
+
+// Remover loja da lista
+function removeStoreFromList(index, subRegion) {
+    if (!confirm('🗑️ Remover esta loja?')) {
+        return;
+    }
+    
+    const config = loadRoutesConfig();
+    const routeName = currentEditingRoute;
+    
+    if (subRegion) {
+        config[routeName][subRegion].splice(index, 1);
+    } else {
+        config[routeName].splice(index, 1);
+    }
+    
+    saveRoutesConfig(config);
+    renderStoresList(routeName);
+    showStatus('✅ Loja removida!');
+}
+
+// Adicionar loja pelo modal
+function addStoreFromModalHandler() {
+    const config = loadRoutesConfig();
+    const routeName = currentEditingRoute;
+    
+    // Verificar se é rota com sub-regiões
+    if (!Array.isArray(config[routeName])) {
+        // Perguntar em qual sub-região adicionar
+        const subRegions = Object.keys(config[routeName]);
+        
+        // Criar mensagem mais clara
+        let message = 'Digite o NÚMERO da região onde deseja adicionar:\n\n';
+        subRegions.forEach((subRegion, index) => {
+            message += `${index + 1} - ${subRegion}\n`;
+        });
+        
+        const answer = prompt(message);
+        
+        if (!answer || answer.trim() === '') {
+            return; // Usuário cancelou
+        }
+        
+        // Converter resposta para número e validar
+        const selectedIndex = parseInt(answer.trim()) - 1;
+        
+        if (isNaN(selectedIndex) || selectedIndex < 0 || selectedIndex >= subRegions.length) {
+            alert('❌ Opção inválida! Digite apenas o número da região.');
+            return;
+        }
+        
+        const selectedSubRegion = subRegions[selectedIndex];
+        
+        // Agora perguntar o número da loja
+        const storeNumber = prompt(`📝 Digite o número da nova loja para "${selectedSubRegion}":`);
+        
+        if (!storeNumber || storeNumber.trim() === '') {
+            return;
+        }
+        
+        // Adicionar loja na sub-região selecionada
+        config[routeName][selectedSubRegion].push(storeNumber.trim());
+        
+        saveRoutesConfig(config);
+        renderStoresList(routeName);
+        showStatus(`✅ Loja ${storeNumber.trim()} adicionada em ${selectedSubRegion}!`);
+    } else {
+        // Rota simples (sem sub-regiões)
+        const storeNumber = prompt('📝 Digite o número da nova loja:');
+        
+        if (!storeNumber || storeNumber.trim() === '') {
+            return;
+        }
+        
+        config[routeName].push(storeNumber.trim());
+        
+        saveRoutesConfig(config);
+        renderStoresList(routeName);
+        showStatus('✅ Loja adicionada!');
+    }
+}
+
+// Salvar alterações das lojas
+function saveStoresFromModalHandler() {
+    const cards = document.querySelectorAll('.store-list-card');
+    const config = loadRoutesConfig();
+    const routeName = currentEditingRoute;
+    
+    // Se for rota simples
+    if (Array.isArray(config[routeName])) {
+        const newOrder = Array.from(cards).map(card => card.dataset.store);
+        config[routeName] = newOrder;
+    } else {
+        // Rota com sub-regiões
+        const subRegions = Object.keys(config[routeName]);
+        
+        subRegions.forEach(subRegion => {
+            const subCards = Array.from(cards).filter(card => card.dataset.subregion === subRegion);
+            config[routeName][subRegion] = subCards.map(card => card.dataset.store);
+        });
+    }
+    
+    saveRoutesConfig(config);
+    
+    // Limpar dados da tabela
+    localStorage.removeItem('controleCarregamento');
+    lastSavedData = '';
+    
+    // Regenerar tabela
+    generateCompleteTable();
+    
+    showStatus('✅ Alterações salvas! Tabela atualizada.', 2000);
+    closeStoresModal();
+}
+
+// Voltar para lista de rotas
+function backToRoutesFromStoresHandler() {
+    closeStoresModal();
+}
+
+// ========================================
+//  EVENT LISTENERS DO NOVO SISTEMA
+// ========================================
+
+// Adicionar event listeners para os novos modais
+document.addEventListener('DOMContentLoaded', function() {
+    // Botão de gerenciar
+    const manageBtn = document.getElementById('manageBtn');
+    if (manageBtn) {
+        manageBtn.addEventListener('click', openManageModal);
+    }
+    
+    // Fechar modal principal
+    const closeModalBtn = document.getElementById('closeModal');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeManageModal);
+    }
+    
+    // Fechar modal ao clicar fora
+    const modal = document.getElementById('manageModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManageModal();
+            }
+        });
+    }
+    
+    // Sistema de abas
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            
+            // Remover active de todas as abas
+            document.querySelectorAll('.admin-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            // Remover active de todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+            });
+            
+            // Ativar aba selecionada
+            this.classList.add('active');
+            
+            // Ativar conteúdo correspondente
+            const targetContent = document.getElementById(`tab-${targetTab}`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+});
+
+// Event listeners do modal de lojas
+const closeStoresModalBtn = document.getElementById('closeStoresModal');
+if (closeStoresModalBtn) {
+    closeStoresModalBtn.addEventListener('click', closeStoresModal);
+}
+
+const backToRoutesBtn = document.getElementById('backToRoutesFromStores');
+if (backToRoutesBtn) {
+    backToRoutesBtn.addEventListener('click', backToRoutesFromStoresHandler);
+}
+
+const saveStoresBtn = document.getElementById('saveStoresFromModal');
+if (saveStoresBtn) {
+    saveStoresBtn.addEventListener('click', saveStoresFromModalHandler);
+}
+
+const addStoreBtn = document.getElementById('addStoreFromModal');
+if (addStoreBtn) {
+    addStoreBtn.addEventListener('click', addStoreFromModalHandler);
+}
+
+// Fechar modal de lojas ao clicar fora
+const storesModal = document.getElementById('storesModal');
+if (storesModal) {
+    storesModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeStoresModal();
+        }
+    });
+}
+
+// Auto-save quando fechar
+window.addEventListener('beforeunload', saveData);  
+    </script>
+	
+</body>
+</html>

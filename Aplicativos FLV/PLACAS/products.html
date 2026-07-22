@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Produtos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VCR+OSD+Mono&display=swap');
+    
+    * {
+      font-family: 'VCR OSD Mono', monospace;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      color: #000000;
+      min-height: 100vh;
+      padding: 1rem;
+      position: relative;
+    }
+    
+    /* Subtle grid pattern for retro feel */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card {
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 8px 8px 0px #000000;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 12px 12px 0px #000000;
+    }
+    
+    .header-card {
+      border: 3px solid #333333;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+      box-shadow: 8px 8px 0px #333333;
+    }
+    
+    .header-card:hover {
+      box-shadow: 12px 12px 0px #333333;
+    }
+    
+    /* Retro scanlines effect for header */
+    .header-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.02) 2px,
+        rgba(0,0,0,0.02) 4px
+      );
+      pointer-events: none;
+    }
+    
+    .button {
+      background: linear-gradient(135deg, #D3D3D3 0%, #C0C0C0 100%);
+      color: #000000;
+      padding: 0.75rem 1.5rem;
+      border: 3px solid #000000;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 1rem;
+      text-transform: uppercase;
+      position: relative;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    
+    .button:hover {
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      color: #FFFFFF;
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0px #666666;
+    }
+    
+    .button:active {
+      transform: translate(0px, 0px);
+      box-shadow: 2px 2px 0px #666666;
+    }
+    
+    .input {
+      background: #FFFFFF;
+      color: #000000;
+      border: 3px solid #808080;
+      padding: 0.75rem;
+      width: 100%;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: #000000;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+      transform: scale(1.02);
+    }
+    
+    .section-icon {
+      background: linear-gradient(135deg, #D3D3D3 0%, #A8A8A8 100%);
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0px #000000;
+      transition: all 0.3s ease;
+    }
+    
+    .section-icon:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 6px 6px 0px #000000;
+    }
+    
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 3px solid #000000;
+      background: #FFFFFF;
+    }
+    
+    .table th,
+    .table td {
+      border-right: 2px solid #808080;
+      border-bottom: 2px solid #808080;
+      padding: 0.75rem;
+      text-align: left;
+      position: relative;
+    }
+    
+    .table th:last-child,
+    .table td:last-child {
+      border-right: none;
+    }
+    
+    .table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .table th {
+      background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+      color: #FFFFFF;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+    
+    .table th:hover {
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      transform: scale(1.02);
+    }
+    
+    .table tr:hover {
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    }
+    
+    /* Enhanced form styling */
+    .form-group {
+      position: relative;
+    }
+    
+    .form-group label {
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.875rem;
+    }
+    
+    /* Retro input icons enhancement */
+    .input-icon {
+      transition: all 0.3s ease;
+    }
+    
+    .input:focus + .input-icon,
+    .input:hover + .input-icon {
+      transform: scale(1.1);
+      color: #000000;
+    }
+    
+    /* Enhanced status messages */
+    .status-message {
+      border: 2px solid;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Subtle animation for table rows */
+    .table tr {
+      transition: all 0.3s ease;
+    }
+    
+    /* Enhanced button in table */
+    .table .button {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      margin: 0 0.25rem;
+    }
+    
+    /* Responsive enhancements */
+    @media (max-width: 768px) {
+      .card {
+        box-shadow: 4px 4px 0px #000000;
+      }
+      
+      .card:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 6px 6px 0px #000000;
+      }
+    }
+    
+    /* Title enhancement */
+    .main-title {
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Subtle pulse animation for important elements */
+    @keyframes pulse-retro {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .section-icon {
+      animation: pulse-retro 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+  <div class="container">
+    <!-- Header Card -->
+    <div class="card header-card" ondblclick="toggleAdminPanel()">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 class="main-title text-3xl sm:text-4xl font-bold text-black mb-2">
+            Gerenciar Produtos
+          </h1>
+          <p class="text-gray-600 text-sm sm:text-base font-medium">Controle de cadastro de produtos</p>
+        </div>
+        <button onclick="goBack()" class="button">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Voltar
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin Panel (Hidden by Default) -->
+    <div id="adminPanel" class="card hidden">
+      <div class="space-y-4">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="section-icon">
+            <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 1.104-.896 2-2 2s-2-.896-2-2 2-4 2-4 2 1.896 2 4zm0 0c0 1.104-.896 2-2 2s-2-.896-2-2m4 0c0 1.104-.896 2-2 2s-2-.896-2-2"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-black uppercase tracking-wide">Painel Administrador</h3>
+        </div>
+        <div class="flex gap-4">
+          <button onclick="exportProducts()" class="button">
+            <span class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z"/>
+              </svg>
+              Exportar JSON
+            </span>
+          </button>
+          <button onclick="document.getElementById('importFile').click()" class="button">
+            <span class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v-6m0 0l-3 3m3-3l3 3m2-8H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/>
+              </svg>
+              Importar JSON
+            </span>
+          </button>
+          <input type="file" id="importFile" accept=".json" class="hidden" onchange="importProducts(event)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+      <div class="space-y-6">
+        <!-- Add Product Section -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="section-icon">
+              <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-black uppercase tracking-wide">Adicionar Produto</h3>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="form-group space-y-2">
+              <label class="block text-gray-600 text-sm font-medium">Código (PLU)</label>
+              <div class="relative">
+                <input id="plu" type="text" placeholder="Código (PLU)" 
+                       class="input font-mono"
+                       autocomplete="off">
+                <div class="input-icon absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group space-y-2">
+              <label class="block text-gray-600 text-sm font-medium">Descrição</label>
+              <div class="relative">
+                <input id="description" type="text" placeholder="Descrição do Produto" 
+                       class="input"
+                       oninput="capitalizeDescription()"
+                       autocomplete="off">
+                <div class="input-icon absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <button onclick="addProduct()" class="button mt-8">
+              <span class="flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Adicionar Produto
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Table Card -->
+    <div class="card">
+      <div class="space-y-4">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="section-icon">
+            <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-black uppercase tracking-wide">Lista de Produtos</h3>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="p-4 cursor-pointer" onclick="sortProducts('plu')">
+                  Código (PLU) <span id="sort-plu">↕</span>
+                </th>
+                <th class="p-4 cursor-pointer" onclick="sortProducts('description')">
+                  Descrição <span id="sort-description">↕</span>
+                </th>
+                <th class="p-4">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="productTable" class="text-black"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage" class="fixed bottom-6 right-6 px-6 py-4 rounded-2xl shadow-xl
+                                  transform translate-y-full opacity-0 transition-all duration-500 z-50 max-w-sm status-message">
+    </div>
+  </div>
+
+  <script>
+    let sortDirection = { plu: 1, description: 1 };
+
+    function capitalizeWords(str) {
+      if (!str) return '';
+      return str.toLowerCase().replace(/(^|\s)\w/g, char => char.toUpperCase());
+    }
+
+    function capitalizeDescription() {
+      try {
+        const descriptionInput = document.getElementById('description');
+        descriptionInput.value = capitalizeWords(descriptionInput.value);
+      } catch (error) {
+        console.error('Erro ao capitalizar descrição:', error);
+      }
+    }
+
+    function showStatusMessage(message, type = 'info', duration = 3000) {
+      const statusEl = document.getElementById('statusMessage');
+      const colors = {
+        success: 'bg-green-500/90 text-white border-green-400',
+        error: 'bg-red-500/90 text-white border-red-400',
+        warning: 'bg-amber-500/90 text-white border-amber-400',
+        info: 'bg-blue-500/90 text-white border-blue-400'
+      };
+      
+      const icons = {
+        success: `<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>`,
+        error: `<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>`,
+        warning: `<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>`,
+        info: `<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+               </svg>`
+      };
+      
+      statusEl.innerHTML = `
+        <div class="flex items-center gap-3">
+          ${icons[type]}
+          <span class="text-sm font-medium">${message}</span>
+        </div>
+      `;
+      statusEl.className = `fixed bottom-6 right-6 px-6 py-4 rounded-2xl shadow-xl
+                           transform transition-all duration-500 z-50 max-w-sm status-message ${colors[type]}`;
+      
+      setTimeout(() => {
+        statusEl.style.transform = 'translateY(0)';
+        statusEl.style.opacity = '1';
+      }, 100);
+      
+      setTimeout(() => {
+        statusEl.style.transform = 'translateY(100%)';
+        statusEl.style.opacity = '0';
+      }, duration);
+    }
+
+    function goBack() {
+      try {
+        if (window.opener && !window.opener.closed) {
+          window.opener.location.href = 'index.html';
+          window.close();
+        } else {
+          window.location.href = 'index.html';
+        }
+      } catch (error) {
+        console.error('Erro ao voltar:', error);
+        window.location.href = 'index.html';
+      }
+    }
+
+    function loadProducts() {
+      try {
+        console.log('Carregando produtos...');
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const table = document.getElementById('productTable');
+        table.innerHTML = '';
+        products.forEach((product, index) => {
+          const row = document.createElement('tr');
+          row.className = 'transition duration-200';
+          row.innerHTML = `
+            <td class="p-4">${product.plu}</td>
+            <td class="p-4">${capitalizeWords(product.description)}</td>
+            <td class="p-4 space-x-2">
+              <button onclick="editProduct(${index})" 
+                      class="button">
+                Editar
+              </button>
+              <button onclick="deleteProduct(${index})" 
+                      class="button">
+                Excluir
+              </button>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+        console.log('Produtos carregados:', products);
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        showStatusMessage('Erro ao carregar produtos!', 'error', 3000);
+      }
+    }
+
+    function sortProducts(key) {
+      try {
+        console.log(`Ordenando por ${key}...`);
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        sortDirection[key] = -sortDirection[key];
+        products.sort((a, b) => {
+          const valueA = key === 'plu' ? a.plu : a.description.toLowerCase();
+          const valueB = key === 'plu' ? b.plu : b.description.toLowerCase();
+          return sortDirection[key] * (valueA > valueB ? 1 : valueA < valueB ? -1 : 0);
+        });
+        localStorage.setItem('products', JSON.stringify(products));
+        loadProducts();
+        document.getElementById('sort-plu').textContent = key === 'plu' ? (sortDirection[key] === 1 ? '↑' : '↓') : '↕';
+        document.getElementById('sort-description').textContent = key === 'description' ? (sortDirection[key] === 1 ? '↑' : '↓') : '↕';
+      } catch (error) {
+        console.error('Erro ao ordenar produtos:', error);
+        showStatusMessage('Erro ao ordenar produtos!', 'error', 3000);
+      }
+    }
+
+    function addProduct() {
+      try {
+        const plu = document.getElementById('plu').value.trim();
+        const description = document.getElementById('description').value.trim();
+        if (!plu || !description) {
+          showStatusMessage('Preencha todos os campos!', 'error', 3000);
+          return;
+        }
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        if (products.some(p => p.plu === plu)) {
+          showStatusMessage('Código PLU já existe!', 'error', 3000);
+          return;
+        }
+        products.push({ plu, description });
+        localStorage.setItem('products', JSON.stringify(products));
+        const excludedPlu = JSON.parse(localStorage.getItem('excludedPlu') || '[]');
+        const index = excludedPlu.indexOf(plu);
+        if (index !== -1) {
+          excludedPlu.splice(index, 1);
+          localStorage.setItem('excludedPlu', JSON.stringify(excludedPlu));
+          console.log('PLU removido da lista de excluídos:', plu);
+        }
+        document.getElementById('plu').value = '';
+        document.getElementById('description').value = '';
+        showStatusMessage('Produto adicionado com sucesso!', 'success', 3000);
+        loadProducts();
+      } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        showStatusMessage('Erro ao adicionar produto!', 'error', 3000);
+      }
+    }
+
+    function editProduct(index) {
+      try {
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const product = products[index];
+        const newPlu = prompt('Novo Código (PLU):', product.plu);
+        const newDescription = prompt('Nova Descrição:', product.description);
+        if (newPlu && newDescription) {
+          if (newPlu !== product.plu && products.some(p => p.plu === newPlu)) {
+            showStatusMessage('Código PLU já existe!', 'error', 3000);
+            return;
+          }
+          if (newPlu !== product.plu) {
+            const excludedPlu = JSON.parse(localStorage.getItem('excludedPlu') || '[]');
+            if (!excludedPlu.includes(product.plu)) {
+              excludedPlu.push(product.plu);
+              localStorage.setItem('excludedPlu', JSON.stringify(excludedPlu));
+              console.log('PLU antigo adicionado à lista de excluídos:', product.plu);
+            }
+          }
+          products[index] = { plu: newPlu, description: newDescription };
+          localStorage.setItem('products', JSON.stringify(products));
+          const excludedPlu = JSON.parse(localStorage.getItem('excludedPlu') || '[]');
+          const indexExcluido = excludedPlu.indexOf(newPlu);
+          if (indexExcluido !== -1) {
+            excludedPlu.splice(indexExcluido, 1);
+            localStorage.setItem('excludedPlu', JSON.stringify(excludedPlu));
+            console.log('PLU removido da lista de excluídos:', newPlu);
+          }
+          showStatusMessage('Produto editado com sucesso!', 'success', 3000);
+          loadProducts();
+        }
+      } catch (error) {
+        console.error('Erro ao editar produto:', error);
+        showStatusMessage('Erro ao editar produto!', 'error', 3000);
+      }
+    }
+
+    function deleteProduct(index) {
+      try {
+        if (confirm('Tem certeza que deseja excluir este produto?')) {
+          const products = JSON.parse(localStorage.getItem('products') || '[]');
+          const deletedPlu = products[index].plu;
+          products.splice(index, 1);
+          localStorage.setItem('products', JSON.stringify(products));
+          const excludedPlu = JSON.parse(localStorage.getItem('excludedPlu') || '[]');
+          if (!excludedPlu.includes(deletedPlu)) {
+            excludedPlu.push(deletedPlu);
+            localStorage.setItem('excludedPlu', JSON.stringify(excludedPlu));
+            console.log('PLU adicionado à lista de excluídos:', deletedPlu);
+          }
+          showStatusMessage('Produto excluído com sucesso!', 'success', 3000);
+          loadProducts();
+        }
+      } catch (error) {
+        console.error('Erro ao excluir produto:', error);
+        showStatusMessage('Erro ao excluir produto!', 'error', 3000);
+      }
+    }
+
+    function toggleAdminPanel() {
+      const adminPanel = document.getElementById('adminPanel');
+      adminPanel.classList.toggle('hidden');
+    }
+
+    function exportProducts() {
+      try {
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const dataStr = JSON.stringify(products, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'produtos.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showStatusMessage('Produtos exportados com sucesso!', 'success', 3000);
+      } catch (error) {
+        console.error('Erro ao exportar produtos:', error);
+        showStatusMessage('Erro ao exportar produtos!', 'error', 3000);
+      }
+    }
+
+    function importProducts(event) {
+      try {
+        const file = event.target.files[0];
+        if (!file) {
+          showStatusMessage('Nenhum arquivo selecionado!', 'error', 3000);
+          return;
+        }
+        if (!file.name.endsWith('.json')) {
+          showStatusMessage('Por favor, selecione um arquivo JSON!', 'error', 3000);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const importedProducts = JSON.parse(e.target.result);
+            if (!Array.isArray(importedProducts)) {
+              showStatusMessage('Arquivo JSON inválido!', 'error', 3000);
+              return;
+            }
+            const existingProducts = JSON.parse(localStorage.getItem('products') || '[]');
+            const existingPluSet = new Set(existingProducts.map(p => p.plu));
+            const validProducts = importedProducts.filter(p => p.plu && p.description);
+            const duplicates = validProducts.filter(p => existingPluSet.has(p.plu));
+            if (duplicates.length > 0) {
+              showStatusMessage('Alguns códigos PLU já existem e foram ignorados!', 'warning', 4000);
+            }
+            const newProducts = validProducts.filter(p => !existingPluSet.has(p.plu));
+            const updatedProducts = [...existingProducts, ...newProducts];
+            localStorage.setItem('products', JSON.stringify(updatedProducts));
+            loadProducts();
+            showStatusMessage('Produtos importados com sucesso!', 'success', 3000);
+          } catch (error) {
+            console.error('Erro ao importar produtos:', error);
+            showStatusMessage('Erro ao importar produtos! Verifique o formato do arquivo.', 'error', 3000);
+          }
+        };
+        reader.readAsText(file);
+      } catch (error) {
+        console.error('Erro ao processar arquivo:', error);
+        showStatusMessage('Erro ao processar arquivo!', 'error', 3000);
+      }
+    }
+
+    window.onload = loadProducts;
+  </script>
+</body>
+</html>

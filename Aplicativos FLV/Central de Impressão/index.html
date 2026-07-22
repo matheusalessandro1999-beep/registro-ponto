@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Impressão - Nagumo FLV</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            /* Cores Institucionais Nagumo */
+            --azul-nagumo: #013564;
+            --cyan-nagumo: #3BCADA;
+            --vermelho-nagumo: #D30037;
+            --branco-nagumo: #FEFEFE;
+            --cinza-claro: #f5f5f5;
+            --cinza-medio: #e0e0e0;
+            --texto-escuro: #1a1a1a;
+            
+            /* Sombras Retrô */
+            --shadow-retro: 4px 4px 0px rgba(1, 53, 100, 0.3);
+            --shadow-retro-hover: 6px 6px 0px rgba(1, 53, 100, 0.4);
+            --shadow-pressed: 2px 2px 0px rgba(1, 53, 100, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f0 50%, #c5dfe8 100%);
+            min-height: 100vh;
+            color: var(--texto-escuro);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            background: var(--branco-nagumo);
+            border: 5px solid var(--azul-nagumo);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(1, 53, 100, 0.25);
+            overflow: hidden;
+        }
+
+        /* Cabeçalho Retrô */
+        .header {
+            background: linear-gradient(180deg, var(--azul-nagumo) 0%, #024a8a 100%);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid var(--cyan-nagumo);
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--cyan-nagumo) 0px,
+                var(--cyan-nagumo) 10px,
+                var(--vermelho-nagumo) 10px,
+                var(--vermelho-nagumo) 20px
+            );
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--cyan-nagumo);
+            border: 3px solid var(--branco-nagumo);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--azul-nagumo);
+            box-shadow: var(--shadow-retro);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--branco-nagumo);
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title p {
+            font-size: 11px;
+            color: var(--cyan-nagumo);
+            font-weight: 600;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-badge {
+            background: var(--vermelho-nagumo);
+            color: var(--branco-nagumo);
+            padding: 6px 14px;
+            border: 3px solid var(--branco-nagumo);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-retro);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Grid de Formulários Compacto - SEM SCROLL */
+        .formularios-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Card Retrô Compacto */
+        .formulario-card {
+            background: var(--branco-nagumo);
+            border: 4px solid var(--azul-nagumo);
+            border-radius: 12px;
+            box-shadow: var(--shadow-retro);
+            overflow: hidden;
+            transition: all 0.15s ease-out;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-height: 220px;
+            position: relative;
+        }
+
+        .formulario-card:hover {
+            box-shadow: var(--shadow-retro-hover);
+            transform: translate(-2px, -2px);
+        }
+
+        .formulario-card:active {
+            box-shadow: var(--shadow-pressed);
+            transform: translate(2px, 2px);
+        }
+
+        .formulario-card-header {
+            background: linear-gradient(135deg, var(--azul-nagumo) 0%, #024a8a 100%);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3px solid var(--cyan-nagumo);
+            min-height: 65px;
+        }
+
+        .formulario-icon-wrapper {
+            width: 36px;
+            height: 36px;
+            background: var(--cyan-nagumo);
+            border: 3px solid var(--branco-nagumo);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .formulario-icon {
+            font-size: 16px;
+            color: var(--azul-nagumo);
+        }
+
+        .formulario-card:hover .formulario-icon-wrapper {
+            background: var(--vermelho-nagumo);
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        .formulario-card:hover .formulario-icon {
+            color: var(--branco-nagumo);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .formulario-info-header {
+            flex: 1;
+        }
+
+        .formulario-titulo {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--branco-nagumo);
+            margin-bottom: 2px;
+            line-height: 1.2;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .formulario-descricao {
+            font-size: 10px;
+            color: var(--cyan-nagumo);
+            font-weight: 600;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .formulario-card-body {
+            padding: 10px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+        }
+
+        .formulario-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .formulario-info {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            color: var(--texto-escuro);
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .formulario-info i {
+            width: 14px;
+            color: var(--azul-nagumo);
+            font-size: 10px;
+        }
+
+        /* Botão Retrô Destacado */
+        .formulario-btn {
+            width: 100%;
+            background: linear-gradient(180deg, var(--vermelho-nagumo) 0%, #a30029 100%);
+            color: var(--branco-nagumo);
+            border: 3px solid var(--azul-nagumo);
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.15s ease-out;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 0 var(--azul-nagumo);
+            position: relative;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .formulario-btn:hover {
+            background: linear-gradient(180deg, #ff0044 0%, var(--vermelho-nagumo) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--azul-nagumo);
+        }
+
+        .formulario-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--azul-nagumo);
+        }
+
+        .formulario-btn i {
+            font-size: 12px;
+        }
+
+        /* Card Em Breve - Estilo Retrô Desativado */
+        .em-breve {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .em-breve .formulario-card {
+            border-style: dashed;
+            border-color: #999;
+        }
+
+        .em-breve .formulario-card-header {
+            background: linear-gradient(135deg, #cccccc 0%, #999999 100%);
+            border-bottom: 3px solid #888;
+        }
+
+        .em-breve .formulario-icon-wrapper {
+            background: #dddddd;
+            border-color: #999;
+        }
+
+        .em-breve .formulario-icon {
+            color: #666;
+        }
+
+        .em-breve .formulario-titulo {
+            color: #666;
+            text-shadow: none;
+        }
+
+        .em-breve .formulario-descricao {
+            color: #888;
+            text-shadow: none;
+        }
+
+        .em-breve .formulario-btn {
+            background: linear-gradient(180deg, #cccccc 0%, #999999 100%);
+            border-color: #666;
+            color: #555;
+            cursor: not-allowed;
+            box-shadow: 0 3px 0 #666;
+        }
+
+        .badge-em-breve {
+            display: inline-block;
+            background: #888;
+            color: white;
+            padding: 2px 6px;
+            border: 2px solid #666;
+            border-radius: 8px;
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer Retrô */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background: var(--azul-nagumo);
+            color: var(--cyan-nagumo);
+            font-size: 9px;
+            font-weight: 700;
+            border-top: 3px solid var(--cyan-nagumo);
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animações Retrô */
+        @keyframes pixelFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .formulario-card {
+            animation: pixelFadeIn 0.3s ease-out;
+        }
+
+        .formulario-card:nth-child(1) { animation-delay: 0.05s; }
+        .formulario-card:nth-child(2) { animation-delay: 0.1s; }
+        .formulario-card:nth-child(3) { animation-delay: 0.15s; }
+        .formulario-card:nth-child(4) { animation-delay: 0.2s; }
+        .formulario-card:nth-child(5) { animation-delay: 0.25s; }
+        .formulario-card:nth-child(6) { animation-delay: 0.3s; }
+        .formulario-card:nth-child(7) { animation-delay: 0.35s; }
+        .formulario-card:nth-child(8) { animation-delay: 0.4s; }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .formularios-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .formulario-card {
+                max-height: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .header-left {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .formularios-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .formulario-card {
+                max-height: 180px;
+            }
+
+            .formulario-titulo {
+                font-size: 11px;
+            }
+
+            .formulario-descricao {
+                font-size: 9px;
+            }
+        }
+
+        /* Scrollbar Retrô */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cinza-claro);
+            border: 2px solid var(--azul-nagumo);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--azul-nagumo);
+            border: 2px solid var(--cyan-nagumo);
+            border-radius: 0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--vermelho-nagumo);
+        }
+
+        /* Efeito de Scanlines Retrô Sutil */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.02) 0px,
+                rgba(0, 0, 0, 0.02) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+		
+		.header-badge {
+    background: transparent;
+    color: transparent;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.logo-retro {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <div class="header-left">
+                <div class="header-icon">
+                    <i class="fas fa-print"></i>
+                </div>
+                <div class="header-title">
+                    <h1>CENTRAL DE IMPRESSÃO</h1>
+                    <p>Sistema de Impressões Nagumo FLV</p>
+                </div>
+            </div>
+            <div class="header-badge">
+    <img src="logoretro.png" alt="Logo" class="logo-retro">
+</div>
+        </div>
+
+        <!-- Grid de Formulários -->
+        <div class="formularios-grid">
+            <!-- Card 1: Controle de Pesagens -->
+            <div class="formulario-card" onclick="abrirFormulario('pesagens.html')">
+                <div class="formulario-card-header">
+                    <div class="formulario-icon-wrapper">
+                        <i class="fas fa-weight-hanging formulario-icon"></i>
+                    </div>
+                    <div class="formulario-info-header">
+                        <div class="formulario-titulo">Recebimento Perecíveis</div>
+                        <div class="formulario-descricao">Controle de Pesagens</div>
+                    </div>
+                </div>
+                <div class="formulario-card-body">
+                    <div class="formulario-info-list">
+                        <div class="formulario-info">
+                            <i class="fas fa-box"></i>
+                            <span>Paletes e caixas</span>
+                        </div>
+                        <div class="formulario-info">
+                            <i class="fas fa-balance-scale"></i>
+                            <span>Registro de pesos</span>
+                        </div>
+                    </div>
+                    <button class="formulario-btn">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 2: Controle de Recebimento FLV -->
+            <div class="formulario-card" onclick="abrirFormulario('recebimento-flv.html')">
+                <div class="formulario-card-header">
+                    <div class="formulario-icon-wrapper">
+                        <i class="fas fa-truck-loading formulario-icon"></i>
+                    </div>
+                    <div class="formulario-info-header">
+                        <div class="formulario-titulo">Recebimento FLV</div>
+                        <div class="formulario-descricao">Frutas, Legumes e Verduras</div>
+                    </div>
+                </div>
+                <div class="formulario-card-body">
+                    <div class="formulario-info-list">
+                        <div class="formulario-info">
+                            <i class="fas fa-apple-alt"></i>
+                            <span>Produtos FLV</span>
+                        </div>
+                        <div class="formulario-info">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Conferência rápida</span>
+                        </div>
+                    </div>
+                    <button class="formulario-btn">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Card 3: Itinerário Perecíveis -->
+            <div class="formulario-card" onclick="abrirFormulario('novo 1.html')">
+                <div class="formulario-card-header">
+                    <div class="formulario-icon-wrapper">
+                        <i class="fas fa-route formulario-icon"></i>
+                    </div>
+                    <div class="formulario-info-header">
+                        <div class="formulario-titulo">Itinerário Perecíveis</div>
+                        <div class="formulario-descricao">Carregamento por rotas</div>
+                    </div>
+                </div>
+                <div class="formulario-card-body">
+                    <div class="formulario-info-list">
+                        <div class="formulario-info">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Produtos perecíveis</span>
+                        </div>
+                        <div class="formulario-info">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Controle de rotas</span>
+                        </div>
+                    </div>
+                    <button class="formulario-btn">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 4: Itinerário FLV -->
+            <div class="formulario-card" onclick="abrirFormulario('itinerario-flv.html')">
+                <div class="formulario-card-header">
+                    <div class="formulario-icon-wrapper">
+                        <i class="fas fa-clipboard-list formulario-icon"></i>
+                    </div>
+                    <div class="formulario-info-header">
+                        <div class="formulario-titulo">Itinerário FLV</div>
+                        <div class="formulario-descricao">Controle de Carregamento</div>
+                    </div>
+                </div>
+                <div class="formulario-card-body">
+                    <div class="formulario-info-list">
+                        <div class="formulario-info">
+                            <i class="fas fa-boxes"></i>
+                            <span>Material de apoio</span>
+                        </div>
+                        <div class="formulario-info">
+                            <i class="fas fa-truck"></i>
+                            <span>Alocação de caminhões</span>
+                        </div>
+                    </div>
+                    <button class="formulario-btn">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card: Identificação com Código de Barras -->
+<div class="formulario-card" onclick="abrirFormulario('identificacao-codigo-barras.html')">
+    <div class="formulario-card-header">
+        <div class="formulario-icon-wrapper">
+            <i class="fas fa-barcode formulario-icon"></i>
+        </div>
+        <div class="formulario-info-header">
+            <div class="formulario-titulo">Placa Para Container</div>
+            <div class="formulario-descricao">Gera a Placa com Código de Barras</div>
+        </div>
+    </div>
+    <div class="formulario-card-body">
+        <div class="formulario-info-list">
+            <div class="formulario-info">
+                <i class="fas fa-qrcode"></i>
+                <span>Fácil Identificação de Produtos</span>
+            </div>
+            <div class="formulario-info">
+                <i class="fas fa-tag"></i>
+                <span>Leitura com Coletor de Dados</span>
+            </div>
+        </div>
+        <button class="formulario-btn">
+            <i class="fas fa-print"></i>
+            Imprimir
+        </button>
+    </div>
+</div>
+
+            <!-- Card 6: Temperatura Containers -->
+            <div class="formulario-card" onclick="abrirFormulario('temperatura-containers.html')">
+                <div class="formulario-card-header">
+                    <div class="formulario-icon-wrapper">
+                        <i class="fas fa-temperature-low formulario-icon"></i>
+                    </div>
+                    <div class="formulario-info-header">
+                        <div class="formulario-titulo">Controle de Temperatura</div>
+                        <div class="formulario-descricao">Containers FLV</div>
+                    </div>
+                </div>
+                <div class="formulario-card-body">
+                    <div class="formulario-info-list">
+                        <div class="formulario-info">
+                            <i class="fas fa-thermometer-half"></i>
+                            <span>30 containers</span>
+                        </div>
+                        <div class="formulario-info">
+                            <i class="fas fa-clock"></i>
+                            <span>Turnos: Manhã e Tarde</span>
+                        </div>
+                    </div>
+                    <button class="formulario-btn">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 8: Mercadorias Impróprias -->
+<div class="formulario-card" onclick="abrirFormulario('mercadorias-improprias.html')">
+    <div class="formulario-card-header">
+        <div class="formulario-icon-wrapper">
+            <i class="fas fa-skull formulario-icon"></i>
+        </div>
+        <div class="formulario-info-header">
+            <div class="formulario-titulo">Mercadorias Impróprias</div>
+            <div class="formulario-descricao">Controle de produtos</div>
+        </div>
+    </div>
+    <div class="formulario-card-body">
+        <div class="formulario-info-list">
+            <div class="formulario-info">
+                <i class="fas fa-ban"></i>
+                <span>Produtos impróprios</span>
+            </div>
+            <div class="formulario-info">
+                <i class="fas fa-calendar-times"></i>
+                <span>Controle de validade</span>
+            </div>
+        </div>
+        <button class="formulario-btn">
+            <i class="fas fa-print"></i>
+            Imprimir
+        </button>
+    </div>
+</div>
+
+            <!-- Card: Mini Word -->
+<div class="formulario-card" onclick="abrirFormulario('mini-word.html')">
+    <div class="formulario-card-header">
+        <div class="formulario-icon-wrapper">
+            <i class="fas fa-file-alt formulario-icon"></i>
+        </div>
+        <div class="formulario-info-header">
+            <div class="formulario-titulo">Folha em Branco</div>
+            <div class="formulario-descricao">Editor de Texto Simples</div>
+        </div>
+    </div>
+    <div class="formulario-card-body">
+        <div class="formulario-info-list">
+            <div class="formulario-info">
+                <i class="fas fa-pen"></i>
+                <span>Edição centralizada</span>
+            </div>
+            <div class="formulario-info">
+                <i class="fas fa-font"></i>
+                <span>9 fontes disponíveis</span>
+            </div>
+        </div>
+        <button class="formulario-btn">
+            <i class="fas fa-print"></i>
+            Imprimir
+        </button>
+    </div>
+</div>
+
+        </div> <!-- FECHAMENTO DA DIV .formularios-grid -->
+
+        <!-- Footer -->
+		<div class="footer">
+    CENTRAL DE DISTRIBUIÇÃO | CD NAGUMO - FLV | DESENVOLVIDO POR @MARCOSANN
+</div>
+ 
+
+    <script>
+        function abrirFormulario(url) {
+            const novaAba = window.open(url, '_blank');
+            if (novaAba) {
+                novaAba.focus();
+            }
+        }
+
+        // Efeito sonoro ao clicar (opcional - comentado)
+        /*
+        document.querySelectorAll('.formulario-card:not(.em-breve)').forEach(card => {
+            card.addEventListener('click', () => {
+                // Adicionar som de clique aqui se desejar
+                console.log('Clique no card:', card.querySelector('.formulario-titulo').textContent);
+            });
+        });
+        */
+    </script>
+</body>
+</html>

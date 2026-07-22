@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Temperatura dos Containers</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: white;
+        }
+
+        /* ========== CONFIGURAÇÃO DA PÁGINA A4 RETRATO ========== */
+        #pagina-impressao {
+            width: 210mm;  /* A4 Retrato */
+            height: 297mm; /* A4 Retrato */
+            background: white;
+            font-family: 'Inter', 'Arial', sans-serif;
+            margin: 0 auto;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pagina-impressao-container {
+            width: 100%;
+            height: 100%;
+            padding: 8mm 10mm;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        /* ========== CABEÇALHO ========== */
+        .cabecalho-impressao {
+            background: #d9d9d9;
+            padding: 10px 20px; /* ⭐ Ajustável */
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 6px; /* ⭐ Ajustável */
+            border: 2px solid #000000;
+        }
+
+        .cabecalho-impressao h1 {
+            font-size: 18px; /* ⭐ Ajustável - Tamanho do título principal */
+            font-weight: 900;
+            color: #000000;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: 1.5px;
+        }
+
+        /* ========== LINHA LOGO E DATA ========== */
+        .linha-logo-data {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px; /* ⭐ Ajustável */
+            padding: 0 10px;
+        }
+
+        .logo-container {
+            width: 80px; /* ⭐ Ajustável */
+            height: 35px; /* ⭐ Ajustável */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+
+        .logo-container img {
+            max-width: 80px;
+            max-height: 35px;
+            object-fit: contain;
+        }
+
+        .data-impressao-box {
+            background: #ffffff;
+            padding: 8px 20px; /* ⭐ Ajustável */
+            border-radius: 12px;
+        }
+
+        .data-impressao {
+            font-size: 13px; /* ⭐ Ajustável */
+            font-weight: 800;
+            color: #000000;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        /* ========== CONTAINER DOS TURNOS ========== */
+        .turnos-container {
+            display: flex;
+            flex-direction: row; /* Lado a lado */
+            gap: 10px; /* ⭐ Ajustável - Espaço entre as tabelas */
+            flex: 1;
+            min-height: 0;
+        }
+
+        .turno-wrapper {
+            width: 50%; /* Cada tabela ocupa 50% */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 3px solid #000000;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        /* ========== TABELAS ========== */
+        .tabela-temperatura {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 11px; /* ⭐ Ajustável */
+            background: white;
+        }
+
+        .tabela-temperatura thead {
+            display: table-header-group;
+        }
+
+        .tabela-temperatura tbody {
+            display: table-row-group;
+        }
+
+        /* ========== ALTURA DAS LINHAS DE CABEÇALHO ========== */
+        .tabela-temperatura th {
+            border: 1px solid #000000;
+            padding: 3px 2px; /* ⭐ Ajustável - Padding do cabeçalho */
+            text-align: center;
+            font-weight: 900;
+            background: #d9d9d9;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-size: 8px; /* ⭐ Ajustável - Tamanho fonte cabeçalho */
+            height: auto;
+        }
+
+        /* ========== ALTURA DAS LINHAS DE DADOS ========== */
+        .tabela-temperatura td {
+            border: 1px solid #000000;
+            padding: 0 2px; /* ⭐ Ajustável - Padding das células */
+            text-align: center;
+            background: white;
+            font-weight: 600;
+            color: #000000;
+            font-size: 12px; /* ⭐ Ajustável - Tamanho fonte dados */
+            vertical-align: middle;
+            height: 7.2mm; /* ⭐ ALTURA DAS LINHAS - AJUSTE AQUI (em mm para melhor precisão) */
+        }
+
+        /* ========== TÍTULO DO TURNO ========== */
+        .titulo-turno {
+            background: #d9d9d9 !important;
+            font-weight: 900;
+            text-align: center; /* ⭐ Centralizado */
+            padding: 8px 12px; /* ⭐ Ajustável */
+            color: #000000 !important;
+            text-transform: uppercase;
+            font-size: 14px; /* ⭐ Ajustável - Tamanho título turno */
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #000000 !important;
+        }
+
+        /* ========== LINHA DO RESPONSÁVEL E HORÁRIO ========== */
+       .linha-responsavel-horario {
+    background: #d9d9d9 !important;
+    font-weight: 700 !important;
+    padding: 5px 10px !important; /* ⭐ Ajustável */
+    color: #000000 !important;
+    font-size: 10px !important; /* ⭐ Ajustável */
+    border: 1px solid #000000 !important;
+    text-align: left !important;
+    overflow: hidden; /* ⭐ Importante para os floats funcionarem */
+}
+
+       
+
+        /* ========== LARGURAS DAS COLUNAS ========== */
+        .tabela-temperatura col:nth-child(1) { width: 18%; } /* ⭐ Coluna Nº */
+        .tabela-temperatura col:nth-child(2) { width: 28%; } /* ⭐ Coluna TEMPERATURA */
+        .tabela-temperatura col:nth-child(3) { width: 54%; } /* ⭐ Coluna OBSERVAÇÃO */
+
+        /* ========== ESTILOS DE IMPRESSÃO ========== */
+        @media print {
+            @page {
+                size: A4 portrait; /* Retrato */
+                margin: 0;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body > *:not(#pagina-impressao) {
+                display: none;
+            }
+
+            #pagina-impressao {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 210mm;  /* A4 Retrato */
+                height: 297mm; /* A4 Retrato */
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border: none;
+                background: white;
+                display: block;
+            }
+
+            .cabecalho-impressao {
+                background: #d9d9d9 !important;
+                border: 2px solid #000000 !important;
+            }
+
+            .turno-wrapper {
+                border: 3px solid #000000 !important;
+            }
+
+            .tabela-temperatura th {
+                background: #d9d9d9 !important;
+                border: 1px solid #000000 !important;
+            }
+
+            .tabela-temperatura td {
+                border: 1px solid #000000 !important;
+            }
+
+            .titulo-turno {
+                background: #d9d9d9 !important;
+                border-bottom: 2px solid #000000 !important;
+            }
+
+            .linha-responsavel-horario {
+                background: #d9d9d9 !important;
+                border-bottom: 2px solid #000000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="pagina-impressao">
+        <div class="pagina-impressao-container">
+            <!-- Cabeçalho -->
+            <div class="cabecalho-impressao">
+                <h1>CONTROLE DE TEMPERATURA DOS CONTAINERS</h1>
+            </div>
+            
+            <!-- Logo e Data -->
+            <div class="linha-logo-data">
+                <div class="logo-container">
+                    <img src="logo.png" alt="Logo da Empresa">
+                </div>
+                <div class="data-impressao-box">
+                    <div class="data-impressao">Data: _____/_____/_________</div>
+                </div>
+            </div>
+            
+            <!-- Container dos Turnos -->
+            <div class="turnos-container">
+                <!-- TURNO MANHÃ -->
+                <div class="turno-wrapper">
+                    <table class="tabela-temperatura">
+                        <colgroup>
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="titulo-turno">TURNO MANHÃ</th>
+                            </tr>
+                           <tr>
+    <td colspan="3" class="linha-responsavel-horario">
+        <span style="float: left;">Responsável:</span>
+        <span style="float: right; margin-right: 100px;">Horário:</span>
+    </td>
+</tr>
+                            <tr>
+                                <th>Nº</th>
+                                <th>TEMPERATURA</th>
+                                <th>OBSERVAÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>P-01</td><td></td><td></td></tr>
+                            <tr><td>P-02</td><td></td><td></td></tr>
+                            <tr><td>P-03</td><td></td><td></td></tr>
+                            <tr><td>P-04</td><td></td><td></td></tr>
+                            <tr><td>P-05</td><td></td><td></td></tr>
+                            <tr><td>P-06</td><td></td><td></td></tr>
+                            <tr><td>P-07</td><td></td><td></td></tr>
+                            <tr><td>P-08</td><td></td><td></td></tr>
+                            <tr><td>P-09</td><td></td><td></td></tr>
+                            <tr><td>P-10</td><td></td><td></td></tr>
+                            <tr><td>P-11</td><td></td><td></td></tr>
+                            <tr><td>P-12</td><td></td><td></td></tr>
+                            <tr><td>P-13</td><td></td><td></td></tr>
+                            <tr><td>P-14</td><td></td><td></td></tr>
+                            <tr><td>P-15</td><td></td><td></td></tr>
+                            <tr><td>P-16</td><td></td><td></td></tr>
+                            <tr><td>P-17</td><td></td><td></td></tr>
+                            <tr><td>P-18</td><td></td><td></td></tr>
+                            <tr><td>P-19</td><td></td><td></td></tr>
+                            <tr><td>P-20</td><td></td><td></td></tr>
+                            <tr><td>P-21</td><td></td><td></td></tr>
+                            <tr><td>P-22</td><td></td><td></td></tr>
+                            <tr><td>P-23</td><td></td><td></td></tr>
+                            <tr><td>P-24</td><td></td><td></td></tr>
+                            <tr><td>P-25</td><td></td><td></td></tr>
+                            <tr><td>P-26</td><td></td><td></td></tr>
+                            <tr><td>P-27</td><td></td><td></td></tr>
+                            <tr><td>P-28</td><td></td><td></td></tr>
+                            <tr><td>P-29</td><td></td><td></td></tr>
+                            <tr><td>P-30</td><td></td><td></td></tr>
+                            <tr><td>P-31</td><td></td><td></td></tr>
+                            <tr><td>P-32</td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- TURNO TARDE -->
+                <div class="turno-wrapper">
+                    <table class="tabela-temperatura">
+                        <colgroup>
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="titulo-turno">TURNO TARDE</th>
+                            </tr>
+                           <tr>
+    <td colspan="3" class="linha-responsavel-horario">
+        <span style="float: left;">Responsável:</span>
+        <span style="float: right; margin-right: 100px;">Horário:</span>
+    </td>
+</tr>
+                            <tr>
+                                <th>Nº</th>
+                                <th>TEMPERATURA</th>
+                                <th>OBSERVAÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>P-01</td><td></td><td></td></tr>
+                            <tr><td>P-02</td><td></td><td></td></tr>
+                            <tr><td>P-03</td><td></td><td></td></tr>
+                            <tr><td>P-04</td><td></td><td></td></tr>
+                            <tr><td>P-05</td><td></td><td></td></tr>
+                            <tr><td>P-06</td><td></td><td></td></tr>
+                            <tr><td>P-07</td><td></td><td></td></tr>
+                            <tr><td>P-08</td><td></td><td></td></tr>
+                            <tr><td>P-09</td><td></td><td></td></tr>
+                            <tr><td>P-10</td><td></td><td></td></tr>
+                            <tr><td>P-11</td><td></td><td></td></tr>
+                            <tr><td>P-12</td><td></td><td></td></tr>
+                            <tr><td>P-13</td><td></td><td></td></tr>
+                            <tr><td>P-14</td><td></td><td></td></tr>
+                            <tr><td>P-15</td><td></td><td></td></tr>
+                            <tr><td>P-16</td><td></td><td></td></tr>
+                            <tr><td>P-17</td><td></td><td></td></tr>
+                            <tr><td>P-18</td><td></td><td></td></tr>
+                            <tr><td>P-19</td><td></td><td></td></tr>
+                            <tr><td>P-20</td><td></td><td></td></tr>
+                            <tr><td>P-21</td><td></td><td></td></tr>
+                            <tr><td>P-22</td><td></td><td></td></tr>
+                            <tr><td>P-23</td><td></td><td></td></tr>
+                            <tr><td>P-24</td><td></td><td></td></tr>
+                            <tr><td>P-25</td><td></td><td></td></tr>
+                            <tr><td>P-26</td><td></td><td></td></tr>
+                            <tr><td>P-27</td><td></td><td></td></tr>
+                            <tr><td>P-28</td><td></td><td></td></tr>
+                            <tr><td>P-29</td><td></td><td></td></tr>
+                            <tr><td>P-30</td><td></td><td></td></tr>
+                            <tr><td>P-31</td><td></td><td></td></tr>
+                            <tr><td>P-32</td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.print();
+            }, 300);
+        });
+
+        window.addEventListener('afterprint', function() {
+            window.close();
+        });
+    </script>
+</body>
+</html>

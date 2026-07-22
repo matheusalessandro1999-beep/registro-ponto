@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Carregamento Perecíveis - Nagumo</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+}
+
+/* ========================================
+   CONFIGURAÇÕES DA PÁGINA A4
+   ======================================== */
+.pagina-a4 {
+    width: 210mm;
+    height: 297mm;
+    padding: 8mm 5mm 3mm 5mm;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+}
+
+/* ========================================
+   CABEÇALHO
+   ======================================== */
+.top-header {
+    background-color: #BFBFBF;
+    border: 0.5px solid #000;
+    padding: 5px;
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 5px;
+    font-size: 16pt;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+.header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.logo-container img {
+    height: 30px;
+}
+
+.date-field {
+    font-weight: 700;
+    font-size: 7pt;
+}
+
+/* ========================================
+   TABELA PRINCIPAL
+   ======================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+/* ========================================
+   CABEÇALHO DUPLO DA TABELA
+   ======================================== */
+.header-grupo {
+    background-color: #BFBFBF;
+    font-weight: 900;
+    text-align: center;
+    padding: 0.8mm;
+    border: 0.5px solid #000;
+    font-size: 10pt;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.header-grupo-carregamento {
+    background-color: #D9D9D9;
+    font-weight: 900;
+    text-align: center;
+    padding: 0.8mm;
+    border: 0.5px solid #000;
+    font-size: 8pt;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* Linha em branco entre cabeçalhos duplos */
+.blank-header-row td {
+    border: none;
+    height: 1.5mm;
+    background-color: white;
+    padding: 0;
+}
+
+/* ========================================
+   CABEÇALHOS DAS COLUNAS (th)
+   ======================================== */
+th {
+    background-color: #BFBFBF;
+    border: 0.5px solid #000;
+    padding: 0.2mm 0.3mm;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 900;
+    font-size: 6pt;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 0.9;
+    height: 5.5mm;
+    background-clip: padding-box;
+}
+
+/* ========================================
+   LARGURAS DAS COLUNAS - AJUSTE AQUI
+   ======================================== */
+
+/* COLUNA 1 - REGIÃO (primeira coluna) */
+th:nth-child(1) {
+    width: 25mm; /* ← AJUSTE AQUI: Largura da coluna Região no cabeçalho */
+}
+
+/* COLUNA 2 - LOJAS */
+th:nth-child(2) {
+    width: 8mm; /* ← AJUSTE AQUI: Largura da coluna Lojas no cabeçalho */
+}
+
+/* COLUNA 4 - BOX (aumentada para ficar mais larga) */
+th:nth-child(4) {
+    width: 10mm; /* ← AJUSTE AQUI: Largura da coluna Box no cabeçalho */
+}
+
+/* COLUNA 9 - MOTORISTA/PLACA (aumentada) */
+th:nth-child(9) {
+    width: 35mm; /* ← AJUSTE AQUI: Largura da coluna Motorista/Placa */
+}
+
+/* COLUNA 10 - TEMPERATURA (C°) */
+th:nth-child(10) {
+    width: 10mm; /* ← AJUSTE AQUI: Largura da coluna Temperatura */
+}
+
+/* Colunas da seção CARREGAMENTO (colunas 8, 9, 10) */
+th:nth-child(8),
+th:nth-child(9),
+th:nth-child(10) {
+    background-color: #D9D9D9;
+}
+
+/* Coluna Total Rota (coluna 7) com mesma cor da coluna Região */
+.total-rota-header {
+    background-color: #BFBFBF !important;
+    width: 16mm; /* ← AJUSTE AQUI: Largura da coluna Total Rota no cabeçalho */
+}
+
+/* ========================================
+   CÉLULAS DA TABELA (td)
+   ======================================== */
+td {
+    padding: 0.15mm 0.3mm;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 8pt;
+    border: 0.5px solid #000;
+    line-height: 0.9;
+    height: 4.0mm;
+}
+
+/* COLUNA 1 - REGIÃO (células de dados) */
+td:nth-child(1) {
+    width: 25mm; /* ← AJUSTE AQUI: Largura das células da coluna Região */
+}
+
+/* COLUNA 2 - LOJAS (células de dados) */
+td:nth-child(2) {
+    width: 8mm; /* ← AJUSTE AQUI: Largura das células da coluna Lojas */
+}
+
+/* COLUNA 4 - BOX (células de dados) */
+td:nth-child(4) {
+    width: 10mm; /* ← AJUSTE AQUI: Largura das células da coluna Box */
+}
+
+/* COLUNA 9 - MOTORISTA/PLACA (células de dados) */
+td:nth-child(9) {
+    width: 35mm; /* ← AJUSTE AQUI: Largura das células Motorista/Placa */
+}
+
+/* COLUNA 10 - TEMPERATURA (células de dados) */
+td:nth-child(10) {
+    width: 10mm; /* ← AJUSTE AQUI: Largura das células da coluna Temperatura */
+}
+
+/* ========================================
+   ESPAÇAMENTO ENTRE GRUPOS DE COLUNAS
+   ======================================== */
+
+/* Grupo 1: Região e Lojas (colunas 1 e 2) */
+.col-group-1 {
+    border-right: 4px double #000; /* Borda dupla grossa à direita */
+    width: 18mm; /* ← AJUSTE AQUI: Largura padrão para grupo 1 */
+}
+
+/* Grupo 2: Qtde Paletes, Box, Container, Câmara (colunas 3, 4, 5, 6) */
+.col-group-2 {
+    border-right: 4px double #000; /* Borda dupla grossa à direita */
+}
+
+/* Grupo 3: Total Rota (coluna 7) */
+.col-group-3 {
+    background-color: #BFBFBF;
+    background-clip: padding-box;
+    border-right: 4px double #000; /* Borda dupla grossa à direita */
+    width: 16mm; /* ← AJUSTE AQUI: Largura da coluna Total Rota nas células */
+}
+
+/* ========================================
+   LINHAS EM BRANCO ENTRE REGIÕES
+   ======================================== */
+.blank-row {
+    height: 1.5mm;
+    background-color: white;
+}
+
+.blank-row td {
+    border: none;
+    padding: 0;
+    height: 1.5mm;
+}
+
+/* ========================================
+   CÉLULAS ESPECIAIS
+   ======================================== */
+
+/* Célula de Região (ABC, Cinturão, etc) - Coluna 1 */
+.region-header {
+    background-color: #BFBFBF;
+    font-weight: 900;
+    text-align: center;
+    vertical-align: middle;
+    background-clip: padding-box;
+    width: 18mm; /* ← AJUSTE AQUI: Largura das células de Região */
+}
+
+/* Célula de Loja (01, 02, 03, etc) - Coluna 2 */
+.store-cell {
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 0.3mm;
+    width: 10mm; /* ← AJUSTE AQUI: Largura das células de Lojas */
+}
+
+/* Células mescladas da seção CARREGAMENTO (colunas 8, 9, 10) */
+.merged-cell {
+    background-color: #f9f9f9;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Primeira célula mesclada (Região) da seção CARREGAMENTO - Coluna 8 */
+.merged-cell:nth-child(8) {
+    background-color: #D9D9D9;
+    font-weight: 900;
+}
+
+/* Célula de temperatura mesclada - Coluna 10 */
+.merged-cell:nth-child(10) {
+    width: 10mm; /* ← AJUSTE AQUI: Largura das células de Temperatura mescladas */
+}
+
+/* ========================================
+   ESTILOS DE IMPRESSÃO
+   ======================================== */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .pagina-a4 {
+        margin: 0;
+        padding: 8mm 5mm 3mm 5mm;
+        width: 210mm;
+        height: 297mm;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: #000 !important;
+    }
+
+    .top-header,
+    .header-grupo,
+    .region-header,
+    th {
+        background-color: #BFBFBF !important;
+        background-clip: padding-box !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .header-grupo-carregamento,
+    th:nth-child(8),
+    th:nth-child(9),
+    th:nth-child(10),
+    .merged-cell:nth-child(8) {
+        background-color: #D9D9D9 !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .merged-cell {
+        background-color: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .total-rota-header {
+        background-color: #BFBFBF !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .col-group-3 {
+        background-color: #BFBFBF !important;
+        background-clip: padding-box !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .col-group-1,
+    .col-group-2 {
+        background-clip: padding-box !important;
+    }
+}
+
+@media print {
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="pagina-a4">
+        <!-- Cabeçalho do topo -->
+        <div class="top-header">
+            CONTROLE DE CARREGAMENTO PERECÍVEIS
+        </div>
+        
+        <!-- Linha com logo e data -->
+        <div class="header-info">
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <div class="date-field">
+                Data: ___________________
+            </div>
+        </div>
+
+        <!-- Tabela Principal -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="7" class="header-grupo">CONTAGEM MATERIAL DE APOIO</th>
+                    <th colspan="3" class="header-grupo-carregamento">CARREGAMENTO</th>
+                </tr>
+                <tr class="blank-header-row">
+                    <td colspan="10"></td>
+                </tr>
+                <tr>
+                    <th class="col-group-1">Região</th>
+                    <th class="col-group-1">Lojas</th>
+                    <th class="col-group-2">Qtde <br>Paletes</th>
+                    <th class="col-group-2">Box</th>
+                    <th class="col-group-2">Container</th>
+                    <th class="col-group-2">Câmara</th>
+                    <th class="col-group-3 total-rota-header">Total<br>Rota</th>
+                    <th>Região</th>
+                    <th>Motorista/Placa</th>
+                    <th>C°</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="blank-row"><td colspan="10"></td></tr>
+                
+                      <tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- ABC -->
+<tr>
+    <td class="region-header col-group-1" rowspan="5">ABC</td>
+    <td class="store-cell col-group-1">01</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="5"></td>
+    <td class="merged-cell" rowspan="5">ABC</td>
+    <td class="merged-cell" rowspan="5"></td>
+    <td class="merged-cell" rowspan="5"></td>
+</tr>
+<tr><td class="store-cell col-group-1">26</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">38</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">46</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">50</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Cinturão -->
+<tr>
+    <td class="region-header col-group-1" rowspan="9">Cinturão</td>
+    <td class="store-cell col-group-1">02</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="9"></td>
+    <td class="merged-cell" rowspan="9">Cinturão</td>
+    <td class="merged-cell" rowspan="9"></td>
+    <td class="merged-cell" rowspan="9"></td>
+</tr>
+<tr><td class="store-cell col-group-1">19</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">23</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">27</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">30</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">39</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">40</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">47</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">52</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Zona Leste -->
+<tr>
+    <td class="region-header col-group-1" rowspan="7">Zona Leste</td>
+    <td class="store-cell col-group-1">03</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="7"></td>
+    <td class="merged-cell" rowspan="7">Zona Leste</td>
+    <td class="merged-cell" rowspan="7"></td>
+    <td class="merged-cell" rowspan="7"></td>
+</tr>
+<tr><td class="store-cell col-group-1">04</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">06</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">16</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">17</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">21</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">29</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Miolo -->
+<tr>
+    <td class="region-header col-group-1" rowspan="8">Miolo</td>
+    <td class="store-cell col-group-1">07</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="8"></td>
+    <td class="merged-cell" rowspan="8">Miolo</td>
+    <td class="merged-cell" rowspan="8"></td>
+    <td class="merged-cell" rowspan="8"></td>
+</tr>
+<tr><td class="store-cell col-group-1">13</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">18</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">20</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">22</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">43</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">44</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">45</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Guarulhos -->
+<tr>
+    <td class="region-header col-group-1" rowspan="12">Guarulhos</td>
+    <td class="store-cell col-group-1">08</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="12"></td>
+    <td class="merged-cell" rowspan="12">Guarulhos</td>
+    <td class="merged-cell" rowspan="12"></td>
+    <td class="merged-cell" rowspan="12"></td>
+</tr>
+<tr><td class="store-cell col-group-1">12</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">14</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">15</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">24</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">37</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">41</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">42</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">49</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">54</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">55</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">56</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Vale do Paraíba - MESCLADO NA COLUNA 1 COM LINHA EM BRANCO -->
+<tr>
+    <td class="region-header col-group-1" rowspan="7">Vale do Paraíba</td>
+    <td class="store-cell col-group-1">09</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="3"></td>
+    <td class="merged-cell" rowspan="3">São José<br>dos Campos</td>
+    <td class="merged-cell" rowspan="3"></td>
+    <td class="merged-cell" rowspan="3"></td>
+</tr>
+<tr><td class="store-cell col-group-1">10</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">11</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="7"></td><td colspan="3"></td></tr>
+
+<tr>
+    <td class="store-cell col-group-1">25</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="3"></td>
+    <td class="merged-cell" rowspan="3" style="background-color: #D9D9D9 !important; font-weight: 900 !important;">Taubaté<br>Lorena</td>
+    <td style="background-color: #f9f9f9; vertical-align: middle; text-align: center; padding: 0.15mm 0.3mm; font-size: 8pt; border: 0.5px solid #000; line-height: 0.9; height: 4.1mm;" rowspan="3"></td>
+    <td style="background-color: #f9f9f9; vertical-align: middle; text-align: center; padding: 0.15mm 0.3mm; font-size: 8pt; border: 0.5px solid #000; line-height: 0.9; height: 4.1mm; width: 10mm;" rowspan="3"></td>
+</tr>
+<tr><td class="store-cell col-group-1">28</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">48</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Atibaia -->
+<tr>
+    <td class="region-header col-group-1" rowspan="7">Atibaia</td>
+    <td class="store-cell col-group-1">31</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="7"></td>
+    <td class="merged-cell" rowspan="7">Atibaia</td>
+    <td class="merged-cell" rowspan="7"></td>
+    <td class="merged-cell" rowspan="7"></td>
+</tr>
+<tr><td class="store-cell col-group-1">32</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">33</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">34</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">35</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">51</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+<tr><td class="store-cell col-group-1">57</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Praia Grande -->
+<tr>
+    <td class="region-header col-group-1">Praia Grande</td>
+    <td class="store-cell col-group-1">58</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3"></td>
+    <td class="merged-cell">Praia Grande</td>
+    <td class="merged-cell"></td>
+    <td class="merged-cell"></td>
+</tr>
+
+<tr class="blank-row"><td colspan="10"></td></tr>
+
+<!-- Rio de Janeiro -->
+<tr>
+    <td class="region-header col-group-1" rowspan="2">Rio de Janeiro</td>
+    <td class="store-cell col-group-1">36</td>
+    <td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td>
+    <td class="col-group-3" rowspan="2"></td>
+    <td class="merged-cell" rowspan="2">Rio de Janeiro</td>
+    <td class="merged-cell" rowspan="2"></td>
+    <td class="merged-cell" rowspan="2"></td>
+</tr>
+<tr><td class="store-cell col-group-1">53</td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td><td class="col-group-2"></td></tr>      
+               
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.print();
+            }, 300);
+        });
+
+        window.addEventListener('afterprint', function() {
+            window.close();
+        });
+    </script>
+</body>
+</html>

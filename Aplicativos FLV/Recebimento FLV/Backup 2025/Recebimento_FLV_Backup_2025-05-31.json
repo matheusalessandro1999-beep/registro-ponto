@@ -1,0 +1,1166 @@
+{
+  "conferentes": [
+    {
+      "nome": "Antonio",
+      "ativo": true,
+      "id": 36
+    },
+    {
+      "nome": "Christian",
+      "ativo": false,
+      "id": 37
+    },
+    {
+      "nome": "Davi",
+      "ativo": true,
+      "id": 38
+    },
+    {
+      "nome": "Douglas R",
+      "ativo": true,
+      "id": 39
+    },
+    {
+      "nome": "Geilton",
+      "ativo": true,
+      "id": 40
+    },
+    {
+      "nome": "Marcos",
+      "ativo": true,
+      "id": 41
+    },
+    {
+      "nome": "Daniel",
+      "ativo": false,
+      "id": 42
+    }
+  ],
+  "dadosPorMes": {
+    "Abril": [],
+    "Agosto": [],
+    "Janeiro": [],
+    "Junho": [],
+    "Maio": [
+      {
+        "conferente": "Christian",
+        "data": "2025-05-01",
+        "fornecedor": "Hortmogi",
+        "horario": "09:58",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-01",
+        "fornecedor": "Iguape",
+        "horario": "10:10",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-01",
+        "fornecedor": "Consentine",
+        "horario": "10:43",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-01",
+        "fornecedor": "Andre Soares",
+        "horario": "11:23",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-01",
+        "fornecedor": "Nossa Terra",
+        "horario": "08:20",
+        "palete": "",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-01",
+        "fornecedor": "Pilon Pilon",
+        "horario": "09:10",
+        "palete": "1",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-01",
+        "fornecedor": "Benassi",
+        "horario": "13:00",
+        "palete": "7",
+        "batida": "",
+        "gaiola": "21"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-01",
+        "fornecedor": "Mpf",
+        "horario": "13:14",
+        "palete": "2",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-05-01",
+        "fornecedor": "Doni",
+        "horario": "08:15",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Daniel",
+        "data": "2025-05-01",
+        "fornecedor": "Mks",
+        "horario": "09:23",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-05",
+        "fornecedor": "Iguape",
+        "horario": "06:47",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-05",
+        "fornecedor": "Consentine",
+        "horario": "08:20",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-05",
+        "fornecedor": "Cris fruit",
+        "horario": "13:20",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-05",
+        "fornecedor": "Nossa Terra",
+        "horario": "13:00",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-05",
+        "fornecedor": "Benassi",
+        "horario": "13:30",
+        "palete": "18",
+        "batida": "",
+        "gaiola": "10"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-05",
+        "fornecedor": "Agw",
+        "horario": "14:53",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-05",
+        "fornecedor": "Hortmogi",
+        "horario": "15:10",
+        "palete": "14",
+        "batida": "2",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-05",
+        "fornecedor": "Doni",
+        "horario": "16:40",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-05",
+        "fornecedor": "Iguape",
+        "horario": "16:43",
+        "palete": "1",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-05",
+        "fornecedor": "Mks",
+        "horario": "16:50",
+        "palete": "1",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-07",
+        "fornecedor": "Consentine",
+        "horario": "07:32",
+        "palete": "7",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-07",
+        "fornecedor": "Doni",
+        "horario": "11:30",
+        "palete": "2",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-07",
+        "fornecedor": "Agw",
+        "horario": "11:30",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-07",
+        "fornecedor": "Pilon Pilon",
+        "horario": "11:15",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-07",
+        "fornecedor": "Iguape",
+        "horario": "11:40",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-07",
+        "fornecedor": "Mks",
+        "horario": "14:04",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-07",
+        "fornecedor": "Benassi",
+        "horario": "15:05",
+        "palete": "10",
+        "batida": "",
+        "gaiola": "14"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-08",
+        "fornecedor": "Pilon Pilon",
+        "horario": "11:21",
+        "palete": "5",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-08",
+        "fornecedor": "Consentine",
+        "horario": "12:00",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-08",
+        "fornecedor": "Mks",
+        "horario": "10:28",
+        "palete": "16",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-08",
+        "fornecedor": "Iguape",
+        "horario": "10:00",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-08",
+        "fornecedor": "Hortmogi",
+        "horario": "12:20",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-08",
+        "fornecedor": "Doni",
+        "horario": "14:40",
+        "palete": "7",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-08",
+        "fornecedor": "Agw",
+        "horario": "14:09",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-08",
+        "fornecedor": "Andre Soares",
+        "horario": "15:11",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-08",
+        "fornecedor": "Benassi",
+        "horario": "15:14",
+        "palete": "10",
+        "batida": "1",
+        "gaiola": "13"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-08",
+        "fornecedor": "Benassi",
+        "horario": "15:44",
+        "palete": "",
+        "batida": "",
+        "gaiola": "10"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-08",
+        "fornecedor": "Hortmogi",
+        "horario": "16:00",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-12",
+        "fornecedor": "Andre Soares",
+        "horario": "10:33",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-12",
+        "fornecedor": "Furquim",
+        "horario": "13:16",
+        "palete": "",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-12",
+        "fornecedor": "Doni",
+        "horario": "14:05",
+        "palete": "11",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-12",
+        "fornecedor": "Consentine",
+        "horario": "09:20",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-12",
+        "fornecedor": "Pilon Pilon",
+        "horario": "10:20",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-12",
+        "fornecedor": "Hortmogi",
+        "horario": "12:20",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-12",
+        "fornecedor": "Sergio",
+        "horario": "10:00",
+        "palete": "16",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-12",
+        "fornecedor": "Kiara",
+        "horario": "14:15",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-12",
+        "fornecedor": "Mks",
+        "horario": "12:20",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-12",
+        "fornecedor": "Agw",
+        "horario": "14:00",
+        "palete": "",
+        "batida": "",
+        "gaiola": "16"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-12",
+        "fornecedor": "Iguape",
+        "horario": "14:04",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-12",
+        "fornecedor": "Cris fruit",
+        "horario": "15:20",
+        "palete": "5",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-12",
+        "fornecedor": "Benassi",
+        "horario": "15:58",
+        "palete": "21",
+        "batida": "",
+        "gaiola": "2"
+      },
+      {
+        "conferente": "Christian",
+        "data": "2025-05-12",
+        "fornecedor": "Hortmogi",
+        "horario": "19:00",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-14",
+        "fornecedor": "Iguape",
+        "horario": "08:24",
+        "palete": "",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-14",
+        "fornecedor": "Hortmogi",
+        "horario": "14:56",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Geilton",
+        "data": "2025-05-14",
+        "fornecedor": "Benassi",
+        "horario": "16:45",
+        "palete": "3",
+        "batida": "",
+        "gaiola": "1"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-15",
+        "fornecedor": "Mks",
+        "horario": "10:06",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-15",
+        "fornecedor": "Agw",
+        "horario": "09:23",
+        "palete": "",
+        "batida": "",
+        "gaiola": "20"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-15",
+        "fornecedor": "Pilon Pilon",
+        "horario": "11:22",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-15",
+        "fornecedor": "Kiara",
+        "horario": "11:40",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-15",
+        "fornecedor": "Hortmogi",
+        "horario": "11:27",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-15",
+        "fornecedor": "Nossa Terra",
+        "horario": "07:30",
+        "palete": "1",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-15",
+        "fornecedor": "Consentine",
+        "horario": "12:15",
+        "palete": "13",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-15",
+        "fornecedor": "Doni",
+        "horario": "12:21",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-15",
+        "fornecedor": "Hortmogi",
+        "horario": "12:07",
+        "palete": "14",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-15",
+        "fornecedor": "Benassi",
+        "horario": "14:05",
+        "palete": "11",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-15",
+        "fornecedor": "Andre Soares",
+        "horario": "14:14",
+        "palete": "9",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-19",
+        "fornecedor": "Generico",
+        "horario": "09:17",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-19",
+        "fornecedor": "Mallmam",
+        "horario": "09:55",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-19",
+        "fornecedor": "Doni",
+        "horario": "11:00",
+        "palete": "11",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-19",
+        "fornecedor": "Consentine",
+        "horario": "08:06",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-19",
+        "fornecedor": "Hortmogi",
+        "horario": "11:29",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-19",
+        "fornecedor": "Sergio",
+        "horario": "07:08",
+        "palete": "14",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-19",
+        "fornecedor": "Andre soares",
+        "horario": "13:00",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-19",
+        "fornecedor": "Pilon Pilon",
+        "horario": "13:50",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-19",
+        "fornecedor": "Nossa Terra",
+        "horario": "14:25",
+        "palete": "",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-19",
+        "fornecedor": "Iguape",
+        "horario": "14:25",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-19",
+        "fornecedor": "Benassi",
+        "horario": "13:40",
+        "palete": "2",
+        "batida": "",
+        "gaiola": "25"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-19",
+        "fornecedor": "Agw",
+        "horario": "15:00",
+        "palete": "5",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-19",
+        "fornecedor": "Agw",
+        "horario": "14:15",
+        "palete": "",
+        "batida": "",
+        "gaiola": "16"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-19",
+        "fornecedor": "Hortmogi",
+        "horario": "16:50",
+        "palete": "13",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Geilton",
+        "data": "2025-05-19",
+        "fornecedor": "Benassi",
+        "horario": "16:45",
+        "palete": "14",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Geilton",
+        "data": "2025-05-21",
+        "fornecedor": "Kiara",
+        "horario": "13:30",
+        "palete": "2",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-22",
+        "fornecedor": "Iguape",
+        "horario": "08:37",
+        "palete": "",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Nossa Terra",
+        "horario": "06:32",
+        "palete": "2",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Agw",
+        "horario": "08:50",
+        "palete": "",
+        "batida": "",
+        "gaiola": "16"
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-22",
+        "fornecedor": "Doni",
+        "horario": "11:06",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-22",
+        "fornecedor": "Mallmam",
+        "horario": "11:17",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-22",
+        "fornecedor": "Consentine",
+        "horario": "12:02",
+        "palete": "16",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Pilon Pilon",
+        "horario": "11:56",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Hortmogi",
+        "horario": "11:47",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Hortmogi",
+        "horario": "11:19",
+        "palete": "13",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Agw",
+        "horario": "11:31",
+        "palete": "",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Andre Soares",
+        "horario": "11:58",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-22",
+        "fornecedor": "Mks",
+        "horario": "13:00",
+        "palete": "5",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-22",
+        "fornecedor": "Benassi",
+        "horario": "15:06",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-26",
+        "fornecedor": "Mallman",
+        "horario": "10:50",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-26",
+        "fornecedor": "Mks",
+        "horario": "11:09",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-26",
+        "fornecedor": "Consentine",
+        "horario": "07:43",
+        "palete": "15",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-26",
+        "fornecedor": "Doni",
+        "horario": "12:05",
+        "palete": "9",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-26",
+        "fornecedor": "Pilon Pilon",
+        "horario": "12:04",
+        "palete": "7",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-26",
+        "fornecedor": "Andre Soares",
+        "horario": "12:53",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-26",
+        "fornecedor": "Cris Frut",
+        "horario": "13:01",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-26",
+        "fornecedor": "Nossa Terra",
+        "horario": "13:50",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-26",
+        "fornecedor": "Benassi",
+        "horario": "14:00",
+        "palete": "12",
+        "batida": "1",
+        "gaiola": "27"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-26",
+        "fornecedor": "Agw",
+        "horario": "14:00",
+        "palete": "10",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-26",
+        "fornecedor": "Iguape",
+        "horario": "14:25",
+        "palete": "14",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-26",
+        "fornecedor": "Agw",
+        "horario": "14:20",
+        "palete": "",
+        "batida": "",
+        "gaiola": "15"
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-26",
+        "fornecedor": "Hortmogi",
+        "horario": "16:35",
+        "palete": "12",
+        "batida": "1",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-27",
+        "fornecedor": "Agw",
+        "horario": "16:30",
+        "palete": "",
+        "batida": "",
+        "gaiola": "15"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-28",
+        "fornecedor": "Kiara",
+        "horario": "13:50",
+        "palete": "4",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-29",
+        "fornecedor": "Doni",
+        "horario": "10:43",
+        "palete": "8",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-29",
+        "fornecedor": "Agw",
+        "horario": "10:52",
+        "palete": "2",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-29",
+        "fornecedor": "Mallmann",
+        "horario": "10:38",
+        "palete": "7",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-29",
+        "fornecedor": "Criss Inport",
+        "horario": "11:17",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-29",
+        "fornecedor": "Iguape",
+        "horario": "11:17",
+        "palete": "7",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-29",
+        "fornecedor": "Nossa Terra",
+        "horario": "07:03",
+        "palete": "3",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-29",
+        "fornecedor": "Mks",
+        "horario": "07:09",
+        "palete": "16",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-29",
+        "fornecedor": "Pilon Pilon",
+        "horario": "11:39",
+        "palete": "7",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-29",
+        "fornecedor": "Consetine",
+        "horario": "12:09",
+        "palete": "12",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Antonio",
+        "data": "2025-05-29",
+        "fornecedor": "Hortmogi",
+        "horario": "11:58",
+        "palete": "14",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Davi",
+        "data": "2025-05-29",
+        "fornecedor": "Cris Import",
+        "horario": "12:49",
+        "palete": "6",
+        "batida": "",
+        "gaiola": ""
+      },
+      {
+        "conferente": "Marcos",
+        "data": "2025-05-29",
+        "fornecedor": "Benassi",
+        "horario": "14:05",
+        "palete": "5",
+        "batida": "",
+        "gaiola": "2"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-29",
+        "fornecedor": "Agw",
+        "horario": "14:20",
+        "palete": "",
+        "batida": "",
+        "gaiola": "17"
+      },
+      {
+        "conferente": "Douglas R",
+        "data": "2025-05-29",
+        "fornecedor": "Agw",
+        "horario": "16:20",
+        "palete": "",
+        "batida": "3",
+        "gaiola": ""
+      }
+    ]
+  },
+  "config": {
+    "mesAtual": "Maio"
+  }
+}

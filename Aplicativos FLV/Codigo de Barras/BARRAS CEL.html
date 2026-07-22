@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador Código 128</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#111;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;margin:0;padding:20px;text-align:center}
+    h1{font-size:20px;margin-bottom:15px}
+    input{font-size:18px;padding:10px;border-radius:8px;border:none;outline:none;text-align:center;margin-bottom:20px;width:100%;max-width:320px;text-transform:uppercase;background:#fff;color:#000}
+    svg{background:#fff;padding:10px;border-radius:8px;max-width:100%}
+  </style>
+</head>
+<body>
+  <h1>Gerador Código 128</h1>
+
+  <input id="inputText" type="text" maxlength="20" placeholder="Digite o texto"
+         autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" />
+
+  <svg id="barcode"></svg>
+
+  <script>
+    const input = document.getElementById('inputText');
+    const svg   = document.getElementById('barcode');
+
+    function render(barText){
+      if(barText){
+        JsBarcode(svg, barText, { format: 'CODE128', lineColor: '#000', width: 2, height: 80, displayValue: false });
+      }else{
+        svg.innerHTML = '';
+      }
+    }
+
+    input.addEventListener('input', () => {
+      const start = input.selectionStart, end = input.selectionEnd;
+
+      // força MAIÚSCULAS e remove tudo que não for A-Z/0-9
+      let v = input.value;
+      v = v.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+      // só reatribui se mudou, preservando o cursor
+      if (input.value !== v) {
+        input.value = v;
+        // recoloca o cursor (ajusta para não passar do tamanho atual)
+        const pos = Math.min(v.length, start);
+        input.setSelectionRange(pos, pos);
+      }
+
+      render(v);
+    });
+  </script>
+</body>
+</html>
