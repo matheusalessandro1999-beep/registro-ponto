@@ -6,6 +6,32 @@
 <title>RH Performance · Dashboard v8</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<script>
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBQwHGiXEuPeSqoIIi159e0uyMx_JGL4y8",
+    authDomain: "registro-ponto-cd.firebaseapp.com",
+    databaseURL: "https://registro-ponto-cd-default-rtdb.firebaseio.com",
+    projectId: "registro-ponto-cd",
+    storageBucket: "registro-ponto-cd.firebasestorage.app",
+    messagingSenderId: "672250389821",
+    appId: "1:672250389821:web:33a80de64c5ccdd9bc5154"
+  };
+
+  // Inicializa o Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Disponibiliza o banco e autenticação para o resto do sistema
+  const db = firebase.database();
+  const auth = firebase.auth();
+</script>
+
 <style>
   :root {
     --bg: #0b0d14;
